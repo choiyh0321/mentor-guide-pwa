@@ -1,14 +1,14 @@
 <!DOCTYPE html>
+
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>👨‍🏫 멘토 생활 백서 - SK 멘토 가이드</title>
-    <link rel="manifest" href="../manifest.json">
-    <meta name="theme-color" content="#EA4335">
-    <link rel="stylesheet" href="../assets/css/main.css">
-    
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>👨‍🏫 멘토 생활 백서 - SK 멘토 가이드</title>
+<link href="../manifest.json" rel="manifest"/>
+<meta content="#EA4335" name="theme-color"/>
+<link href="../assets/css/main.css" rel="stylesheet"/>
+<style>
         .guide-container {
             max-width: 800px;
             margin: 0 auto;
@@ -244,234 +244,218 @@
     </style>
 </head>
 <body>
-    <button class="back-button" onclick="goBack()">←</button>
-
-    <div class="guide-container">
-        <!-- 헤더 -->
-        <div class="guide-header">
-            <div class="guide-title">👨‍🏫 멘토 생활 백서</div>
-            <div class="guide-subtitle">신입구성원과정 기간 중 멘토 생활 가이드</div>
-        </div>
-
-        <!-- 숙소 지원 -->
-        <div class="info-section">
-            <div class="section-title">
-                <span>🏠</span>
+<button class="back-button" onclick="goBack()">←</button>
+<div class="guide-container">
+<!-- 헤더 -->
+<div class="guide-header">
+<div class="guide-title">👨‍🏫 멘토 생활 백서</div>
+<div class="guide-subtitle">신입구성원과정 기간 중 멘토 생활 가이드</div>
+</div>
+<!-- 숙소 지원 -->
+<div class="info-section">
+<div class="section-title">
+<span>🏠</span>
                 숙소 지원 안내
             </div>
-            
-            <div class="info-item">
-                <div class="info-icon">🛏️</div>
-                <div class="info-content">
-                    <div class="info-title">멘토 숙소 제공</div>
-                    <div class="info-description">
-                        신입구성원과 동일한 건물 내 숙소를 제공하며, <strong>1인 1실</strong>로 제공됩니다<br>
+<div class="info-item">
+<div class="info-icon">🛏️</div>
+<div class="info-content">
+<div class="info-title">멘토 숙소 제공</div>
+<div class="info-description">
+                        신입구성원과 동일한 건물 내 숙소를 제공하며, <strong>1인 1실</strong>로 제공됩니다<br/>
                         (신입구성원은 숙소 수용 인원에 맞춰 '2인 1실 or 3인 1실' 사용 예정)
                     </div>
-                </div>
-            </div>
-            
-            <div class="info-item">
-                <div class="info-icon">📅</div>
-                <div class="info-content">
-                    <div class="info-title">주말 숙박 정책</div>
-                    <div class="info-description">
-                        주말 숙박은 불가합니다<br>
+</div>
+</div>
+<div class="info-item">
+<div class="info-icon">📅</div>
+<div class="info-content">
+<div class="info-title">주말 숙박 정책</div>
+<div class="info-description">
+                        주말 숙박은 불가합니다<br/>
                         주말 동안 연수원 내 짐 보관 장소에 짐 거치 가능
                     </div>
-                    <div class="info-highlight">
-                        💡 멘토의 경우, 일요일 18시 이후 사전 입소 가능<br>
+<div class="info-highlight">
+                        💡 멘토의 경우, 일요일 18시 이후 사전 입소 가능<br/>
                         (단, 일요일에는 식당/편의점 등 이용 불가)
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 운영진과의 미팅 -->
-        <div class="info-section">
-            <div class="section-title">
-                <span>🤝</span>
+</div>
+</div>
+</div>
+<!-- 운영진과의 미팅 -->
+<div class="info-section">
+<div class="section-title">
+<span>🤝</span>
                 운영진과의 미팅
             </div>
-            
-            <div class="info-item">
-                <div class="info-icon">⏰</div>
-                <div class="info-content">
-                    <div class="info-title">일일 미팅 시간</div>
-                    <div class="info-description">
+<div class="info-item">
+<div class="info-icon">⏰</div>
+<div class="info-content">
+<div class="info-title">일일 미팅 시간</div>
+<div class="info-description">
                         매일 저녁식사 전 30분간 운영진과의 미팅 시간이 있습니다
                     </div>
-                    <div class="info-highlight">
-                        🕕 시간: 18:00~18:30 (매일)<br>
+<div class="info-highlight">
+                        🕕 시간: 18:00~18:30 (매일)<br/>
                         📋 내용: 당일 특이사항 공유 + 다음날 일정 안내
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 교통 및 이동 -->
-        <div class="info-section center-specific" id="transport-section">
-            <div class="section-title">
-                <span>🚌</span>
+</div>
+</div>
+</div>
+<!-- 교통 및 이동 -->
+<div class="info-section center-specific" id="transport-section">
+<div class="section-title">
+<span>🚌</span>
                 교통 및 이동 안내
             </div>
-            
-            <!-- 이천 FMI인재개발원 (기본값, 나중에 동적으로 변경 예정) -->
-            <div class="info-item">
-                <div class="info-icon">📍</div>
-                <div class="info-content">
-                    <div class="info-title">버스 승하차 장소</div>
-                    <div class="info-description">
-                        <strong>이천 FMI인재개발원:</strong> 패기관 경비실<br>
+<!-- 이천 FMI인재개발원 (기본값, 나중에 동적으로 변경 예정) -->
+<div class="info-item">
+<div class="info-icon">📍</div>
+<div class="info-content">
+<div class="info-title">버스 승하차 장소</div>
+<div class="info-description">
+<strong>이천 FMI인재개발원:</strong> 패기관 경비실<br/>
                         교육기간 중 이동 시 모든 승하차는 이 위치에서 진행됩니다
                     </div>
-                </div>
-            </div>
-            
-            <div class="info-item">
-                <div class="info-icon">🚗</div>
-                <div class="info-content">
-                    <div class="info-title">개인 차량 이용</div>
-                    <div class="info-description">
-                        개인 차량(부모, 지인 차량 포함)을 통한 개별 이동은 불가합니다 (멘토는 제외)<br>
+</div>
+</div>
+<div class="info-item">
+<div class="info-icon">🚗</div>
+<div class="info-content">
+<div class="info-title">개인 차량 이용</div>
+<div class="info-description">
+                        개인 차량(부모, 지인 차량 포함)을 통한 개별 이동은 불가합니다 (멘토는 제외)<br/>
                         신입구성원 참가자는 모두 정해진 셔틀버스로만 이동 가능
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- mySUNI 커뮤니티 -->
-        <div class="info-section">
-            <div class="section-title">
-                <span>💻</span>
+</div>
+</div>
+</div>
+<!-- mySUNI 커뮤니티 -->
+<div class="info-section">
+<div class="section-title">
+<span>💻</span>
                 mySUNI 커뮤니티 활용
             </div>
-            
-            <div class="info-item">
-                <div class="info-icon">👨‍🏫</div>
-                <div class="info-content">
-                    <div class="info-title">멘토과정 커뮤니티</div>
-                    <div class="info-description">
-                        '멘토+운영진'이 활용하는 커뮤니티<br>
+<div class="info-item">
+<div class="info-icon">👨‍🏫</div>
+<div class="info-content">
+<div class="info-title">멘토과정 커뮤니티</div>
+<div class="info-description">
+                        '멘토+운영진'이 활용하는 커뮤니티<br/>
                         출결 현황판, 멘토 진행 장표 등 멘토에게 필요한 정보 중심으로 구성
                     </div>
-                </div>
-            </div>
-            
-            <div class="info-item">
-                <div class="info-icon">👥</div>
-                <div class="info-content">
-                    <div class="info-title">신입구성원과정 커뮤니티</div>
-                    <div class="info-description">
-                        '신입구성원'이 활용하는 커뮤니티<br>
+</div>
+</div>
+<div class="info-item">
+<div class="info-icon">👥</div>
+<div class="info-content">
+<div class="info-title">신입구성원과정 커뮤니티</div>
+<div class="info-description">
+                        '신입구성원'이 활용하는 커뮤니티<br/>
                         신입구성원과정 주요 공지사항 및 멘티들의 교육 내용 파악 가능
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 멘토 역할 및 업무 -->
-        <div class="info-section">
-            <div class="section-title">
-                <span>📋</span>
+</div>
+</div>
+</div>
+<!-- 멘토 역할 및 업무 -->
+<div class="info-section">
+<div class="section-title">
+<span>📋</span>
                 멘토 주요 역할
             </div>
-            
-            <div class="info-item">
-                <div class="info-icon">📊</div>
-                <div class="info-content">
-                    <div class="info-title">출결 현황 관리</div>
-                    <div class="info-description">
+<div class="info-item">
+<div class="info-icon">📊</div>
+<div class="info-content">
+<div class="info-title">출결 현황 관리</div>
+<div class="info-description">
                         담당 분과의 Daily 출결 현황(오전/오후)을 파악하여 '신입구성원 출결 현황판'에 기입
                     </div>
-                    <div class="info-highlight">
+<div class="info-highlight">
                         💡 Tip: 1일차에 선정될 조장이 조원들의 출결을 확인하도록 하시면 좋습니다
                     </div>
-                </div>
-            </div>
-            
-            <div class="info-item">
-                <div class="info-icon">🎯</div>
-                <div class="info-content">
-                    <div class="info-title">프로그램 진행 지원</div>
-                    <div class="info-description">
-                        각 일자별 과목, 강의장 위치, 시간표 등 주요 학습 내용에 대해 안내<br>
+</div>
+</div>
+<div class="info-item">
+<div class="info-icon">🎯</div>
+<div class="info-content">
+<div class="info-title">프로그램 진행 지원</div>
+<div class="info-description">
+                        각 일자별 과목, 강의장 위치, 시간표 등 주요 학습 내용에 대해 안내<br/>
                         신입구성원이 원활히 교육과정에 참여하고 몰입할 수 있도록 지원
                     </div>
-                </div>
-            </div>
-            
-            <div class="info-item">
-                <div class="info-icon">⚠️</div>
-                <div class="info-content">
-                    <div class="info-title">특이사항 보고</div>
-                    <div class="info-description">
-                        담당 분과 구성원 관련 이슈 or 특이사항 발생 시 운영진에게 공유<br>
+</div>
+</div>
+<div class="info-item">
+<div class="info-icon">⚠️</div>
+<div class="info-content">
+<div class="info-title">특이사항 보고</div>
+<div class="info-description">
+                        담당 분과 구성원 관련 이슈 or 특이사항 발생 시 운영진에게 공유<br/>
                         신입구성원이 교육 과정 기간 동안 규율에 따라 행동할 수 있도록 가이드
                     </div>
-                </div>
-            </div>
-        </div>
+</div>
+</div>
+</div>
+<!-- 분과장 관리 -->
 
-        <!-- 분과장 관리 -->
-        <div class="info-section">
-            <div class="section-title">
-                <span>🏫</span>
-                분과장 관리
+<div class="info-section">
+<div class="section-title">
+<span>🏫</span>
+        분과 운영 공간 가이드
+    </div>
+<div class="info-item">
+<div class="info-icon">📐</div>
+<div class="info-content">
+<div class="info-title">분과 운영 공간 관리</div>
+<div class="info-description">
+                멘토가 책임지고 운영하는 교육 공간입니다.<br/>
+                자유롭게 활용하되, 기본 Layout을 유지해주세요.
             </div>
-            
-            <div class="info-item">
-                <div class="info-icon">📐</div>
-                <div class="info-content">
-                    <div class="info-title">분과장 Layout 관리</div>
-                    <div class="info-description">
-                        분과장은 멘토가 담당하고 책임지는 공간입니다<br>
-                        자유롭게 활용하되, 기본 Layout이 유지될 수 있도록 관리해주세요
-                    </div>
-                </div>
-            </div>
-            
-            <div class="info-item">
-                <div class="info-icon">👥</div>
-                <div class="info-content">
-                    <div class="info-title">그룹 명칭 통일</div>
-                    <div class="info-description">
-                        혼선 방지를 위해 그룹 명칭을 통일해주세요
-                    </div>
-                    <div class="info-highlight">
-                        📝 멘토 담당 그룹: '분과'<br>
-                        📝 분과 내 소그룹: '조'
-                    </div>
-                </div>
-            </div>
-            
-            <div class="info-item">
-                <div class="info-icon">👤</div>
-                <div class="info-content">
-                    <div class="info-title">분과장 선정</div>
-                    <div class="info-description">
-                        분과를 대표하여 멘토를 도와줄 분과장(조장 아님)을 선정하여<br>
-                        신입구성원과정 분과현황판에 기입해주세요
-                    </div>
-                </div>
-            </div>
-        </div>
+</div>
+</div>
+<div class="info-item vertical">
+<div class="info-title">공간 배치 예시</div>
+<div class="info-description" style="text-align: center;">
+<img alt="분과장 레이아웃 예시" src="../assets/images/분과장-layout.png"/>
+</div>
+</div>
+<div class="info-item">
+<div class="info-icon">👥</div>
+<div class="info-content">
+<div class="info-title">그룹 명칭 통일</div>
+<div class="info-description">
+                그룹 간 혼선을 방지하기 위해 명칭을 통일해주세요.
+                <div class="info-highlight">📝 분과: 멘토 담당 그룹 / 조: 분과 내 소그룹</div>
+</div>
+</div>
+</div>
+<div class="info-item">
+<div class="info-icon">🧭</div>
+<div class="info-content">
+<div class="info-title">분과 대표 멘티 선정</div>
+<div class="info-description">
+                신입구성원 중 멘토를 보조할 <strong>‘분과 대표 멘티’</strong>를 1명 선정해주세요.<br/>
+                조장이 아닌 별도 역할로, 출결 체크 및 일정 전달 등을 보조합니다.
+                <div class="info-highlight">💡 선정 후 ‘분과현황판’에 기입 필수</div>
+</div>
+</div>
+</div>
+</div>
 
-        <!-- 유용한 팁 -->
-        <div class="quick-tip">
-            <div class="quick-tip-icon">💡</div>
-            <div class="quick-tip-content">
-                <div class="quick-tip-title">멘토 생활 Tip</div>
-                <div class="quick-tip-text">
-                    • 분과 내 조 편성은 멘토 자율적으로 진행 가능<br>
-                    • 중요한 안내사항이 있는 Daily Closing, 팀 프로젝트 OT 시간에는 멘토도 참가하여 내용 숙지<br>
+<!-- 유용한 팁 -->
+<div class="quick-tip">
+<div class="quick-tip-icon">💡</div>
+<div class="quick-tip-content">
+<div class="quick-tip-title">멘토 생활 Tip</div>
+<div class="quick-tip-text">
+                    • 분과 내 조 편성은 멘토 자율적으로 진행 가능<br/>
+                    • 중요한 안내사항이 있는 Daily Closing, 팀 프로젝트 OT 시간에는 멘토도 참가하여 내용 숙지<br/>
                     • 멘토과정에서 학습한 캔미팅 가이드, FT Skill을 적극 활용해보세요
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
+</div>
+</div>
+</div>
+<script>
         function goBack() {
             if (document.referrer && document.referrer.includes(window.location.origin)) {
                 history.back();
