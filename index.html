@@ -2469,23 +2469,31 @@
             });
             
             // 9. 뒤로가기 제어
+            // 뒤로가기 제어 (한 번만!)
             history.pushState(null, null, window.location.href);
+            
             window.addEventListener('popstate', function(event) {
                 const sidebar = document.querySelector('.sidebar');
                 const modal = document.getElementById('myPageModal');
                 
+                // 1. 사이드바가 열려있으면 사이드바 닫기
                 if (sidebar && sidebar.classList.contains('open')) {
                     closeSidebar();
                     history.pushState(null, null, window.location.href);
                     return;
                 }
                 
+                // 2. 마이페이지 모달이 열려있으면 모달 닫기  
                 if (modal && modal.classList.contains('active')) {
                     closeMyPage();
                     history.pushState(null, null, window.location.href);
                     return;
                 }
+                
+                // 3. 둘 다 닫혀있으면 아무것도 하지 않음 (앱 종료 방지)
+                history.pushState(null, null, window.location.href);
             });
+        });
             
             // 10. 정기 업데이트
             setInterval(updateTime, 60000);
@@ -2505,7 +2513,6 @@
             setTimeout(() => {
                 showNotification('환영합니다!', '오늘의 멘토 업무를 시작해주세요.');
             }, 1000);
-        });
 
         // 개별 함수들
         function scrollToToday() {
