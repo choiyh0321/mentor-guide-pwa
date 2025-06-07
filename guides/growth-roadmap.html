@@ -3,190 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📈 성장 Roadmap 가이드 - SK 멘토 가이드</title>
-    <meta name="theme-color" content="#fa709a">
+    <title>📈 성장 Roadmap 가이드</title>
+    <meta name="theme-color" content="#EA1917">
+    
+    <script>
+        function goBack() {
+            try {
+                if (window.history.length > 1) {
+                    window.history.back();
+                    return;
+                }
+            } catch (e) {
+                console.log('history.back() 실패:', e);
+            }
+
+            try {
+                const currentUrl = window.location.href;
+                const parentUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
+                if (parentUrl && parentUrl !== currentUrl) {
+                    window.location.href = parentUrl;
+                    return;
+                }
+            } catch (e) {
+                console.log('상위 폴더 이동 실패:', e);
+            }
+
+            try {
+                window.location.href = '../index.html';
+            } catch (e) {
+                console.log('index.html 이동 실패:', e);
+                window.open('../index.html', '_blank');
+            }
+        }
+    </script>
+
     <style>
+        :root {
+            --sk-red: #EA1917;
+            --sk-orange: #FF6B35;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --info: #2196F3;
+            --purple: #9C27B0;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            user-select: none;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
-            background: #f8f9fa;
-            color: #202124;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+            color: #333;
             line-height: 1.6;
         }
 
-        /* Header */
         .header {
-            background: linear-gradient(135deg, #fa709a, #fee140);
+            background: linear-gradient(135deg, var(--sk-orange) 0%, var(--sk-red) 100%);
             color: white;
             padding: 20px;
-            box-shadow: 0 4px 20px rgba(250, 112, 154, 0.3);
             position: relative;
+            overflow: hidden;
         }
 
-        .back-button {
-            background: rgba(255, 255, 255, 0.2);
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
             border: none;
             color: white;
             padding: 8px 12px;
             border-radius: 8px;
+            margin-bottom: 12px;
             cursor: pointer;
-            font-size: 14px;
-            margin-bottom: 16px;
-            transition: background 0.3s ease;
+            z-index: 9999;
+            position: relative;
         }
 
-        .back-button:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .header h1 {
+        .title {
             font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 8px;
+            font-weight: 700;
+            margin-bottom: 4px;
         }
 
-        .header .subtitle {
-            font-size: 16px;
+        .subtitle {
             opacity: 0.9;
+            font-size: 14px;
         }
 
-        /* Container */
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
         }
 
-        /* Section */
-        .section {
-            background: white;
-            margin-bottom: 24px;
+        .overview-card {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
             padding: 24px;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
         }
 
-        .section h2 {
-            font-size: 20px;
-            margin-bottom: 16px;
-            color: #fa709a;
+        .card-header {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
+            margin-bottom: 16px;
         }
 
-        .section h3 {
-            font-size: 18px;
-            margin-bottom: 12px;
-            color: #333;
-            border-left: 4px solid #fa709a;
-            padding-left: 12px;
+        .card-icon {
+            font-size: 32px;
         }
 
-        /* 시간표 */
-        .timeline {
-            position: relative;
-            padding-left: 20px;
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--sk-red);
         }
 
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 8px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: #fa709a;
-        }
-
-        .timeline-item {
-            position: relative;
-            margin-bottom: 24px;
-            background: #f8f9fa;
+        .purpose-section {
+            background: linear-gradient(135deg, rgba(234,25,23,0.05), rgba(255,107,53,0.05));
+            border-left: 4px solid var(--sk-red);
             padding: 16px;
             border-radius: 12px;
-            border-left: 4px solid #fa709a;
+            margin: 16px 0;
         }
 
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -26px;
-            top: 20px;
-            width: 12px;
-            height: 12px;
-            background: #fa709a;
-            border-radius: 50%;
-            border: 3px solid white;
-        }
-
-        .time-badge {
-            background: #fa709a;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 12px;
+        .purpose-title {
             font-weight: 600;
-            display: inline-block;
+            color: var(--sk-red);
             margin-bottom: 8px;
         }
 
-        .activity-title {
+        .purpose-text {
+            color: #555;
+            line-height: 1.5;
+            user-select: text;
+        }
+
+        .timeline-overview {
+            display: grid;
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.7);
+            border-radius: 12px;
+            border-left: 4px solid var(--info);
+        }
+
+        .time-badge {
+            background: var(--info);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
             font-weight: 600;
-            margin-bottom: 4px;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .time-badge.morning { background: var(--success); }
+        .time-badge.writing { background: var(--sk-red); }
+        .time-badge.sharing { background: var(--purple); }
+
+        .activity-name {
+            font-weight: 600;
             color: #333;
         }
 
-        .activity-description {
+        .activity-purpose {
+            font-size: 13px;
             color: #666;
-            font-size: 14px;
+            margin-top: 2px;
         }
 
-        /* 토의 주제 */
-        .discussion-card {
-            background: linear-gradient(135deg, #fff3e0, #fce4ec);
-            border: 2px solid #ff9800;
+        .mentor-role-card {
+            background: linear-gradient(135deg, rgba(156,39,176,0.08), rgba(186,104,200,0.08));
+            border: 2px solid var(--purple);
             border-radius: 16px;
             padding: 20px;
             margin: 16px 0;
-            position: relative;
         }
 
-        .discussion-title {
-            color: #e65100;
+        .role-title {
+            color: var(--purple);
             font-weight: 600;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 18px;
         }
 
-        .discussion-topics {
-            display: grid;
-            gap: 12px;
+        .role-list {
+            list-style: none;
+            padding: 0;
         }
 
-        .topic-item {
+        .role-item {
             background: white;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            border-left: 3px solid var(--purple);
+            position: relative;
+        }
+
+        .role-item::before {
+            content: '📋';
+            margin-right: 8px;
+        }
+
+        .strength-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .strength-card {
+            background: white;
+            border: 2px solid #e8eaed;
+            border-radius: 12px;
             padding: 16px;
-            border-radius: 8px;
-            border-left: 4px solid #fa709a;
+            text-align: center;
             transition: all 0.3s ease;
         }
 
-        .topic-item:hover {
-            transform: translateX(4px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        .strength-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        .topic-number {
-            background: #fa709a;
+        .strength-card.top5 {
+            border-color: var(--sk-red);
+            background: linear-gradient(135deg, rgba(234,25,23,0.05), rgba(255,107,53,0.05));
+        }
+
+        .strength-number {
+            background: var(--info);
             color: white;
             width: 24px;
             height: 24px;
@@ -196,695 +276,399 @@
             justify-content: center;
             font-size: 12px;
             font-weight: 600;
-            margin-right: 8px;
+            margin-bottom: 8px;
         }
 
-        .topic-text {
+        .strength-number.top5 {
+            background: var(--sk-red);
+        }
+
+        .strength-name {
+            font-weight: 600;
             color: #333;
-            font-weight: 500;
+            margin-bottom: 4px;
         }
 
-        /* Roadmap 템플릿 */
+        .strength-desc {
+            font-size: 12px;
+            color: #666;
+        }
+
         .roadmap-template {
-            background: #f8f9fa;
-            border: 2px solid #fa709a;
+            background: rgba(255,255,255,0.95);
+            border: 2px solid var(--info);
             border-radius: 16px;
             padding: 20px;
             margin: 16px 0;
         }
 
         .template-title {
-            color: #c2185b;
+            color: var(--info);
             font-weight: 600;
             margin-bottom: 16px;
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 18px;
         }
 
-        .roadmap-form {
-            display: grid;
-            gap: 16px;
-        }
-
-        .form-section {
+        .roadmap-table {
+            width: 100%;
+            border-collapse: collapse;
             background: white;
-            padding: 16px;
-            border-radius: 12px;
-            border-left: 4px solid #fa709a;
-        }
-
-        .form-section h4 {
-            color: #c2185b;
-            margin-bottom: 12px;
-            font-size: 16px;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: auto 1fr 1fr 2fr;
-            gap: 12px;
-            align-items: center;
-            margin-bottom: 8px;
-            padding: 8px;
-            background: #f8f9fa;
             border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
-        .form-label {
+        .roadmap-table th {
+            background: var(--sk-red);
+            color: white;
+            padding: 12px;
+            text-align: left;
             font-weight: 600;
-            color: #333;
             font-size: 14px;
-            min-width: 60px;
         }
 
-        .form-input {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            font-family: inherit;
+        .roadmap-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 13px;
+            vertical-align: top;
         }
 
-        .form-input:focus {
-            outline: none;
-            border-color: #fa709a;
-            box-shadow: 0 0 0 2px rgba(250, 112, 154, 0.2);
+        .roadmap-table tr:last-child td {
+            border-bottom: none;
         }
 
-        .form-textarea {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            font-family: inherit;
-            resize: vertical;
-            min-height: 60px;
+        .period-label {
+            background: var(--info);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 11px;
         }
 
-        .form-textarea:focus {
-            outline: none;
-            border-color: #fa709a;
-            box-shadow: 0 0 0 2px rgba(250, 112, 154, 0.2);
-        }
-
-        /* 강점 활용 가이드 */
-        .strength-guide {
-            background: linear-gradient(135deg, #e8f5e8, #f1f8e9);
-            border: 2px solid #4caf50;
+        .guide-tips {
+            background: linear-gradient(135deg, #fff3e0, #fce4ec);
+            border: 2px solid var(--sk-orange);
             border-radius: 16px;
             padding: 20px;
             margin: 16px 0;
         }
 
-        .strength-title {
-            color: #2e7d32;
+        .tips-title {
+            color: #e65100;
             font-weight: 600;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .strength-list {
-            display: grid;
-            gap: 12px;
-        }
-
-        .strength-item {
-            background: white;
-            padding: 12px;
-            border-radius: 8px;
-            border-left: 4px solid #4caf50;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
-
-        .strength-icon {
-            background: #4caf50;
-            color: white;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        .strength-content {
-            flex: 1;
-        }
-
-        .strength-name {
-            font-weight: 600;
-            color: #2e7d32;
-            margin-bottom: 4px;
-        }
-
-        .strength-description {
-            color: #333;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        /* Tips 박스 */
-        .tip-box {
-            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
-            border: 1px solid #2196f3;
-            border-radius: 12px;
-            padding: 16px;
-            margin: 16px 0;
-        }
-
-        .tip-title {
-            font-weight: 600;
-            color: #1976d2;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .tip-list {
-            margin-left: 16px;
-            color: #1565c0;
-        }
-
-        .tip-list li {
-            margin-bottom: 6px;
-            line-height: 1.5;
-        }
-
-        /* 준비물 체크리스트 */
-        .checklist {
-            background: #e8f5e8;
-            border: 1px solid #4caf50;
-            border-radius: 12px;
-            padding: 16px;
-            margin: 16px 0;
-        }
-
-        .checklist h4 {
-            color: #2e7d32;
             margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .checklist-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-            padding: 8px;
+        .tips-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tip-item {
             background: white;
+            padding: 12px 16px;
+            margin-bottom: 8px;
             border-radius: 8px;
+            border-left: 3px solid var(--sk-orange);
         }
 
-        .checklist-item input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: #4caf50;
+        .tip-item::before {
+            content: '💡';
+            margin-right: 8px;
         }
 
-        /* 반응형 */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(234,25,23,0.1), rgba(255,107,53,0.1));
+            border: 1px solid var(--sk-orange);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .highlight-title {
+            font-weight: 600;
+            color: #e65100;
+            margin-bottom: 8px;
+        }
+
+        .highlight-text {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.5;
+            user-select: text;
+        }
+
         @media (max-width: 768px) {
             .container {
-                padding: 15px;
-            }
-            
-            .section {
                 padding: 16px;
-                margin-bottom: 16px;
-            }
-            
-            .header h1 {
-                font-size: 20px;
             }
 
-            .form-row {
+            .strength-grid {
                 grid-template-columns: 1fr;
-                gap: 8px;
             }
 
-            .form-label {
-                min-width: auto;
+            .overview-card {
+                padding: 16px;
+                margin-bottom: 12px;
+            }
+
+            .roadmap-table {
+                font-size: 12px;
+            }
+
+            .roadmap-table th,
+            .roadmap-table td {
+                padding: 8px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <div class="header">
-        <button class="back-button" onclick="goBack()">← 뒤로가기</button>
-        <h1>📈 성장 Roadmap 완전 가이드</h1>
-        <div class="subtitle">강점 진단 기반 로드맵 작성법</div>
+        <div class="header-content">
+            <button class="back-btn" onclick="goBack()">← 뒤로가기</button>
+            <div class="title">📈 성장 Roadmap</div>
+            <div class="subtitle">강점 기반 성장 계획 수립</div>
+        </div>
     </div>
 
     <div class="container">
-        <!-- 사전 준비사항 -->
-        <div class="section">
-            <h2>📋 사전 준비사항</h2>
-            <div class="checklist">
-                <h4>✅ 준비사항 체크리스트</h4>
-                <div class="checklist-item">
-                    <input type="checkbox" id="prep1">
-                    <label for="prep1">성장 Roadmap 장표 준비</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="prep2">
-                    <label for="prep2">강점 진단 결과 확인 (Self-Awareness 시간 진행 후)</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="prep3">
-                    <label for="prep3">SKMS 실천 다짐 결과물 준비</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="prep4">
-                    <label for="prep4">Vision Building 결과물 참고자료 준비</label>
-                </div>
+        <div class="overview-card">
+            <div class="card-header">
+                <div class="card-icon">🎯</div>
+                <div class="card-title">성장 Roadmap 개요</div>
             </div>
-        </div>
-
-        <!-- 전체 진행 일정 -->
-        <div class="section">
-            <h2>⏰ 전체 진행 일정</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="time-badge">14:00~14:30</div>
-                    <div class="activity-title">과정 돌아보기</div>
-                    <div class="activity-description">조별 토의를 통한 교육과정 회고</div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="time-badge">14:30~15:00</div>
-                    <div class="activity-title">성장 Roadmap 작성</div>
-                    <div class="activity-description">개인별 로드맵 작성 및 멘토 가이드</div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="time-badge">15:00~15:30</div>
-                    <div class="activity-title">성장 Roadmap 공유</div>
-                    <div class="activity-description">조별 발표 및 상호 피드백</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 과정 돌아보기 -->
-        <div class="section">
-            <h2>🔄 과정 돌아보기</h2>
-            <div class="discussion-card">
-                <div class="discussion-title">💭 조별 토의 주제</div>
-                <div class="discussion-topics">
-                    <div class="topic-item">
-                        <span class="topic-number">1</span>
-                        <span class="topic-text">과정 내용 중에 가장 인상적이었거나 SK 속 성장에 도움이 될 것 같은 프로그램을 고르고, 그 이유를 서로 얘기해보세요.</span>
-                    </div>
-                    <div class="topic-item">
-                        <span class="topic-number">2</span>
-                        <span class="topic-text">오전에 진단한 강점 5가지를 조원들과 공유해주세요. 그리고 Top 5 강점 중 현업에서 바로 활용하고 싶은 강점과 그 이유를 설명해주세요.</span>
-                    </div>
-                    <div class="topic-item">
-                        <span class="topic-number">3</span>
-                        <span class="topic-text">Career 목표를 달성하기 위해 과정 중 배운 내용과 강점들을 어떻게 활용할 수 있을지에 대해서 작성한 SKMS 실천 다짐 결과물을 바탕으로 토의해주세요.</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 강점 활용 가이드 -->
-        <div class="section">
-            <h2>💪 강점 활용 가이드</h2>
-            <div class="strength-guide">
-                <div class="strength-title">🌟 주요 강점별 현업 활용 방법</div>
-                <div class="strength-list">
-                    <div class="strength-item">
-                        <div class="strength-icon">1</div>
-                        <div class="strength-content">
-                            <div class="strength-name">소통 & 협업 강점</div>
-                            <div class="strength-description">팀 프로젝트 리더 역할, 부서 간 조율 업무, 고객 대응, 사내 커뮤니케이션 허브 역할</div>
-                        </div>
-                    </div>
-                    <div class="strength-item">
-                        <div class="strength-icon">2</div>
-                        <div class="strength-content">
-                            <div class="strength-name">분석 & 전략 강점</div>
-                            <div class="strength-description">데이터 분석 업무, 시장 조사, 경쟁사 분석, 전략 기획, 프로세스 개선</div>
-                        </div>
-                    </div>
-                    <div class="strength-item">
-                        <div class="strength-icon">3</div>
-                        <div class="strength-content">
-                            <div class="strength-name">실행 & 추진 강점</div>
-                            <div class="strength-description">프로젝트 매니지먼트, 일정 관리, 목표 달성, 성과 관리, 업무 효율화</div>
-                        </div>
-                    </div>
-                    <div class="strength-item">
-                        <div class="strength-icon">4</div>
-                        <div class="strength-content">
-                            <div class="strength-name">창의 & 혁신 강점</div>
-                            <div class="strength-description">아이디어 발굴, 문제 해결, 새로운 접근법 제시, 디지털 트랜스포메이션</div>
-                        </div>
-                    </div>
-                    <div class="strength-item">
-                        <div class="strength-icon">5</div>
-                        <div class="strength-content">
-                            <div class="strength-name">관계 & 영향력 강점</div>
-                            <div class="strength-description">팀 빌딩, 멘토링, 조직 문화 개선, 네트워킹, 대외 업무</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 성장 Roadmap 템플릿 -->
-        <div class="section">
-            <h2>📋 성장 Roadmap 작성 템플릿</h2>
-            <div class="roadmap-template">
-                <div class="template-title">📝 개인별 성장 로드맵</div>
-                <div class="roadmap-form">
-                    <div class="form-section">
-                        <h4>🎯 Career 목표</h4>
-                        <input type="text" class="form-input" placeholder="예: 데이터 기반 마케팅 전문가가 되어 고객 인사이트를 발굴하는 역할을 하고 싶습니다" style="width: 100%; margin-bottom: 8px;">
-                        
-                        <h4 style="margin-top: 16px;">💎 내가 정의한 SKMS 실천</h4>
-                        <input type="text" class="form-input" placeholder="예: 고객을 위한 Value 창출을 위해 끊임없이 학습하고 혁신하는 구성원" style="width: 100%;">
-                    </div>
-
-                    <div class="form-section">
-                        <h4>📈 단계별 성장 계획</h4>
-                        <div class="form-row">
-                            <div class="form-label">시점</div>
-                            <div class="form-label">목표</div>
-                            <div class="form-label">강점</div>
-                            <div class="form-label">세부 실천계획</div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-label">단기<br>(0~1년)</div>
-                            <input type="text" class="form-input" placeholder="예: 기본 업무 역량 습득">
-                            <input type="text" class="form-input" placeholder="예: 학습능력, 소통력">
-                            <textarea class="form-textarea" placeholder="예: 매주 업무 관련 도서 1권 읽기, 월 1회 타 부서와의 협업 프로젝트 참여"></textarea>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-label">중기<br>(1~3년)</div>
-                            <input type="text" class="form-input" placeholder="예: 전문 분야 역량 개발">
-                            <input type="text" class="form-input" placeholder="예: 분석력, 기획력">
-                            <textarea class="form-textarea" placeholder="예: 전문 자격증 취득, 사내 전문가 과정 이수, 외부 교육 참여"></textarea>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-label">장기<br>(3년~)</div>
-                            <input type="text" class="form-input" placeholder="예: 조직을 이끄는 리더">
-                            <input type="text" class="form-input" placeholder="예: 리더십, 전략적 사고">
-                            <textarea class="form-textarea" placeholder="예: MBA 취득, 해외 경험, 후배 멘토링, 조직 혁신 프로젝트 리드"></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tip-box">
-                <div class="tip-title">🎯 Roadmap 작성 가이드</div>
-                <ul class="tip-list">
-                    <li><strong>구성원들이 작성한 SKMS 실천 다짐을 Remind 해주세요</strong></li>
-                    <li><strong>Roadmap 작성을 어려워하는 구성원이 있다면 예시로 Guide 해주세요</strong></li>
-                    <li><strong>1일차 Vision Building의 결과물 중 '일잘러'의 모습과 '내가 SK에서 하고 싶은 일' 결과물을 구성원들에게 Remind 해주세요</strong></li>
-                    <li><strong>멘토님의 사례 혹은 작성 예시를 통해 구성원들이 감을 잡을 수 있게 해주세요</strong></li>
-                    <li><strong>'내가 정의한 SKMS 실천'과 '목표' 그리고 '실천계획'이 내용적으로 통할 수 있도록 Guide 해주세요</strong></li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- 성장 Roadmap 공유 -->
-        <div class="section">
-            <h2>📢 성장 Roadmap 공유</h2>
-            <div class="discussion-card">
-                <div class="discussion-title">🗣️ 조별 발표 진행</div>
-                <div class="discussion-topics">
-                    <div class="topic-item">
-                        <span class="topic-number">1</span>
-                        <span class="topic-text">조별로 1~2명씩 자신의 성장 로드맵을 발표 (1인당 2-3분)</span>
-                    </div>
-                    <div class="topic-item">
-                        <span class="topic-number">2</span>
-                        <span class="topic-text">Career 목표와 강점을 어떻게 연결했는지 설명</span>
-                    </div>
-                    <div class="topic-item">
-                        <span class="topic-number">3</span>
-                        <span class="topic-text">동료들의 로드맵에 대해 격려와 조언 제공</span>
-                    </div>
-                    <div class="topic-item">
-                        <span class="topic-number">4</span>
-                        <span class="topic-text">가장 인상적인 로드맵이나 실천계획에 대해 공유</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tip-box">
-                <div class="tip-title">⏰ 진행 Tips</div>
-                <ul class="tip-list">
-                    <li>시간 관리를 위해 발표자를 미리 선정하고 시간 안내</li>
-                    <li>다른 구성원들도 적극적으로 응원하고 격려하도록 분위기 조성</li>
-                    <li>구체적이고 실현 가능한 계획에 대해 긍정적 피드백 제공</li>
-                    <li>공통적인 목표나 관심사를 가진 구성원들끼리 연결해주기</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- 멘토 진행 포인트 -->
-        <div class="section">
-            <h2>🎯 멘토 진행 핵심 포인트</h2>
             
-            <div class="strength-guide">
-                <div class="strength-title">💡 효과적인 가이드 방법</div>
-                <div class="strength-list">
-                    <div class="strength-item">
-                        <div class="strength-icon">📋</div>
-                        <div class="strength-content">
-                            <div class="strength-name">사전 자료 활용</div>
-                            <div class="strength-description">Vision Building 결과물과 SKMS 실천 다짐을 연결하여 일관성 있는 로드맵 작성 유도</div>
-                        </div>
+            <div class="purpose-section">
+                <div class="purpose-title">💡 활동 목적</div>
+                <div class="purpose-text">
+                    오전 Self-Awareness 진단을 통해 발견한 개인별 강점을 바탕으로 
+                    구체적이고 실현 가능한 성장 계획을 수립하는 시간입니다. 
+                    10일간의 교육과정을 마무리하며 앞으로의 SK 생활에서 
+                    어떻게 성장해 나갈지 구체적인 로드맵을 그려보세요.
+                </div>
+            </div>
+
+            <div class="purpose-section">
+                <div class="purpose-title">🎪 멘토의 역할</div>
+                <div class="purpose-text">
+                    <strong>가이드 및 조언자</strong> 역할입니다. 신입구성원들이 자신의 강점을 제대로 파악하고 
+                    현실적이면서도 도전적인 목표를 설정할 수 있도록 도와주세요. 
+                    개인별 상황에 맞는 맞춤형 조언을 제공하는 것이 핵심입니다.
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-header">
+                <div class="card-icon">⏰</div>
+                <div class="card-title">활동 일정 (90분)</div>
+            </div>
+            
+            <div class="timeline-overview">
+                <div class="timeline-item">
+                    <div class="time-badge morning">14:00~14:30</div>
+                    <div>
+                        <div class="activity-name">과정 돌아보기</div>
+                        <div class="activity-purpose">10일간의 교육과정 회고 및 소감 공유</div>
                     </div>
-                    <div class="strength-item">
-                        <div class="strength-icon">🎯</div>
-                        <div class="strength-content">
-                            <div class="strength-name">구체적 목표 설정</div>
-                            <div class="strength-description">막연한 목표가 아닌 구체적이고 측정 가능한 목표 설정을 위한 질문과 가이드 제공</div>
-                        </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="time-badge writing">14:30~15:00</div>
+                    <div>
+                        <div class="activity-name">성장 Roadmap 작성</div>
+                        <div class="activity-purpose">강점 기반 개인별 성장 계획 수립</div>
                     </div>
-                    <div class="strength-item">
-                        <div class="strength-icon">💪</div>
-                        <div class="strength-content">
-                            <div class="strength-name">강점 기반 접근</div>
-                            <div class="strength-description">약점 보완보다는 강점을 살려 성장할 수 있는 방향으로 로드맵 작성 유도</div>
-                        </div>
-                    </div>
-                    <div class="strength-item">
-                        <div class="strength-icon">🌱</div>
-                        <div class="strength-content">
-                            <div class="strength-name">단계적 성장</div>
-                            <div class="strength-description">무리한 계획보다는 단계적으로 성장할 수 있는 현실적인 로드맵 작성 지원</div>
-                        </div>
-                    </div>
-                    <div class="strength-item">
-                        <div class="strength-icon">🤝</div>
-                        <div class="strength-content">
-                            <div class="strength-name">개별 맞춤 조언</div>
-                            <div class="strength-description">각 구성원의 배경과 관심사를 고려한 개별적인 조언과 격려 제공</div>
-                        </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="time-badge sharing">15:00~15:30</div>
+                    <div>
+                        <div class="activity-name">성장 Roadmap 공유</div>
+                        <div class="activity-purpose">조별 발표 및 상호 격려</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 마무리 안내 -->
-        <div class="section">
-            <h2>📤 마무리 및 제출 안내</h2>
-            <div class="checklist">
-                <h4>✅ 마무리 체크사항</h4>
-                <div class="checklist-item">
-                    <input type="checkbox" id="finish1">
-                    <label for="finish1">모든 구성원이 성장 로드맵 작성 완료</label>
+        <div class="overview-card">
+            <div class="card-header">
+                <div class="card-icon">📋</div>
+                <div class="card-title">멘토 진행 가이드</div>
+            </div>
+
+            <div class="mentor-role-card">
+                <div class="role-title">
+                    <span>🗣️</span>
+                    과정 돌아보기 진행 (14:00~14:30)
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="finish2">
-                    <label for="finish2">작성된 로드맵을 구성원들이 커뮤니티에 업로드하도록 안내</label>
+                <ul class="role-list">
+                    <li class="role-item">과정 내용 중 가장 인상적이었거나 도움이 될 것 같은 프로그램과 이유 공유</li>
+                    <li class="role-item">오전에 진단한 강점 5가지를 조원들과 공유하도록 안내</li>
+                    <li class="role-item">Top 5 강점 중 현업에서 바로 활용하고 싶은 강점과 이유 설명 유도</li>
+                    <li class="role-item">SKMS 실천 다짐 결과물을 바탕으로 한 토의 진행</li>
+                </ul>
+            </div>
+
+            <div class="guide-tips">
+                <div class="tips-title">
+                    <span>💡</span>
+                    멘토 가이드 팁
                 </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="finish3">
-                    <label for="finish3">개별 피드백 및 격려 메시지 전달</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="finish4">
-                    <label for="finish4">후속 멘토링이나 지원이 필요한 구성원 파악</label>
+                <ul class="tips-list">
+                    <li class="tip-item">구성원들이 작성한 SKMS 실천 다짐을 다시 한번 Remind 해주세요</li>
+                    <li class="tip-item">Roadmap 작성을 어려워하는 구성원이 있다면 예시로 Guide 해주세요</li>
+                    <li class="tip-item">완성된 Roadmap을 구성원들이 커뮤니티에 업로드하도록 안내해주세요</li>
+                    <li class="tip-item">개인의 강점과 목표가 연결되도록 도와주세요</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-header">
+                <div class="card-icon">💪</div>
+                <div class="card-title">강점 활용 가이드</div>
+            </div>
+
+            <div class="purpose-section">
+                <div class="purpose-title">🔍 강점 진단 결과 활용법</div>
+                <div class="purpose-text">
+                    오전 Self-Awareness에서 진단한 <strong>Top 5 강점</strong>을 중심으로 
+                    성장 계획을 수립합니다. 각자의 고유한 강점을 인정하고 
+                    이를 SK에서 어떻게 발휘할 수 있을지 구체적으로 계획해보세요.
                 </div>
             </div>
 
-            <div class="tip-box">
-                <div class="tip-title">💌 마무리 메시지 예시</div>
-                <ul class="tip-list">
-                    <li>"오늘 작성한 로드맵이 여러분의 성장 나침반이 되길 바랍니다"</li>
-                    <li>"강점을 발견하고 활용하는 것이 성공의 지름길입니다"</li>
-                    <li>"언제든 궁금한 것이 있으면 멘토에게 문의하세요"</li>
-                    <li>"여러분의 성장을 응원하고 지켜보겠습니다"</li>
+            <div class="strength-grid">
+                <div class="strength-card top5">
+                    <div class="strength-number top5">1</div>
+                    <div class="strength-name">최고 강점</div>
+                    <div class="strength-desc">가장 자신 있는 분야</div>
+                </div>
+                <div class="strength-card top5">
+                    <div class="strength-number top5">2</div>
+                    <div class="strength-name">핵심 강점</div>
+                    <div class="strength-desc">현업 활용 가능</div>
+                </div>
+                <div class="strength-card top5">
+                    <div class="strength-number top5">3</div>
+                    <div class="strength-name">발전 강점</div>
+                    <div class="strength-desc">더 키울 수 있는 영역</div>
+                </div>
+                <div class="strength-card">
+                    <div class="strength-number">4</div>
+                    <div class="strength-name">보조 강점</div>
+                    <div class="strength-desc">상황별 활용</div>
+                </div>
+                <div class="strength-card">
+                    <div class="strength-number">5</div>
+                    <div class="strength-name">잠재 강점</div>
+                    <div class="strength-desc">개발 가능성</div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <div class="highlight-title">💡 강점 활용 조언</div>
+                <div class="highlight-text">
+                    모든 강점을 다 개발하려 하지 마세요. <strong>Top 3 강점</strong>에 집중하여 
+                    이를 전문성으로 발전시키는 것이 더 효과적입니다. 
+                    나머지 강점들은 상황에 따라 보조적으로 활용하는 것으로 충분합니다.
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-header">
+                <div class="card-icon">📝</div>
+                <div class="card-title">성장 Roadmap 템플릿</div>
+            </div>
+
+            <div class="roadmap-template">
+                <div class="template-title">
+                    <span>📋</span>
+                    작성 양식 가이드
+                </div>
+                
+                <table class="roadmap-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">시점</th>
+                            <th style="width: 25%;">목표</th>
+                            <th style="width: 20%;">활용 강점</th>
+                            <th style="width: 40%;">세부 실천계획</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="period-label">단기</span><br>(6개월~1년)</td>
+                            <td>담당 업무 전문성 확보<br>팀 내 신뢰 구축</td>
+                            <td>Top 1-2 강점<br>집중 활용</td>
+                            <td>• 업무 관련 스터디 참여<br>• 멘토/선배와 정기 미팅<br>• 강점 활용한 기여 방안 모색</td>
+                        </tr>
+                        <tr>
+                            <td><span class="period-label">중기</span><br>(1년~3년)</td>
+                            <td>핵심 인재로 성장<br>리더십 역량 개발</td>
+                            <td>Top 3 강점<br>통합 활용</td>
+                            <td>• 프로젝트 리더 경험<br>• 사내외 네트워킹<br>• 후배 멘토링 참여</td>
+                        </tr>
+                        <tr>
+                            <td><span class="period-label">장기</span><br>(3년~5년)</td>
+                            <td>조직 내 전문가<br>영향력 확대</td>
+                            <td>강점 기반<br>전문성 완성</td>
+                            <td>• 전문 분야 대외 발표<br>• 조직 혁신 주도<br>• 차세대 리더 준비</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="purpose-section">
+                <div class="purpose-title">✅ 작성 시 체크포인트</div>
+                <div class="purpose-text">
+                    <strong>• 구체성</strong>: "열심히 하겠다"가 아닌 "매주 2회 스터디 참여"처럼 구체적으로<br>
+                    <strong>• 연결성</strong>: Career 목표와 SKMS 실천이 자연스럽게 연결되도록<br>
+                    <strong>• 현실성</strong>: 도전적이지만 달성 가능한 수준으로 설정<br>
+                    <strong>• 강점 활용</strong>: 개인의 Top 강점이 계획에 반영되도록
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-header">
+                <div class="card-icon">🎤</div>
+                <div class="card-title">공유 시간 진행</div>
+            </div>
+
+            <div class="highlight-box">
+                <div class="highlight-title">💬 발표 진행 가이드 (15:00~15:30)</div>
+                <div class="highlight-text">
+                    <strong>• 시간 배분</strong>: 조별로 1명씩 3-4분씩 발표 (총 30분)<br>
+                    <strong>• 발표 내용</strong>: 가장 중요한 강점 1개 + 단기 목표 1개만 간단히<br>
+                    <strong>• 멘토 역할</strong>: 각 발표 후 격려 및 간단한 조언 제공<br>
+                    <strong>• 마무리</strong>: 전체적인 소감 및 앞으로의 응원 메시지
+                </div>
+            </div>
+
+            <div class="guide-tips">
+                <div class="tips-title">
+                    <span>🌟</span>
+                    격려 메시지 예시
+                </div>
+                <ul class="tips-list">
+                    <li class="tip-item">"○○님의 △△ 강점이 정말 인상적이네요. 이 강점을 잘 활용하시면 분명 좋은 성과가 있을 것 같습니다."</li>
+                    <li class="tip-item">"구체적이고 현실적인 계획을 세우셨네요. 단계별로 차근차근 실행해 나가시기 바랍니다."</li>
+                    <li class="tip-item">"도전적인 목표를 설정하셨는데, ○○님의 의지와 역량이면 충분히 달성 가능하다고 생각합니다."</li>
+                    <li class="tip-item">"앞으로 SK에서 여러분의 성장과 활약을 기대하겠습니다. 언제든 도움이 필요하면 연락주세요."</li>
                 </ul>
             </div>
         </div>
     </div>
-
-    <script>
-        function goBack() {
-            history.back();
-        }
-
-        // 체크리스트 상태 저장
-        document.addEventListener('DOMContentLoaded', function() {
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            
-            checkboxes.forEach(checkbox => {
-                const savedState = localStorage.getItem(`roadmap_${checkbox.id}`);
-                if (savedState === 'true') {
-                    checkbox.checked = true;
-                }
-                
-                checkbox.addEventListener('change', function() {
-                    localStorage.setItem(`roadmap_${this.id}`, this.checked);
-                });
-            });
-        });
-
-        // 로드맵 템플릿 자동 저장
-        document.querySelectorAll('.form-input, .form-textarea').forEach(input => {
-            input.addEventListener('input', function() {
-                const section = this.closest('.form-section');
-                const sectionTitle = section.querySelector('h4').textContent;
-                const key = `roadmap_template_${sectionTitle}_${this.placeholder}`;
-                localStorage.setItem(key, this.value);
-            });
-            
-            // 저장된 값 복원
-            const section = input.closest('.form-section');
-            if (section) {
-                const sectionTitle = section.querySelector('h4').textContent;
-                const key = `roadmap_template_${sectionTitle}_${input.placeholder}`;
-                const savedValue = localStorage.getItem(key);
-                if (savedValue) {
-                    input.value = savedValue;
-                }
-            }
-        });
-
-        // 토의 주제 클릭 이벤트
-        document.querySelectorAll('.topic-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const topicText = this.querySelector('.topic-text').textContent;
-                
-                // 하이라이트 효과
-                this.style.backgroundColor = '#e3f2fd';
-                this.style.transform = 'translateX(8px)';
-                
-                setTimeout(() => {
-                    this.style.backgroundColor = '';
-                    this.style.transform = 'translateX(4px)';
-                }, 2000);
-                
-                console.log(`토의 주제: ${topicText}`);
-            });
-        });
-
-        // 강점 항목 클릭 이벤트
-        document.querySelectorAll('.strength-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const strengthName = this.querySelector('.strength-name').textContent;
-                const strengthDesc = this.querySelector('.strength-description').textContent;
-                
-                // 모든 강점 항목 원상복구
-                document.querySelectorAll('.strength-item').forEach(s => {
-                    s.style.transform = 'translateX(0)';
-                    s.style.boxShadow = '';
-                });
-                
-                // 선택된 항목 하이라이트
-                this.style.transform = 'translateX(8px)';
-                this.style.boxShadow = '0 4px 12px rgba(76, 175, 80, 0.3)';
-                
-                setTimeout(() => {
-                    alert(`💪 ${strengthName}\n\n${strengthDesc}\n\n실제 구현에서는 더 상세한 활용 가이드가 표시됩니다.`);
-                    
-                    // 3초 후 원상복구
-                    setTimeout(() => {
-                        this.style.transform = 'translateX(0)';
-                        this.style.boxShadow = '';
-                    }, 3000);
-                }, 300);
-            });
-        });
-
-        // 진행률 추적
-        function updateProgress() {
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            const checkedCount = document.querySelectorAll('input[type="checkbox"]:checked').length;
-            const totalCount = checkboxes.length;
-            const progress = Math.round((checkedCount / totalCount) * 100);
-            
-            console.log(`성장 Roadmap 준비 진행률: ${progress}% (${checkedCount}/${totalCount})`);
-        }
-
-        // 체크박스 변경시 진행률 업데이트
-        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-            checkbox.addEventListener('change', updateProgress);
-        });
-
-        // 로드맵 자동 완성 도우미
-        function autoFillExample() {
-            const inputs = document.querySelectorAll('.form-input');
-            const textareas = document.querySelectorAll('.form-textarea');
-            
-            // 예시 데이터 (실제 구현에서는 더 다양한 예시 제공)
-            const examples = {
-                career: "데이터 기반 마케팅 전문가가 되어 고객 인사이트를 발굴하는 역할",
-                skms: "고객을 위한 Value 창출을 위해 끊임없이 학습하고 혁신하는 구성원",
-                shortGoal: "기본 업무 역량 습득",
-                shortStrength: "학습능력, 소통력",
-                shortPlan: "매주 업무 관련 도서 1권 읽기, 월 1회 타 부서와의 협업 프로젝트 참여"
-            };
-            
-            // 예시 데이터를 폼에 적용하는 함수
-            // 실제 구현에서는 버튼 클릭이나 도움말 기능으로 제공
-        }
-
-        // 애니메이션 효과
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        // 섹션들에 초기 스타일 적용 및 관찰 시작
-        document.querySelectorAll('.discussion-card, .roadmap-template, .strength-guide').forEach(element => {
-            element.style.opacity = '0';
-            element.style.transform = 'translateY(20px)';
-            element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(element);
-        });
-
-        // 페이지 로드시 초기 진행률 계산
-        setTimeout(updateProgress, 500);
-    </script>
 </body>
 </html>
