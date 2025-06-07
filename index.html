@@ -8,133 +8,9 @@
     <meta name="theme-color" content="#EA4335">
     
     <!-- CSS 파일 링크 -->
-    <link rel="stylesheet" href="assets/css/main.css">
-    <!-- 모바일 푸시 알림을 위한 추가 스타일 -->
-    <style>
-        /* 푸시 알림 권한 요청 배너 */
-        .notification-permission-banner {
-            background: linear-gradient(135deg, #E31837, #ff4569);
-            color: white;
-            padding: 16px 20px;
-            margin-bottom: 20px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            box-shadow: 0 4px 20px rgba(227, 24, 55, 0.3);
-            animation: slideDown 0.5s ease-out;
-            position: relative; 
-        }
-
-        .permission-close {
-            position: absolute;
-            top: 8px;
-            right: 12px;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            padding: 4px;
-            line-height: 1;
-            opacity: 0.8;
-            transition: opacity 0.3s ease;
-        }
-
-        .permission-close:hover {
-            opacity: 1;
-            transform: scale(1.1);
-        }
-
-        .notification-permission-banner.hidden {
-            display: none;
-        }
-
-        .permission-icon {
-            font-size: 32px;
-            animation: pulse 2s infinite;
-        }
-
-        .permission-content {
-            flex: 1;
-        }
-
-        .permission-title {
-            font-weight: 700;
-            font-size: 16px;
-            margin-bottom: 4px;
-        }
-
-        .permission-text {
-            font-size: 14px;
-            opacity: 0.9;
-            line-height: 1.4;
-        }
-
-        .permission-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .permission-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .permission-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-1px);
-        }
-
-        .permission-btn.primary {
-            background: white;
-            color: #E31837;
-        }
-
-        .permission-btn.primary:hover {
-            background: #f5f5f5;
-        }
-
-        /* 푸시 알림 상태 표시 */
-        .notification-status {
-            display:none !important;
-        }
-
-        .notification-status.show {
-            transform: translateY(0);
-        }
-
-        /* 애니메이션 */
-        @keyframes slideDown {
-            from {
-                transform: translateY(-20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="assets/css/main.css">  
 </head>
+
 <body>
     <!-- 모바일 푸시 알림 권한 요청 배너 -->
     <div class="notification-permission-banner" id="notificationBanner">
@@ -151,12 +27,11 @@
         <button class="permission-close" onclick="hideNotificationBanner()">×</button>
     </div>
 
-<!-- Header -->
-    <div class="header">
-        <div class="time-indicator" id="currentTime"></div>
-        <h1>🎯 슬기로운 멘토 생활 가이드</h1>
-        <div class="subtitle" id="headerSubtitle">2025년 1월 SK그룹 신입구성원과정</div>
-    </div>
+    <!-- Header -->
+        <div class="header">
+            <h1>🎯 슬기로운 멘토 생활 가이드</h1>
+            <div class="subtitle" id="headerSubtitle">2025년 7월 SK그룹 신입구성원과정</div>
+        </div>
 
     <div class="container">
         <!-- 🆕 멘토 가이드라인 섹션 - <div class="container"> 바로 다음에 추가 -->
@@ -254,8 +129,8 @@
 </div>
         <!-- Today's Essential Tasks -->
         <div class="section daily-tasks-section">
-            <h2>📊 오늘의 필수 업무</h2>
-            <p class="section-description">매일 완료해야 하는 핵심 업무들을 확인하고 진행하세요</p>
+            <h2>📊 오늘 멘토가 할 일</h2>
+            <p class="section-description">오늘 완료해야 하는 일을 확인하고 진행하세요</p>
             
             <div class="tasks-grid">
                 <!-- 출석체크 - 오전 -->
@@ -308,7 +183,7 @@
                 <div class="task-card interview-card" id="interviewTask">
                     <div class="task-header">
                         <div class="task-title">
-                            💬 1:1 면담 진행현황
+                            💬 1:1 면담 진행 현황
                         </div>
                         <div class="task-status status-partial" id="interviewStatus">진행중</div>
                     </div>
@@ -368,7 +243,6 @@
             </div>
         </div>
 
-        <!-- Today's Schedule -->
         <!-- Today's Schedule - Google Sheets 완전 연동 버전 -->
 <div class="section schedule-section">
     <div class="schedule-header">
@@ -447,394 +321,6 @@
     </div>
 </div>
 
-<style>
-/* 일정 섹션 스타일 */
-.schedule-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-}
-
-.schedule-actions {
-    display: flex;
-    gap: 8px;
-}
-
-.btn-refresh-schedule,
-.btn-full-schedule {
-    background: linear-gradient(135deg, #1976d2, #42a5f5);
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn-refresh-schedule {
-    background: linear-gradient(135deg, #4caf50, #66bb6a);
-}
-
-.btn-refresh-schedule:hover {
-    background: linear-gradient(135deg, #45a049, #5cb85c);
-    transform: translateY(-1px);
-}
-
-.btn-full-schedule:hover {
-    background: linear-gradient(135deg, #1565c0, #1e88e5);
-    transform: translateY(-1px);
-}
-
-.btn-refresh-schedule:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-    transform: none;
-}
-
-/* 로딩 스타일 */
-.schedule-loading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 40px 20px;
-    color: #666;
-}
-
-.loading-spinner {
-    width: 32px;
-    height: 32px;
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #1976d2;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 12px;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* 일정 아이템 스타일 - 기존 디자인 유지 */
-.schedule-item {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 16px;
-    background: white;
-    border-radius: 12px;
-    margin-bottom: 12px;
-    border-left: 4px solid #e0e0e0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    transition: all 0.3s ease;
-}
-
-.schedule-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-}
-
-.schedule-item.lunch-break,
-.schedule-item.dinner-break {
-    background: linear-gradient(135deg, #fff8e1, #f3e5ab);
-    border-left-color: #ffa726;
-}
-
-.schedule-time {
-    font-weight: 600;
-    color: #1976d2;
-    min-width: 60px;
-    font-size: 14px;
-    background: #e3f2fd;
-    padding: 8px 12px;
-    border-radius: 8px;
-    text-align: center;
-}
-
-.schedule-content {
-    flex: 1;
-}
-
-.schedule-title {
-    font-weight: 600;
-    margin-bottom: 4px;
-    font-size: 16px;
-    color: #202124;
-}
-
-.schedule-location {
-    color: #666;
-    font-size: 14px;
-}
-
-.schedule-badge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    white-space: nowrap;
-}
-
-.badge-lead {
-    background: #e3f2fd;
-    color: #1976d2;
-    border: 1px solid #bbdefb;
-}
-
-.badge-required {
-    background: #fff3e0;
-    color: #f57c00;
-    border: 1px solid #ffcc02;
-}
-
-.badge-optional {
-    background: #f5f5f5;
-    color: #666;
-    border: 1px solid #e0e0e0;
-}
-
-.badge-break {
-    background: #fff3e0;
-    color: #e65100;
-    border: 1px solid #ffb74d;
-}
-
-/* 모달 스타일 */
-.full-timetable-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-backdrop {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(5px);
-}
-
-.modal-content {
-    position: relative;
-    background: white;
-    border-radius: 16px;
-    width: 90%;
-    max-width: 1000px;
-    height: 85%;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 24px;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.modal-header h2 {
-    color: #1976d2;
-    font-size: 20px;
-    margin: 0;
-}
-
-.modal-close {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #666;
-    padding: 4px;
-}
-
-.modal-filters {
-    display: flex;
-    gap: 12px;
-    padding: 16px 24px;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.modal-filters select {
-    padding: 8px 12px;
-    border: 1px solid #e0e0e0;
-    border-radius: 6px;
-    background: white;
-    cursor: pointer;
-}
-
-.timetable-container {
-    flex: 1;
-    overflow-y: auto;
-    padding: 24px;
-}
-
-.week-section {
-    margin-bottom: 32px;
-}
-
-.week-title {
-    text-align: center;
-    margin-bottom: 20px;
-    padding: 12px;
-    background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
-    border-radius: 8px;
-}
-
-.week-title h3 {
-    color: #1976d2;
-    margin: 0;
-    font-size: 16px;
-}
-
-.day-schedule {
-    background: #f8f9fa;
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 16px;
-}
-
-.day-header {
-    font-size: 16px;
-    font-weight: 600;
-    color: #1976d2;
-    margin-bottom: 12px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.day-timeline {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.timeline-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 8px;
-    background: white;
-    border-radius: 6px;
-    border-left: 3px solid #e0e0e0;
-    font-size: 14px;
-}
-
-.timeline-item.mentor {
-    border-left-color: #1976d2;
-    background: linear-gradient(135deg, #e3f2fd, #f8f9ff);
-}
-
-.timeline-item.break {
-    border-left-color: #ffa726;
-    background: linear-gradient(135deg, #fff8e1, #fffde7);
-}
-
-.timeline-item .time {
-    font-weight: 600;
-    color: #1976d2;
-    min-width: 60px;
-}
-
-.timeline-item .content {
-    flex: 1;
-}
-
-.timeline-item .title {
-    font-weight: 600;
-    margin-bottom: 2px;
-}
-
-.timeline-item .location {
-    font-size: 12px;
-    color: #666;
-}
-
-.modal-footer {
-    padding: 16px 24px;
-    border-top: 1px solid #e0e0e0;
-    background: #f8f9fa;
-}
-
-.schedule-legend {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-bottom: 8px;
-}
-
-.legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-}
-
-.legend-color {
-    width: 12px;
-    height: 12px;
-    border-radius: 3px;
-}
-
-.legend-color.mentor {
-    background: #1976d2;
-}
-
-.legend-color.optional {
-    background: #e0e0e0;
-}
-
-.legend-color.break {
-    background: #ffa726;
-}
-
-.data-info {
-    text-align: center;
-    font-size: 11px;
-    color: #666;
-}
-
-/* 반응형 */
-@media (max-width: 768px) {
-    .schedule-header {
-        flex-direction: column;
-        gap: 12px;
-        align-items: stretch;
-    }
-    
-    .schedule-actions {
-        justify-content: center;
-    }
-    
-    .modal-content {
-        width: 95%;
-        height: 90%;
-    }
-    
-    .modal-filters {
-        flex-direction: column;
-    }
-    
-    .schedule-legend {
-        flex-direction: column;
-        gap: 8px;
-    }
-}
-</style>
-
 <!-- Today's Mentor Program -->
 <div class="section mentor-program-section">
     <h2>🎯 오늘의 멘토 프로그램</h2>
@@ -844,9 +330,8 @@
     </div>
 </div>
 
-        <!-- 기존 index.html의 프로그램 그리드 섹션을 이것으로 교체 -->
-        <!-- Quick Access to Program Guides -->
-        <div id="guide-section" class="section quick-access-section">
+<!-- Quick Access to Program Guides -->
+<div id="guide-section" class="section quick-access-section">
     <h2>🧭 프로그램별 가이드</h2>
     <div class="program-grid">
         <!-- 1. Daily Opening -->
@@ -905,80 +390,80 @@
     </div>
 </div>
 
-        <!-- Quick Actions -->
-        <div class="section quick-actions-section">
-            <h2>⚡ 빠른 작업</h2>
-            <div class="quick-actions">
-                <button class="quick-action" onclick="quickAttendance()">
-                    <div class="quick-action-icon">📋</div>
-                    <div class="quick-action-title">긴급 출석체크</div>
-                    <div class="quick-action-desc">빠른 출석 현황 제출</div>
-                </button>
-                
-                <button class="quick-action" onclick="quickInterview()">
-                    <div class="quick-action-icon">💬</div>
-                    <div class="quick-action-title">면담 기록</div>
-                    <div class="quick-action-desc">1:1 면담 내용 제출</div>
-                </button>
-                
-                <button class="quick-action" onclick="viewSubmissions()">
-                    <div class="quick-action-icon">📄</div>
-                    <div class="quick-action-title">제출 내역</div>
-                    <div class="quick-action-desc">지난 제출 기록 확인</div>
-                </button>
-                
-                <button class="quick-action" onclick="showMentorInfo()" id="mentorInfoAction">
-                    <div class="quick-action-icon">👤</div>
-                    <div class="quick-action-title">멘토 정보</div>
-                    <div class="quick-action-desc" id="mentorInfoDesc">설정 필요</div>
-                </button>
-            </div>
-        </div>
+<!-- Quick Actions -->
+<div class="section quick-actions-section">
+    <h2>⚡ 빠른 작업</h2>
+    <div class="quick-actions">
+        <button class="quick-action" onclick="quickAttendance()">
+            <div class="quick-action-icon">📋</div>
+            <div class="quick-action-title">긴급 출석체크</div>
+            <div class="quick-action-desc">빠른 출석 현황 제출</div>
+        </button>
+        
+        <button class="quick-action" onclick="quickInterview()">
+            <div class="quick-action-icon">💬</div>
+            <div class="quick-action-title">면담 기록</div>
+            <div class="quick-action-desc">1:1 면담 내용 제출</div>
+        </button>
+        
+        <button class="quick-action" onclick="viewSubmissions()">
+            <div class="quick-action-icon">📄</div>
+            <div class="quick-action-title">제출 내역</div>
+            <div class="quick-action-desc">지난 제출 기록 확인</div>
+        </button>
+        
+        <button class="quick-action" onclick="showMentorInfo()" id="mentorInfoAction">
+            <div class="quick-action-icon">👤</div>
+            <div class="quick-action-title">멘토 정보</div>
+            <div class="quick-action-desc" id="mentorInfoDesc">설정 필요</div>
+        </button>
+    </div>
+</div>
 
-        <!-- Mentor Core Principles -->
-        <div class="section principles-section">
-            <h2>💡 멘토 핵심 원칙</h2>
-            <div class="principle-item">
-                <div class="principle-number">1</div>
-                <div class="principle-text">미소와 여유를 잃지 않기 - 긍정적 분위기 조성</div>
-            </div>
-            <div class="principle-item">
-                <div class="principle-number">2</div>
-                <div class="principle-text">모든 멘티에게 관심 갖기 - 소외되는 구성원 없이</div>
-            </div>
-            <div class="principle-item">
-                <div class="principle-number">3</div>
-                <div class="principle-text">안전 최우선으로 행동하기 - 예방이 최선의 대처</div>
-            </div>
-        </div>
+<!-- Mentor Core Principles -->
+<div class="section principles-section">
+    <h2>💡 멘토 핵심 원칙</h2>
+    <div class="principle-item">
+        <div class="principle-number">1</div>
+        <div class="principle-text">미소와 여유를 잃지 않기 - 긍정적 분위기 조성</div>
+    </div>
+    <div class="principle-item">
+        <div class="principle-number">2</div>
+        <div class="principle-text">모든 멘티에게 관심 갖기 - 소외되는 구성원 없이</div>
+    </div>
+    <div class="principle-item">
+        <div class="principle-number">3</div>
+        <div class="principle-text">안전 최우선으로 행동하기 - 예방이 최선의 대처</div>
+    </div>
+</div>
 
-        <!-- Contact Information -->
-        <div class="section contact-section">
-            <h2>📞 담당자 연락처</h2>
-            <div class="contact-grid">
-                <div class="contact-item">
-                    <div class="contact-icon">👨‍💼</div>
-                    <div class="contact-info">
-                        <h4>운영진 대표</h4>
-                        <p>010-xxxx-xxxx (업데이트 예정)</p>
-                    </div>
+    <!-- Contact Information -->
+    <div class="section contact-section">
+        <h2>📞 담당자 연락처</h2>
+        <div class="contact-grid">
+            <div class="contact-item">
+                <div class="contact-icon">👨‍💼</div>
+                <div class="contact-info">
+                    <h4>운영진 대표</h4>
+                    <p>010-xxxx-xxxx (업데이트 예정)</p>
                 </div>
-                <div class="contact-item">
-                    <div class="contact-icon">🏢</div>
-                    <div class="contact-info">
-                        <h4>현장 관리</h4>
-                        <p>010-yyyy-yyyy (업데이트 예정)</p>
-                    </div>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon">🏢</div>
+                <div class="contact-info">
+                    <h4>현장 관리</h4>
+                    <p>010-yyyy-yyyy (업데이트 예정)</p>
                 </div>
-                <div class="contact-item">
-                    <div class="contact-icon">🚨</div>
-                    <div class="contact-info">
-                        <h4>응급 상황</h4>
-                        <p>031-639-4888 (응급실)</p>
-                    </div>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon">🚨</div>
+                <div class="contact-info">
+                    <h4>응급 상황</h4>
+                    <p>031-639-4888 (응급실)</p>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <!-- 알림 시스템 -->
@@ -1621,11 +1106,11 @@
             }
         }
 
-        // =================================================================
-        // 모바일 PWA 푸시 알림 시스템
-        // =================================================================
+    // =================================================================
+    // 모바일 PWA 푸시 알림 시스템
+    // =================================================================
 
-        class MobilePushNotificationManager {
+    class MobilePushNotificationManager {
     constructor() {
         this.isSupported = 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
         this.permission = Notification.permission;
@@ -1926,18 +1411,6 @@
         let mentorTeamManager;
 
         let mobilePushManager;
-
-        // 현재 시간 업데이트
-        function updateTime() {
-            const now = new Date();
-            const timeString = now.toLocaleString('ko-KR', {
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-            document.getElementById('currentTime').textContent = timeString;
-        }
 
         // 출석체크 상태 확인
         function checkAttendanceStatus() {
@@ -2384,7 +1857,6 @@
         // 모든 초기화를 하나로 통합
         document.addEventListener('DOMContentLoaded', function() {
             // 1. 기본 초기화
-            updateTime();
             checkAttendanceStatus();
             
             // 2. 매니저 초기화
