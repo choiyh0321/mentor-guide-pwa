@@ -9,10 +9,135 @@
     
     <!-- CSS 파일 링크 -->
     <link rel="stylesheet" href="assets/css/main.css">
+    <!-- 모바일 푸시 알림을 위한 추가 스타일 -->
+    <style>
+        /* 푸시 알림 권한 요청 배너 */
+        .notification-permission-banner {
+            background: linear-gradient(135deg, #E31837, #ff4569);
+            color: white;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 4px 20px rgba(227, 24, 55, 0.3);
+            animation: slideDown 0.5s ease-out;
+        }
+
+        .notification-permission-banner.hidden {
+            display: none;
+        }
+
+        .permission-icon {
+            font-size: 32px;
+            animation: pulse 2s infinite;
+        }
+
+        .permission-content {
+            flex: 1;
+        }
+
+        .permission-title {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .permission-text {
+            font-size: 14px;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .permission-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .permission-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .permission-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .permission-btn.primary {
+            background: white;
+            color: #E31837;
+        }
+
+        .permission-btn.primary:hover {
+            background: #f5f5f5;
+        }
+
+        /* 푸시 알림 상태 표시 */
+        .notification-status {
+            position: fixed;
+            bottom: 100px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            transform: translateY(100px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification-status.show {
+            transform: translateY(0);
+        }
+
+        /* 애니메이션 */
+        @keyframes slideDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+    </style>
 </head>
 <body>
-
-<!-- 연수원 배너 영역 -->
+    <!-- 모바일 푸시 알림 권한 요청 배너 -->
+<div class="notification-permission-banner" id="notificationBanner">
+    <div class="permission-icon">🔔</div>
+    <div class="permission-content">
+        <div class="permission-title">실시간 알림 설정</div>
+        <div class="permission-text">중요한 업무 알림을 놓치지 않도록 모바일 푸시 알림을 활성화하세요</div>
+    </div>
+    <div class="permission-actions">
+        <button class="permission-btn" onclick="hideNotificationBanner()">나중에</button>
+        <button class="permission-btn primary" onclick="requestMobilePushPermission()">설정하기</button>
+    </div>
+</div>
 
 <!-- Header -->
     <div class="header">
@@ -847,6 +972,11 @@
     <!-- 알림 시스템 -->
     <div class="notifications" id="notifications"></div>
 
+    <!-- 모바일 푸시 알림 상태 표시 -->
+    <div class="notification-status" id="notificationStatus">
+        알림 상태: 확인 중...
+    </div>
+
     <!-- 멘토 설정 모달 -->
     <div class="mentor-setup-modal" id="mentorSetupModal" style="display: none;">
         <!-- 모달 내용은 JavaScript로 동적 생성 -->
@@ -1480,11 +1610,310 @@
         }
 
         // =================================================================
+        // 모바일 PWA 푸시 알림 시스템
+        // =================================================================
+
+        class MobilePushNotificationManager {
+    constructor() {
+        this.isSupported = 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
+        this.permission = Notification.permission;
+        this.serviceWorkerRegistration = null;
+        this.pushSubscription = null;
+        this.init();
+    }
+
+    async init() {
+        console.log('🔔 모바일 푸시 알림 시스템 초기화 중...');
+        
+        if (!this.isSupported) {
+            console.warn('❌ 이 브라우저는 모바일 푸시 알림을 지원하지 않습니다.');
+            this.updateNotificationStatus('지원되지 않음');
+            this.hideNotificationBanner();
+            return;
+        }
+
+        await this.registerServiceWorker();
+        await this.checkExistingSubscription();
+        this.updateNotificationStatus();
+        this.checkNotificationBanner();
+        this.scheduleAutomaticNotifications();
+        
+        console.log('✅ 모바일 푸시 알림 시스템 초기화 완료');
+    }
+
+    async registerServiceWorker() {
+        try {
+            this.serviceWorkerRegistration = await navigator.serviceWorker.register('/sw.js');
+            console.log('✅ 서비스 워커 등록 성공');
+            return this.serviceWorkerRegistration;
+        } catch (error) {
+            console.error('❌ 서비스 워커 등록 실패:', error);
+            this.updateNotificationStatus('등록 실패');
+        }
+    }
+
+    async checkExistingSubscription() {
+        if (!this.serviceWorkerRegistration) return;
+
+        try {
+            this.pushSubscription = await this.serviceWorkerRegistration.pushManager.getSubscription();
+            if (this.pushSubscription) {
+                console.log('📱 기존 푸시 구독 발견');
+                localStorage.setItem('push-subscription', JSON.stringify(this.pushSubscription));
+            }
+        } catch (error) {
+            console.error('❌ 기존 구독 확인 실패:', error);
+        }
+    }
+
+    checkNotificationBanner() {
+        const banner = document.getElementById('notificationBanner');
+        const dismissed = localStorage.getItem('notification-banner-dismissed');
+        
+        if (this.permission === 'granted' || dismissed === 'true' || !this.isSupported) {
+            banner.classList.add('hidden');
+        }
+    }
+
+    async requestPermission() {
+        if (!this.isSupported) {
+            this.showToast('❌ 이 브라우저는 모바일 푸시 알림을 지원하지 않습니다.', 'error');
+            return false;
+        }
+
+        try {
+            const permission = await Notification.requestPermission();
+            this.permission = permission;
+            
+            if (permission !== 'granted') {
+                this.showToast('❌ 알림 권한이 거부되었습니다.', 'error');
+                this.updateNotificationStatus('권한 거부됨');
+                return false;
+            }
+
+            await this.subscribeToPush();
+            this.updateNotificationStatus();
+            this.hideNotificationBanner();
+            
+            setTimeout(() => {
+                this.sendWelcomeNotification();
+            }, 1000);
+            
+            this.showToast('✅ 모바일 푸시 알림이 활성화되었습니다!', 'success');
+            return true;
+            
+        } catch (error) {
+            console.error('❌ 푸시 알림 설정 실패:', error);
+            this.showToast('푸시 알림 설정 중 오류가 발생했습니다.', 'error');
+            this.updateNotificationStatus('설정 실패');
+            return false;
+        }
+    }
+
+    async subscribeToPush() {
+        if (!this.serviceWorkerRegistration) {
+            throw new Error('서비스 워커가 등록되지 않았습니다.');
+        }
+
+        try {
+            const vapidPublicKey = 'BEl62iUYgUivxIkv69yViEuiBIa40HI8YLfHkKOUj8C1-4-2Nfo-c2FKY8XJ9ARd4-fJqMLyS5F2EPNF7KlVPzk';
+            
+            const subscriptionOptions = {
+                userVisibleOnly: true,
+                applicationServerKey: this.urlBase64ToUint8Array(vapidPublicKey)
+            };
+
+            this.pushSubscription = await this.serviceWorkerRegistration.pushManager.subscribe(subscriptionOptions);
+            
+            console.log('✅ 푸시 구독 생성 성공');
+            localStorage.setItem('push-subscription', JSON.stringify(this.pushSubscription));
+            
+            return this.pushSubscription;
+        } catch (error) {
+            console.error('❌ 푸시 구독 생성 실패:', error);
+            throw error;
+        }
+    }
+
+    urlBase64ToUint8Array(base64String) {
+        const padding = '='.repeat((4 - base64String.length % 4) % 4);
+        const base64 = (base64String + padding)
+            .replace(/\-/g, '+')
+            .replace(/_/g, '/');
+
+        const rawData = window.atob(base64);
+        const outputArray = new Uint8Array(rawData.length);
+
+        for (let i = 0; i < rawData.length; ++i) {
+            outputArray[i] = rawData.charCodeAt(i);
+        }
+        return outputArray;
+    }
+
+    updateNotificationStatus(customStatus = null) {
+        const statusElement = document.getElementById('notificationStatus');
+        const toggleDesc = document.getElementById('notificationToggleDesc');
+        
+        let statusText = '';
+        let toggleText = '';
+        let bgColor = '';
+        
+        if (customStatus) {
+            statusText = `알림 상태: ${customStatus}`;
+            toggleText = customStatus;
+            bgColor = 'rgba(156, 39, 176, 0.8)';
+        } else if (!this.isSupported) {
+            statusText = '알림 상태: 지원되지 않음';
+            toggleText = '지원되지 않음';
+            bgColor = 'rgba(158, 158, 158, 0.8)';
+        } else if (this.permission === 'granted' && this.pushSubscription) {
+            statusText = '알림 상태: 활성화됨';
+            toggleText = '활성화됨';
+            bgColor = 'rgba(76, 175, 80, 0.8)';
+        } else if (this.permission === 'denied') {
+            statusText = '알림 상태: 차단됨';
+            toggleText = '차단됨';
+            bgColor = 'rgba(244, 67, 54, 0.8)';
+        } else {
+            statusText = '알림 상태: 비활성화';
+            toggleText = '비활성화';
+            bgColor = 'rgba(255, 152, 0, 0.8)';
+        }
+        
+        if (statusElement) {
+            statusElement.textContent = statusText;
+            statusElement.style.background = bgColor;
+            statusElement.classList.add('show');
+            
+            setTimeout(() => {
+                statusElement.classList.remove('show');
+            }, 3000);
+        }
+        
+        if (toggleDesc) {
+            toggleDesc.textContent = toggleText;
+        }
+    }
+
+    hideNotificationBanner() {
+        const banner = document.getElementById('notificationBanner');
+        banner.classList.add('hidden');
+        localStorage.setItem('notification-banner-dismissed', 'true');
+    }
+
+    sendWelcomeNotification() {
+        this.sendLocalNotification({
+            title: '🎯 SK 멘토 가이드 알림 설정 완료',
+            body: '중요한 업무 알림을 실시간으로 받아보실 수 있습니다.',
+            tag: 'welcome'
+        });
+    }
+
+    sendLocalNotification(options) {
+        if (this.permission !== 'granted') {
+            console.warn('❌ 알림 권한이 없어 알림을 보낼 수 없습니다.');
+            return;
+        }
+
+        if (this.serviceWorkerRegistration) {
+            this.serviceWorkerRegistration.showNotification(options.title, {
+                body: options.body,
+                icon: '/icon-192.png',
+                badge: '/icon-72.png',
+                tag: options.tag || 'sk-mentor-guide',
+                requireInteraction: true,
+                vibrate: [200, 100, 200]
+            });
+        }
+    }
+
+    scheduleAutomaticNotifications() {
+        if (this.permission !== 'granted' || !this.pushSubscription) return;
+
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentMinute = now.getMinutes();
+
+        // 오전 8:50 알림
+        if (currentHour === 8 && currentMinute === 50) {
+            this.sendLocalNotification({
+                title: '🌅 오전 출석체크 알림',
+                body: '10분 후 오전 9시 출석체크가 시작됩니다. 준비해주세요!',
+                tag: 'attendance-morning'
+            });
+        }
+
+        // 오후 1:50 알림
+        if (currentHour === 13 && currentMinute === 50) {
+            this.sendLocalNotification({
+                title: '🌞 오후 출석체크 알림',
+                body: '10분 후 오후 2시 출석체크가 시작됩니다. 준비해주세요!',
+                tag: 'attendance-afternoon'
+            });
+        }
+    }
+
+    showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.style.cssText = `
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: ${type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : '#2196f3'};
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 10002;
+            max-width: 300px;
+            word-wrap: break-word;
+            font-weight: 600;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        `;
+        
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.transform = 'translateX(0)';
+        }, 100);
+        
+        setTimeout(() => {
+            toast.style.transform = 'translateX(100%)';
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 300);
+        }, 4000);
+    }
+
+    async unsubscribe() {
+        try {
+            if (this.pushSubscription) {
+                await this.pushSubscription.unsubscribe();
+                this.pushSubscription = null;
+                localStorage.removeItem('push-subscription');
+                console.log('✅ 푸시 구독 해제 완료');
+                this.updateNotificationStatus('구독 해제됨');
+                return true;
+            }
+        } catch (error) {
+            console.error('❌ 푸시 구독 해제 실패:', error);
+            return false;
+        }
+    }
+}
+
+        // =================================================================
         // 기존 함수들과 통합
         // =================================================================
 
         // 전역 인스턴스
         let mentorTeamManager;
+
+        let mobilePushManager;
 
         // 현재 시간 업데이트
         function updateTime() {
@@ -1902,16 +2331,98 @@
             closeSidebar();
         }
 
+        // 모바일 푸시 알림 관련 함수들
+        function requestMobilePushPermission() {
+            if (mobilePushManager) {
+                mobilePushManager.requestPermission();
+            }
+        }
+
+        function hideNotificationBanner() {
+            if (mobilePushManager) {
+                mobilePushManager.hideNotificationBanner();
+            }
+        }
+
+        function toggleMobilePushNotifications() {
+            closeSidebar();
+            
+            if (!mobilePushManager) {
+                alert('모바일 푸시 알림 시스템이 초기화되지 않았습니다.');
+                return;
+            }
+            
+            if (mobilePushManager.permission === 'granted' && mobilePushManager.pushSubscription) {
+                if (confirm('모바일 푸시 알림이 활성화되어 있습니다.\n\n알림을 비활성화하시겠습니까?')) {
+                    mobilePushManager.unsubscribe().then(success => {
+                        if (success) {
+                            mobilePushManager.showToast('모바일 푸시 알림이 비활성화되었습니다.', 'info');
+                        }
+                    });
+                }
+            } else if (mobilePushManager.permission === 'denied') {
+                alert('모바일 푸시 알림이 차단되어 있습니다.\n\n브라우저 설정에서 알림 권한을 허용해주세요.');
+            } else {
+                mobilePushManager.requestPermission();
+            }
+        }
+
 
         // 초기화
+        // 모든 초기화를 하나로 통합
         document.addEventListener('DOMContentLoaded', function() {
+            // 1. 기본 초기화
             updateTime();
             checkAttendanceStatus();
             
-            // 멘토 팀 매니저 초기화 (면담 현황 관리)
+            // 2. 매니저 초기화
             mentorTeamManager = new MentorTeamManager();
+            mobilePushManager = new MobilePushNotificationManager();
             
-            // 🆕 모달 외부 클릭 이벤트 추가
+            // 3. 연수원 이름 설정
+            try {
+                const centerName = configManager.getCurrentConfig().centerName || "알 수 없음";
+                const centerNameEl = document.getElementById("center-name");
+                if (centerNameEl) centerNameEl.textContent = centerName;
+            } catch (e) {
+                console.warn("연수원 이름 로딩 실패:", e);
+                const centerNameEl = document.getElementById("center-name");
+                if (centerNameEl) centerNameEl.textContent = "미설정";
+            }
+            
+            // 4. 메뉴 토글 (중복 제거)
+            const menuToggle = document.getElementById("menu-toggle");
+            const sideMenu = document.getElementById("side-menu");
+            if (menuToggle && sideMenu) {
+                menuToggle.addEventListener("click", () => {
+                    sideMenu.classList.toggle("open");
+                });
+            }
+            
+            // 5. 연수원 변경 버튼
+            const changeCenterBtn = document.getElementById("change-center-btn");
+            if (changeCenterBtn) {
+                changeCenterBtn.addEventListener("click", () => {
+                    if (confirm("연수원을 다시 선택하시겠습니까?")) {
+                        localStorage.removeItem("selectedCenter");
+                        localStorage.removeItem("setupCompleted");
+                        window.location.href = "setup.html";
+                    }
+                });
+            }
+            
+            // 6. 해시 스크롤 (빠진 부분 추가!)
+            const targetId = window.location.hash.substring(1);
+            if (targetId) {
+                const el = document.getElementById(targetId);
+                if (el) {
+                    setTimeout(() => {
+                        el.scrollIntoView({ behavior: "smooth" });
+                    }, 200);
+                }
+            }
+            
+            // 7. 모달 이벤트
             const myPageModal = document.getElementById('myPageModal');
             if (myPageModal) {
                 myPageModal.addEventListener('click', function(e) {
@@ -1921,60 +2432,68 @@
                 });
             }
             
-            // 🆕 ESC 키로 모달 닫기 추가
+            // 8. 키보드 이벤트 (ESC)
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
-                    // 사이드바가 열려있으면 사이드바 먼저 닫기
                     const sidebar = document.querySelector('.sidebar');
                     if (sidebar && sidebar.classList.contains('open')) {
                         closeSidebar();
-                        return; // 사이드바 닫으면 다른 모달은 건드리지 않음
+                        return;
                     }
-                    
-                    // 사이드바가 닫혀있으면 기존 모달 닫기 로직 실행
-                    closeMyPage(); // 또는 기존에 있던 모달 닫기 함수
+                    closeMyPage();
                 }
             });
-
-            // 시간 업데이트 (1분마다)
-            setInterval(updateTime, 60000);
             
-            // 상태 체크 (5분마다)
+            // 9. 뒤로가기 제어
+            history.pushState(null, null, window.location.href);
+            window.addEventListener('popstate', function(event) {
+                const sidebar = document.querySelector('.sidebar');
+                const modal = document.getElementById('myPageModal');
+                
+                if (sidebar && sidebar.classList.contains('open')) {
+                    closeSidebar();
+                    history.pushState(null, null, window.location.href);
+                    return;
+                }
+                
+                if (modal && modal.classList.contains('active')) {
+                    closeMyPage();
+                    history.pushState(null, null, window.location.href);
+                    return;
+                }
+            });
+            
+            // 10. 정기 업데이트
+            setInterval(updateTime, 60000);
             setInterval(() => {
                 checkAttendanceStatus();
                 if (mentorTeamManager) {
                     mentorTeamManager.updateInterviewStatus();
                 }
             }, 300000);
+            setInterval(() => {
+                if (mobilePushManager) {
+                    mobilePushManager.scheduleAutomaticNotifications();
+                }
+            }, 60000);
             
-            // 시작 알림
+            // 11. 시작 알림
             setTimeout(() => {
                 showNotification('환영합니다!', '오늘의 멘토 업무를 시작해주세요.');
             }, 1000);
         });
+
+        // 개별 함수들
+        function scrollToToday() {
+            const todaySection = document.getElementById("today-schedule");
+            if (todaySection) todaySection.scrollIntoView({ behavior: "smooth" });
+        }
+
+        function closeMenu() {
+            const sideMenu = document.getElementById("side-menu");
+            if (sideMenu) sideMenu.classList.remove("open");
+        }
     </script>
-
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-     try {
-      const centerName = configManager.getCurrentConfig().centerName || "알 수 없음";
-      document.getElementById("center-name").textContent = centerName;
-    } catch (e) {
-      console.warn("연수원 이름 로딩 실패:", e);
-      document.getElementById("center-name").textContent = "미설정";
-    }
-
-    document.getElementById("change-center-btn").addEventListener("click", () => {
-      if (confirm("연수원을 다시 선택하시겠습니까?")) {
-        localStorage.removeItem("selectedCenter");
-        localStorage.removeItem("setupCompleted");
-        window.location.href = "setup.html";
-      }
-    });
-  });
-</script>
-
-
 
 
 <!-- 🔄 기존 사이드바를 이것으로 전체 교체 -->
@@ -2150,6 +2669,15 @@
                 <div class="menu-arrow">→</div>
             </button>
             
+            <button class="sidebar-menu-item" onclick="toggleMobilePushNotifications()">
+                <div class="menu-icon">🔔</div>
+                <div class="menu-text">
+                    <div class="menu-title">알림 설정</div>
+                    <div class="menu-desc" id="notificationToggleDesc">모바일 푸시 알림 관리</div>
+                </div>
+                <div class="menu-arrow">→</div>
+            </button>
+            
             <button class="sidebar-menu-item" onclick="showAppInfo()">
                 <div class="menu-icon">ℹ️</div>
                 <div class="menu-text">
@@ -2162,33 +2690,8 @@
     </div>
 </div>
 
-<script>
-// 🆕 추가된 함수들 - showFacilityMap 함수 제거
-</script>
-
 <!-- 🆕 사이드바 오버레이 추가 (기존 사이드바 다음에) -->
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
-
-
-<script>
-  function scrollToToday() {
-    const todaySection = document.getElementById("today-schedule");
-    if (todaySection) todaySection.scrollIntoView({ behavior: "smooth" });
-  }
-
-  function closeMenu() {
-    document.getElementById("side-menu").classList.remove("open");
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    const menuToggle = document.getElementById("menu-toggle");
-    if (menuToggle) {
-      menuToggle.addEventListener("click", () => {
-        document.getElementById("side-menu").classList.toggle("open");
-      });
-    }
-  });
-</script>
 
 
 <!-- 하단 네비게이션 바 -->
@@ -2216,31 +2719,6 @@
 </nav>
 
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const targetId = window.location.hash.substring(1);
-    if (targetId) {
-      const el = document.getElementById(targetId);
-      if (el) {
-        setTimeout(() => {
-          el.scrollIntoView({ behavior: "smooth" });
-        }, 200);
-      }
-    }
-  });
-</script>
-
-
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const menuBtn = document.getElementById("menu-toggle");
-    const menu = document.getElementById("side-menu");
-    menuBtn.addEventListener("click", () => {
-      menu.classList.toggle("open");
-    });
-  });
-</script>
-
 <!-- 🆕 마이 페이지 모달 -->
 <div class="my-page-modal" id="myPageModal">
     <div class="modal-content">
@@ -2265,4 +2743,4 @@
     </div>
 </div>
 </body>
-</html>
+</html> 
