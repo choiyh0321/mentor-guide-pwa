@@ -3,9 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎯 Vision Building 가이드 - SK 멘토 가이드</title>
-    <meta name="theme-color" content="#9c27b0">
+    <title>🎯 Vision Building 가이드</title>
+    <meta name="theme-color" content="#EA4335">
+    
+    <script>
+        // 전역 함수들을 먼저 정의
+        let currentStep = 0;
+        const totalSteps = 6;
+
+        function switchView(mode) {
+            console.log('switchView 호출:', mode);
+            const overviewMode = document.getElementById('overviewMode');
+            const liveMode = document.getElementById('liveMode');
+            const toggleBtns = document.querySelectorAll('.toggle-btn');
+            
+            if (mode === 'overview') {
+                if (overviewMode) overviewMode.style.display = 'block';
+                if (liveMode) liveMode.style.display = 'none';
+                toggleBtns.forEach(btn => btn.classList.remove('active'));
+                if (toggleBtns[0]) toggleBtns[0].classList.add('active');
+            } else if (mode === 'live') {
+                if (overviewMode) overviewMode.style.display = 'none';
+                if (liveMode) liveMode.style.display = 'block';
+                toggleBtns.forEach(btn => btn.classList.remove('active'));
+                if (toggleBtns[1]) toggleBtns[1].classList.add('active');
+                setTimeout(updateNavigation, 100);
+            }
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps - 1) {
+                currentStep++;
+                scrollToStep(currentStep);
+                updateNavigation();
+            } else {
+                if (confirm('Vision Building 가이드를 완료하시겠습니까?')) {
+                    alert('🎉 Vision Building 완료! 수고하셨습니다.');
+                }
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                scrollToStep(currentStep);
+                updateNavigation();
+            }
+        }
+
+        function scrollToStep(step) {
+            const container = document.getElementById('stepCards');
+            if (container) {
+                container.scrollTo({
+                    left: step * container.clientWidth,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const stepIndicator = document.getElementById('stepIndicator');
+            
+            if (prevBtn) prevBtn.disabled = currentStep === 0;
+            if (nextBtn) nextBtn.textContent = currentStep === totalSteps - 1 ? '완료' : '다음';
+            if (stepIndicator) stepIndicator.textContent = `${currentStep + 1}/${totalSteps}`;
+        }
+
+        function showSituation(type) {
+            const solutions = {
+                '빙고': '🎲 자기소개 빙고 상황 대응\n\n【키워드 겹침】\n→ "조금 더 구체적으로 표현해볼까요?"\n\n【빙고판 어려움】\n→ 직접 도와주며 시범 보이기\n\n【소극적 참여】\n→ 멘토가 먼저 반응하여 분위기 조성',
+                '비전': '🎯 비전 빌딩 상황 대응\n\n【토의가 활발하지 않을 때】\n→ 직접 해당 조로 가서 질문 던지기\n\n【시간이 부족할 때】\n→ 3,4번 질문(포스트잇)에 집중\n\n【답변을 어려워할 때】\n→ "정답은 없어요, 솔직한 생각으로 충분합니다"'
+            };
+            alert(solutions[type] || '준비 중입니다.');
+        }
+    </script>
+
     <style>
+        :root {
+            --sk-red: #EA1917;
+            --sk-orange: #FF6B35;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --info: #2196F3;
+            --purple: #9C27B0;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,831 +97,939 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
-            background: #f8f9fa;
-            color: #202124;
-            line-height: 1.7;
-            font-size: 16px;
-            padding-bottom: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+            color: #333;
+            line-height: 1.6;
         }
 
-        /* 상단 헤더 */
         .header {
-            background: linear-gradient(135deg, #9c27b0, #673ab7);
+            background: linear-gradient(135deg, var(--sk-orange) 0%, var(--sk-red) 100%);
             color: white;
             padding: 20px;
-            position: sticky;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
             top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 20px rgba(156, 39, 176, 0.3);
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
         }
 
         .header-content {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
+            position: relative;
+            z-index: 10;
         }
 
-        .back-button {
-            background: rgba(255, 255, 255, 0.2);
+        .back-btn {
+            background: rgba(255,255,255,0.2);
             border: none;
             color: white;
             padding: 8px 12px;
             border-radius: 8px;
+            margin-bottom: 12px;
             cursor: pointer;
-            font-size: 14px;
-            margin-right: 12px;
-            transition: background 0.3s ease;
-            min-height: 44px;
         }
 
-        .back-button:hover {
-            background: rgba(255, 255, 255, 0.3);
+        .title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
         }
 
-        .header h1 {
-            font-size: 20px;
-            font-weight: 600;
-        }
-
-        .header .subtitle {
-            font-size: 14px;
+        .subtitle {
             opacity: 0.9;
-            margin-top: 4px;
+            font-size: 14px;
         }
 
-        /* 빠른 네비게이션 */
-        .quick-nav {
-            background: white;
-            border-bottom: 1px solid #e0e0e0;
-            padding: 12px 20px;
+        .view-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
             display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 4px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
 
-        .quick-nav::-webkit-scrollbar {
+        .toggle-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: transparent;
+            color: #666;
+        }
+
+        .toggle-btn.active {
+            background: var(--sk-red);
+            color: white;
+        }
+
+        .overview-mode {
+            display: block;
+        }
+
+        .live-mode {
             display: none;
         }
 
-        .nav-chip {
-            background: #f8f9fa;
-            color: #666;
-            padding: 8px 16px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            white-space: nowrap;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
-
-        .nav-chip:hover {
-            background: #e3f2fd;
-            color: #1976d2;
-        }
-
-        /* 컨테이너 */
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
         }
 
-        /* 섹션 */
-        .section {
-            background: white;
-            margin-bottom: 24px;
-            padding: 28px;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        .overview-card {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
         }
 
-        .section h2 {
-            font-size: 22px;
-            margin-bottom: 20px;
-            color: #9c27b0;
+        .card-header {
             display: flex;
             align-items: center;
-            gap: 8px;
-        }
-
-        .section h3 {
-            font-size: 18px;
+            gap: 12px;
             margin-bottom: 16px;
-            color: #333;
-            border-left: 4px solid #9c27b0;
-            padding-left: 16px;
-            margin-top: 24px;
         }
 
-        .section h3:first-of-type {
-            margin-top: 0;
+        .card-icon {
+            font-size: 32px;
         }
 
-        /* 설명 텍스트 */
-        .description {
-            background: linear-gradient(135deg, #f3e5f5, #fff);
-            border: 1px solid #e1bee7;
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--sk-red);
+        }
+
+        .purpose-section {
+            background: linear-gradient(135deg, rgba(234,25,23,0.05), rgba(255,107,53,0.05));
+            border-left: 4px solid var(--sk-red);
+            padding: 16px;
             border-radius: 12px;
-            padding: 20px;
             margin: 16px 0;
-            font-size: 15px;
-            line-height: 1.6;
         }
 
-        /* 시간표 */
-        .timeline {
-            position: relative;
-            padding-left: 24px;
-            margin: 20px 0;
+        .purpose-title {
+            font-weight: 600;
+            color: var(--sk-red);
+            margin-bottom: 8px;
         }
 
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 10px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: #9c27b0;
+        .purpose-text {
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .timeline-overview {
+            display: grid;
+            gap: 12px;
+            margin: 16px 0;
         }
 
         .timeline-item {
-            position: relative;
-            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 16px;
             background: #f8f9fa;
-            padding: 20px;
             border-radius: 12px;
-            border-left: 4px solid #9c27b0;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -30px;
-            top: 24px;
-            width: 12px;
-            height: 12px;
-            background: #9c27b0;
-            border-radius: 50%;
-            border: 3px solid white;
+            border-left: 4px solid var(--info);
         }
 
         .time-badge {
-            background: #9c27b0;
+            background: var(--info);
             color: white;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            display: inline-block;
-            margin-bottom: 12px;
-        }
-
-        .activity-title {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #333;
-            font-size: 16px;
-        }
-
-        .activity-description {
-            color: #666;
-            font-size: 15px;
-            line-height: 1.5;
-        }
-
-        /* 단계별 가이드 */
-        .step-list {
-            list-style: none;
-            counter-reset: step-counter;
-            margin: 20px 0;
-        }
-
-        .step-list li {
-            counter-increment: step-counter;
-            margin-bottom: 20px;
-            position: relative;
-            padding-left: 50px;
-            font-size: 15px;
-            line-height: 1.6;
-        }
-
-        .step-list li::before {
-            content: counter(step-counter);
-            position: absolute;
-            left: 0;
-            top: 2px;
-            background: #9c27b0;
-            color: white;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .step-list li strong {
-            color: #9c27b0;
-            font-weight: 600;
-        }
-
-        .step-detail {
-            margin-top: 8px;
-            padding-left: 16px;
-            color: #555;
-            font-size: 14px;
-            border-left: 2px solid #f0f0f0;
-        }
-
-        /* 체크리스트 */
-        .checklist {
-            background: #e8f5e8;
-            border: 1px solid #4caf50;
+            padding: 4px 12px;
             border-radius: 12px;
-            padding: 20px;
-            margin: 20px 0;
+            font-size: 12px;
+            font-weight: 600;
+            min-width: 80px;
+            text-align: center;
         }
 
-        .checklist h4 {
-            color: #2e7d32;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 16px;
+        .activity-name {
+            font-weight: 600;
+            color: #333;
         }
 
-        .checklist-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            margin-bottom: 12px;
-            padding: 12px;
-            background: white;
-            border-radius: 8px;
-            min-height: 44px;
-        }
-
-        .checklist-item input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            accent-color: #4caf50;
+        .activity-purpose {
+            font-size: 13px;
+            color: #666;
             margin-top: 2px;
         }
 
-        .checklist-item label {
-            flex: 1;
-            cursor: pointer;
-            line-height: 1.5;
-            font-size: 15px;
-        }
-
-        /* 팁 박스 */
-        .tip-box {
-            background: linear-gradient(135deg, #fff3e0, #fce4ec);
-            border: 1px solid #ffb74d;
+        .connection-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 16px 0;
+            padding: 16px;
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
             border-radius: 12px;
-            padding: 20px;
-            margin: 20px 0;
         }
 
-        .tip-box .tip-title {
+        .flow-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .flow-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .flow-text {
+            font-size: 12px;
             font-weight: 600;
-            color: #e65100;
-            margin-bottom: 12px;
+            color: #333;
+        }
+
+        .flow-arrow {
+            font-size: 20px;
+            color: var(--info);
+            margin: 0 8px;
+        }
+
+        .start-button {
+            background: linear-gradient(135deg, var(--sk-red), var(--sk-orange));
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 4px 20px rgba(234,25,23,0.3);
+        }
+
+        .live-container {
+            height: calc(100vh - 120px);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .step-cards {
+            display: flex;
+            height: 100%;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .step-cards::-webkit-scrollbar {
+            display: none;
+        }
+
+        .step-card {
+            min-width: 100%;
+            padding: 20px;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .live-card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 24px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .step-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .step-icon {
+            font-size: 48px;
+            margin-bottom: 8px;
+        }
+
+        .step-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--sk-red);
+            margin-bottom: 4px;
+        }
+
+        .step-time {
+            background: var(--info);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: inline-block;
+        }
+
+        .step-content {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .context-section {
+            background: linear-gradient(135deg, rgba(156,39,176,0.08), rgba(186,104,200,0.08));
+            border: 1px solid rgba(156,39,176,0.2);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .context-title {
+            font-weight: 600;
+            color: var(--purple);
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 16px;
         }
 
-        .tip-box ul {
-            margin-left: 20px;
-        }
-
-        .tip-box li {
-            margin-bottom: 8px;
-            color: #bf360c;
+        .context-text {
+            font-size: 14px;
+            color: #555;
             line-height: 1.5;
-            font-size: 15px;
         }
 
-        .tip-box li strong {
-            color: #e65100;
-        }
-
-        /* 질문 섹션 */
-        .question-section {
-            background: linear-gradient(135deg, #f3e5f5, #fff);
-            border: 2px solid #e1bee7;
-            border-radius: 12px;
-            padding: 24px;
-            margin: 20px 0;
-        }
-
-        .question-title {
-            color: #9c27b0;
-            font-weight: 600;
-            margin-bottom: 16px;
-            font-size: 18px;
-        }
-
-        .question-list {
+        .guide-list {
             list-style: none;
-            counter-reset: question-counter;
         }
 
-        .question-list li {
-            counter-increment: question-counter;
-            margin-bottom: 20px;
-            position: relative;
-            padding-left: 40px;
-            font-size: 15px;
-            line-height: 1.6;
+        .guide-item {
+            background: #f8f9fa;
+            margin-bottom: 12px;
+            padding: 16px;
+            border-radius: 12px;
+            border-left: 4px solid var(--sk-red);
         }
 
-        .question-list li::before {
-            content: counter(question-counter);
-            position: absolute;
-            left: 0;
-            top: 0;
-            background: #9c27b0;
-            color: white;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .guide-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+        }
+
+        .guide-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .guide-tip {
+            background: rgba(255,152,0,0.1);
+            border: 1px solid rgba(255,152,0,0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 8px;
+        }
+
+        .tip-label {
             font-size: 12px;
             font-weight: 600;
+            color: var(--warning);
+            margin-bottom: 4px;
         }
 
-        .question-list li strong {
-            color: #7b1fa2;
+        .tip-text {
+            font-size: 13px;
+            color: #666;
         }
 
-        .question-note {
-            background: #fff3e0;
-            padding: 12px 16px;
-            border-radius: 8px;
+        .situation-card {
+            background: linear-gradient(135deg, #ffebee, #fff3e0);
+            border: 1px solid #ffcdd2;
+            border-radius: 12px;
+            padding: 16px;
             margin-top: 16px;
-            font-size: 14px;
-            border-left: 4px solid #ff9800;
-        }
-
-        .question-note strong {
-            color: #e65100;
-        }
-
-        /* 반응형 */
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-            
-            .section {
-                padding: 20px;
-                margin-bottom: 20px;
-            }
-            
-            .header h1 {
-                font-size: 18px;
-            }
-
-            body {
-                font-size: 15px;
-            }
-
-            .step-list li {
-                padding-left: 40px;
-            }
-
-            .step-list li::before {
-                width: 24px;
-                height: 24px;
-                font-size: 12px;
-            }
-        }
-
-        /* 점프 버튼 */
-        .jump-button {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 56px;
-            height: 56px;
-            background: #9c27b0;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            font-size: 20px;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);
-            z-index: 90;
             transition: all 0.3s ease;
         }
 
-        .jump-button:hover {
-            transform: scale(1.1);
+        .situation-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .situation-title {
+            font-weight: 600;
+            color: #d32f2f;
+            margin-bottom: 4px;
+        }
+
+        .situation-desc {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .nav-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            padding: 12px 20px;
+            border-radius: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-btn {
+            background: rgba(234,25,23,0.1);
+            border: none;
+            color: var(--sk-red);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+        }
+
+        .nav-btn.primary {
+            background: var(--sk-red);
+            color: white;
+        }
+
+        .step-indicator {
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+            
+            .view-toggle {
+                top: 16px;
+                right: 16px;
+            }
+            
+            .toggle-btn {
+                padding: 6px 12px;
+                font-size: 11px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- 헤더 -->
     <div class="header">
         <div class="header-content">
-            <button class="back-button" onclick="goBack()">← 뒤로가기</button>
-            <div>
-                <h1>🎯 Vision Building 완전 가이드</h1>
-                <div class="subtitle">자기소개 & 팀빌딩 활동 진행법</div>
-            </div>
+            <button class="back-btn" onclick="window.history.length > 1 ? history.back() : window.location.href='../index.html'">← 뒤로가기</button>
+            <div class="title">🎯 Vision Building</div>
+            <div class="subtitle">자기소개 & 팀빌딩 활동</div>
         </div>
     </div>
 
-    <!-- 빠른 네비게이션 -->
-    <div class="quick-nav">
-        <a href="#prepare" class="nav-chip">📋 준비사항</a>
-        <a href="#schedule" class="nav-chip">⏰ 전체일정</a>
-        <a href="#bingo" class="nav-chip">🎲 자기소개빙고</a>
-        <a href="#team" class="nav-chip">👥 팀빌딩</a>
-        <a href="#vision" class="nav-chip">🎯 비전빌딩</a>
-        <a href="#sharing" class="nav-chip">📢 결과공유</a>
+    <div class="view-toggle">
+        <button class="toggle-btn active" onclick="switchView('overview')">전체보기</button>
+        <button class="toggle-btn" onclick="switchView('live')">실행모드</button>
     </div>
 
-    <div class="container">
-        <!-- 사전 준비사항 -->
-        <div class="section" id="prepare">
-            <h2>📋 사전 준비사항</h2>
-            <div class="description">
-                Vision Building을 성공적으로 진행하기 위해서는 사전 준비가 매우 중요합니다. 아래 준비물들을 미리 확인하시고, 활동 시작 전에 모든 준비가 완료되었는지 다시 한번 체크해주세요.
-            </div>
-            
-            <div class="checklist">
-                <h4>✅ 준비물 체크리스트</h4>
-                <div class="checklist-item">
-                    <input type="checkbox" id="prep1">
-                    <label for="prep1">Vision Building 장표를 준비해주세요. 발표용 장표와 함께 배경음악(BGM)도 미리 틀어두시면 신입구성원들이 편안한 분위기에서 시작할 수 있습니다.</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="prep2">
-                    <label for="prep2">조별 이젤패드를 분과당 총 4개 준비해주세요. 각 조가 활동 결과물을 작성할 때 사용됩니다.</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="prep3">
-                    <label for="prep3">12색 사인펜을 충분히 준비해주세요. 신입구성원들이 다양한 색깔로 창의적으로 표현할 수 있도록 도와주는 도구입니다.</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="prep4">
-                    <label for="prep4">여러 색상의 포스트잇을 준비해주세요. 자기소개 빙고와 Vision Building 활동에서 핵심적으로 사용됩니다.</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="prep5">
-                    <label for="prep5">4X4 빙고판을 준비해주세요. 신입구성원들이 자기소개 빙고 게임을 위해 사용할 빙고판입니다.</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- 전체 진행 일정 -->
-        <div class="section" id="schedule">
-            <h2>⏰ 전체 진행 일정</h2>
-            <div class="description">
-                Vision Building은 총 2시간 30분에 걸쳐 진행되는 활동입니다. 각 단계별로 정해진 시간을 지켜주시는 것이 중요하며, 신입구성원들이 자연스럽게 서로 알아가고 팀을 형성할 수 있도록 따뜻하고 격려하는 분위기로 이끌어주세요.
-            </div>
-            
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="time-badge">13:30~13:35 (5분)</div>
-                    <div class="activity-title">멘토 소개 및 진행방식 안내</div>
-                    <div class="activity-description">신입구성원들에게 따뜻한 인사말과 함께 멘토님을 소개해주시고, 오늘 진행될 Vision Building 활동에 대해 간단히 안내해주세요. 긴장을 풀고 편안한 분위기를 만드는 것이 중요합니다.</div>
+    <!-- 오버뷰 모드 -->
+    <div id="overviewMode" class="overview-mode">
+        <div class="container">
+            <div class="overview-card">
+                <div class="card-header">
+                    <div class="card-icon">🎯</div>
+                    <div class="card-title">이 활동을 하는 이유</div>
                 </div>
                 
-                <div class="timeline-item">
-                    <div class="time-badge">13:35~13:50 (15분)</div>
-                    <div class="activity-title">개인별 자기소개 준비</div>
-                    <div class="activity-description">신입구성원들이 자신을 표현하는 키워드를 생각하고 작성할 수 있도록 안내해주세요. 이후 4X4 빙고판을 만들어 서로의 키워드를 채워가는 시간입니다.</div>
+                <div class="purpose-section">
+                    <div class="purpose-title">💡 교육적 목적</div>
+                    <div class="purpose-text">
+                        신입구성원들이 처음 만나 어색한 상황에서 자연스럽게 친해지고, 
+                        개인의 비전을 구체화하며 팀의 기초를 다지는 핵심 활동입니다. 
+                        단순한 아이스브레이킹이 아니라 앞으로 10일간 함께할 동료들과의 
+                        신뢰 관계를 만드는 출발점입니다.
+                    </div>
+                </div>
+
+                <div class="purpose-section">
+                    <div class="purpose-title">🎪 멘토의 역할</div>
+                    <div class="purpose-text">
+                        조력자이자 격려자로서 신입구성원들이 편안하게 자신을 표현할 수 있는 
+                        분위기를 만들어주세요. 정답을 제시하기보다는 각자의 이야기를 
+                        이끌어내고 공감해주는 것이 핵심입니다.
+                    </div>
+                </div>
+            </div>
+
+            <div class="overview-card">
+                <div class="card-header">
+                    <div class="card-icon">⏰</div>
+                    <div class="card-title">전체 흐름 & 시간 배분</div>
                 </div>
                 
-                <div class="timeline-item">
-                    <div class="time-badge">13:50~14:20 (30분)</div>
-                    <div class="activity-title">릴레이 자기소개 (인당 1분)</div>
-                    <div class="activity-description">빙고게임과 함께 진행되는 자기소개 시간입니다. 각자 1분씩 자기소개를 하면서 다음 사람을 키워드로 지명하는 방식으로 진행해주세요.</div>
+                <div class="timeline-overview">
+                    <div class="timeline-item">
+                        <div class="time-badge">5분</div>
+                        <div>
+                            <div class="activity-name">멘토 소개</div>
+                            <div class="activity-purpose">긴장 완화, 친근한 분위기 조성</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="time-badge">45분</div>
+                        <div>
+                            <div class="activity-name">자기소개 빙고</div>
+                            <div class="activity-purpose">서로의 키워드에 관심 갖게 하는 아이스브레이킹</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="time-badge">20분</div>
+                        <div>
+                            <div class="activity-name">팀 빌딩</div>
+                            <div class="activity-purpose">앞으로 함께할 팀의 기초 다지기</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="time-badge">50분</div>
+                        <div>
+                            <div class="activity-name">비전 빌딩 ⭐</div>
+                            <div class="activity-purpose">개인 목표 구체화 (절대 단축 불가!)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="time-badge">20분</div>
+                        <div>
+                            <div class="activity-name">결과 공유</div>
+                            <div class="activity-purpose">팀별 발표, 격려, 마무리</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="overview-card">
+                <div class="card-header">
+                    <div class="card-icon">🔗</div>
+                    <div class="card-title">다른 프로그램과의 연결</div>
                 </div>
                 
-                <div class="timeline-item">
-                    <div class="time-badge">14:20~14:30 (10분)</div>
-                    <div class="activity-title">쉬는 시간</div>
-                    <div class="activity-description">간단한 다과와 함께 휴식시간을 가져주세요. 신입구성원들이 서로 자연스럽게 대화할 수 있는 시간이기도 합니다.</div>
+                <div class="connection-flow">
+                    <div class="flow-item">
+                        <div class="flow-icon">🎯</div>
+                        <div class="flow-text">Vision Building<br>(오늘)</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-item">
+                        <div class="flow-icon">🎮</div>
+                        <div class="flow-text">Play SKMS<br>(내일)</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-item">
+                        <div class="flow-icon">📈</div>
+                        <div class="flow-text">성장 Roadmap<br>(마지막날)</div>
+                    </div>
                 </div>
-                
-                <div class="timeline-item">
-                    <div class="time-badge">14:30~14:50 (20분)</div>
-                    <div class="activity-title">조별 Team Building</div>
-                    <div class="activity-description">조 이름 정하기, 역할 분담, 공통점 찾기 등을 통해 팀의 결속을 다지는 시간입니다. 신입구성원들이 협력할 수 있는 기반을 마련해주세요.</div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="time-badge">14:50~15:40 (50분)</div>
-                    <div class="activity-title">조별 Vision Building</div>
-                    <div class="activity-description">4가지 핵심 질문을 통해 신입구성원들이 자신의 취업 경험과 목표, SK에서의 비전을 구체화하는 핵심 시간입니다.</div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="time-badge">15:40~16:00 (20분)</div>
-                    <div class="activity-title">조별 활동 결과 공유</div>
-                    <div class="activity-description">각 조가 활동 결과를 발표하고, 공통점 찾기 우수 조에 대한 시상을 진행해주세요. 모든 신입구성원들의 노력을 격려해주시는 것이 중요합니다.</div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="time-badge">16:00~ (마무리)</div>
-                    <div class="activity-title">마무리 및 오픈카톡방 안내</div>
-                    <div class="activity-description">오늘 활동에 대한 소감을 나누고, 앞으로의 교육과정에 대해 안내해주세요. 오픈카톡방 접속도 함께 안내해주시면 됩니다.</div>
-                </div>
-            </div>
-        </div>
 
-        <!-- 자기소개 빙고 -->
-        <div class="section" id="bingo">
-            <h2>🎲 자기소개 빙고 진행법</h2>
-            <div class="description">
-                자기소개 빙고는 신입구성원들이 서로를 알아가는 재미있는 방법입니다. 게임 형식을 통해 자연스럽게 소통할 수 있도록 격려해주시고, 모든 신입구성원이 적극적으로 참여할 수 있는 분위기를 만들어주세요.
-            </div>
-
-            <h3>1단계: 키워드 작성 & 빙고판 만들기</h3>
-            <ol class="step-list">
-                <li><strong>키워드 작성 안내</strong>
-                    <div class="step-detail">신입구성원들에게 "자신을 가장 잘 표현하는 키워드 하나를 생각해보세요"라고 안내해주세요. 너무 어려워하지 않도록 "취미, 성격, 특기, 출신지역 등 무엇이든 괜찮다"고 격려해주시면 됩니다. 각자 포스트잇에 키워드를 작성하고 벽에 붙이도록 안내해주세요.</div>
-                </li>
-                <li><strong>빙고판 작성</strong>
-                    <div class="step-detail">신입구성원들이 SK 노트에 4X4 빙고판을 그리도록 안내해주세요. 그리고 벽에 붙어있는 분과 동기들의 키워드를 보면서 빙고판의 각 칸에 키워드를 채워넣도록 해주세요. 이때 같은 키워드가 여러 번 적히지 않도록 주의 깊게 봐주시면 됩니다.</div>
-                </li>
-                <li><strong>인상적인 키워드 선택</strong>
-                    <div class="step-detail">빙고판을 완성한 후, 신입구성원들에게 "가장 인상적이거나 궁금한 키워드 하나를 선택해서 자리로 가져오세요"라고 안내해주세요. 이 키워드로 다음 사람을 지명하게 됩니다.</div>
-                </li>
-            </ol>
-            
-            <h3>2단계: 릴레이 자기소개</h3>
-            <ol class="step-list">
-                <li><strong>첫 번째 발표자 지명</strong>
-                    <div class="step-detail">멘토님께서 신입구성원들이 작성한 키워드 중 가장 인상 깊었던 것을 소개하면서 해당 키워드를 작성한 신입구성원을 첫 번째 발표자로 지명해주세요. "○○○라는 키워드가 정말 인상적이었는데, 누가 작성했나요?"라고 자연스럽게 시작하시면 됩니다.</div>
-                </li>
-                <li><strong>자기소개 진행</strong>
-                    <div class="step-detail">지명된 신입구성원이 공통질문에 따라 1분간 자기소개를 하도록 안내해주세요. 공통질문은 ① 이름과 소속 ② 본인 키워드 소개 ③ 본인이 선택한 다른 사람의 키워드입니다. 1분이 넘어가지 않도록 시간 관리를 해주시는 것이 중요합니다.</div>
-                </li>
-                <li><strong>다음 사람 지명 및 빙고 체크</strong>
-                    <div class="step-detail">자기소개를 마친 신입구성원이 본인이 선택한 키워드를 말하면서 다음 발표자를 지명하도록 해주세요. 동시에 다른 신입구성원들은 지명된 사람의 이름에 빙고판에서 동그라미를 치도록 안내해주세요. 4빙고를 가장 먼저 완성하는 분에게는 소정의 상품을 준비해주시면 더욱 좋습니다.</div>
-                </li>
-            </ol>
-
-            <div class="tip-box">
-                <div class="tip-title">🎯 멘토 진행 Tips</div>
-                <ul>
-                    <li><strong>키워드 중복 방지</strong>: 신입구성원들이 키워드를 작성할 때 다른 사람과 겹치지 않도록 해주세요. 만약 겹치는 키워드가 있다면 "조금 더 구체적으로 표현해볼까요?" 하고 재작성을 유도해주세요.</li>
-                    <li><strong>시간 관리</strong>: 각자 1분을 넘어가지 않도록 적절히 시간을 안내해주세요. "30초 남았습니다" 같은 안내를 해주시면 됩니다.</li>
-                    <li><strong>참여 격려</strong>: 자기소개 중간중간 "정말 흥미로운 이야기네요", "멋진 키워드네요" 같은 격려의 말을 해주시면 신입구성원들이 더욱 적극적으로 참여할 수 있습니다.</li>
-                    <li><strong>미니게임 추가</strong>: 자기소개 소요시간이 1분에 가장 가까운 신입구성원에게 별도 상품을 주는 미니게임을 진행하시면 더욱 재미있게 활동할 수 있습니다.</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Team Building -->
-        <div class="section" id="team">
-            <h2>👥 Team Building 진행법</h2>
-            <div class="description">
-                Team Building은 신입구성원들이 앞으로 함께 활동할 팀의 기초를 다지는 중요한 시간입니다. 각 조가 하나의 팀으로 결속될 수 있도록 도와주시고, 모든 구성원이 자신의 역할을 찾을 수 있도록 격려해주세요.
-            </div>
-            
-            <ol class="step-list">
-                <li><strong>조별 인사 및 조 이름 정하기</strong>
-                    <div class="step-detail">각 조별로 모여앉도록 안내한 후, 먼저 조원들끼리 간단한 인사시간을 가지도록 해주세요. 그 다음 조를 대표할 수 있는 창의적이고 기억하기 쉬운 조 이름을 함께 정하도록 안내해주세요. "우리 조만의 특색이 드러나는 이름으로 정해보세요"라고 격려해주시면 됩니다.</div>
-                </li>
-                <li><strong>조원별 역할 정하기</strong>
-                    <div class="step-detail">팀 활동이 원활하게 진행될 수 있도록 조원들의 역할을 정해주세요. 조장, 서기, 타임키퍼는 기본 역할이며, 나머지 역할은 조원들이 자유롭게 정할 수 있도록 해주세요. "각자의 장점을 살릴 수 있는 역할로 정해보세요"라고 안내해주시면 됩니다.</div>
-                </li>
-                <li><strong>Ground Rule 정하기</strong>
-                    <div class="step-detail">조원들이 함께 지킬 하나의 약속을 정하도록 안내해주세요. 팀워크 향상과 상호 존중을 위한 규칙이면 무엇이든 좋습니다. "서로를 배려하고 팀워크를 높일 수 있는 우리만의 약속을 하나 정해보세요"라고 제안해주시면 됩니다.</div>
-                </li>
-                <li><strong>조 내 공통점 찾기</strong>
-                    <div class="step-detail">조원들 사이의 공통점을 최대한 많이 찾아보도록 안내해주세요. 다만 전체 신입구성원에게 해당되는 공통점(예: 모두 SK 신입구성원, 모두 20-30대 등)은 -1점 처리된다는 것을 미리 안내해주세요. "우리 조만의 특별한 공통점을 찾아보세요"라고 격려해주시면 됩니다.</div>
-                </li>
-            </ol>
-            
-            <div class="tip-box">
-                <div class="tip-title">📝 분과장 선정 안내</div>
-                <ul>
-                    <li>Team Building 과정에서 분과를 대표하여 멘토님을 도와줄 분과장을 선정해주세요. 분과장은 조장과는 별개의 역할로, 전체 분과의 의견을 대변하고 멘토님과 소통하는 역할을 합니다.</li>
-                    <li>분과장이 선정되면 신입구성원과정 분과현황판에 이름을 기입해주세요.</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Vision Building 핵심 질문 -->
-        <div class="section" id="vision">
-            <h2>🎯 Vision Building 핵심 질문</h2>
-            <div class="description">
-                Vision Building의 핵심은 4가지 질문을 통해 신입구성원들이 자신의 과거 경험을 돌아보고, 현재의 목표를 구체화하며, 미래의 비전을 그려보는 것입니다. 각 질문에 대해 충분히 생각하고 토의할 수 있도록 시간을 배분해주시고, 신입구성원들이 진솔한 이야기를 나눌 수 있는 분위기를 만들어주세요.
-            </div>
-
-            <div class="question-section">
-                <div class="question-title">4가지 핵심 질문 (포스트잇에 작성)</div>
-                <ol class="question-list">
-                    <li><strong>취업 과정 중에 가장 기억에 남는 순간은 무엇인가요?</strong>
-                        <div class="step-detail">신입구성원들이 취업 준비를 하면서 겪었던 다양한 경험들 중에서 특별히 기억에 남는 순간을 떠올려보도록 안내해주세요. 성공의 기쁨, 어려웠던 순간, 깨달음을 얻은 경험 등 무엇이든 괜찮다고 격려해주세요.</div>
-                    </li>
-                    <li><strong>직장인이 되고 가장 하고 싶었던 일은 어떤 것인가요?</strong>
-                        <div class="step-detail">입사 전부터 품고 있던 꿈이나 하고 싶었던 업무, 도전해보고 싶었던 분야에 대해 이야기해보도록 안내해주세요. 구체적인 업무뿐만 아니라 "이런 사람이 되고 싶다"는 추상적인 목표도 모두 좋다고 안내해주세요.</div>
-                    </li>
-                    <li><strong>내가 생각하는 '일잘러'의 사례를 공유해주세요!</strong>
-                        <div class="step-detail">실제 인물, 영화나 드라마의 캐릭터, 책에서 본 인물 등 어떤 형태든 상관없이 자신이 생각하는 '일 잘하는 사람'의 사례를 들어보도록 안내해주세요. 왜 그 사람을 일잘러라고 생각하는지 이유도 함께 나누도록 격려해주세요.</div>
-                    </li>
-                    <li><strong>SK에서 내가 맡고 싶은 역할이나 도전하고 싶은 업무는 무엇인가요?</strong>
-                        <div class="step-detail">SK 구성원으로서 앞으로 맡고 싶은 역할이나 도전해보고 싶은 업무에 대해 구체적으로 생각해보도록 안내해주세요. 현재 잘 모르더라도 "이런 분야에 관심이 있다", "이런 일을 해보고 싶다" 정도로 시작해도 좋다고 격려해주세요.</div>
-                    </li>
-                </ol>
-                
-                <div class="question-note">
-                    <strong>📌 중요 안내:</strong> 3번과 4번 질문의 답은 반드시 포스트잇에 작성한 후 조별 이젤패드에 부착해주세요. 이후 작성된 이젤패드는 강의장 벽면에 부착해주시면 됩니다. 이 결과물은 이후 Play SKMS 프로그램에서 다시 활용될 예정입니다.
+                <div class="purpose-section">
+                    <div class="purpose-title">🔄 결과물 연계</div>
+                    <div class="purpose-text">
+                        오늘 작성하는 <strong>"일잘러 사례"</strong>와 <strong>"SK에서의 목표"</strong> 포스트잇은 
+                        내일 Play SKMS에서 VWBE 실천과 연결하여 다시 활용됩니다. 
+                        마지막 날 성장 Roadmap 작성 시에도 일관성 있는 계획 수립의 기초가 됩니다.
+                    </div>
                 </div>
             </div>
 
-            <div class="tip-box">
-                <div class="tip-title">🎯 Vision Building 진행 Tips</div>
-                <ul>
-                    <li><strong>조장 역할 안내</strong>: Vision Building 시간에는 각 조의 조장이 토의를 이끌어갈 수 있도록 역할을 다시 한번 안내해주세요. "조장님이 각 질문에 대해 조원들의 의견을 들어보는 시간으로 진행해주세요"라고 안내하시면 됩니다.</li>
-                    <li><strong>적극적 개입</strong>: 만약 어떤 조의 토의가 활발하지 않다면 멘토님이 직접 해당 조에 가서 "어떤 이야기들이 나오고 있나요?"라고 질문을 던져주세요. 자연스럽게 대화가 이어질 수 있도록 도와주시면 됩니다.</li>
-                    <li><strong>멘토 사례 공유</strong>: 신입구성원들이 질문에 대한 감을 잡을 수 있도록 멘토님의 실제 경험이나 사례를 간단히 공유해주시면 좋습니다. "저 같은 경우에는..." 하고 시작하시면 신입구성원들이 더 편안하게 이야기할 수 있습니다.</li>
-                    <li><strong>결과물 관리</strong>: Vision Building 결과물은 Play SKMS에서 다시 참고할 예정이므로, 신입구성원들이 작성한 포스트잇과 이젤패드를 분과장 벽면에 잘 보관해주세요.</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- 조별 활동 결과 공유 -->
-        <div class="section" id="sharing">
-            <h2>📢 조별 활동 결과 전체 공유</h2>
-            <div class="description">
-                각 조가 열심히 활동한 결과를 전체가 함께 나누는 소중한 시간입니다. 모든 조의 발표를 경청하고 격려해주시며, 우수한 활동에 대해서는 적극적으로 칭찬해주세요. 신입구성원들이 서로의 비전과 목표를 알아가며 더욱 가까워질 수 있는 기회입니다.
-            </div>
-            
-            <ol class="step-list">
-                <li><strong>팀빌딩 결과 공유</strong>
-                    <div class="step-detail">각 조가 정한 조 이름과 그 의미, 조원들의 역할 분담 결과를 간단히 소개하도록 안내해주세요. "우리 조의 이름은 ○○이고, 이런 의미가 담겨있습니다"라는 식으로 발표하도록 격려해주세요.</div>
-                </li>
-                <li><strong>공통점 찾기 결과 발표</strong>
-                    <div class="step-detail">각 조가 찾아낸 공통점들을 발표하도록 안내해주세요. 가장 많은 공통점을 찾은 조에게는 소정의 상품(연수원별로 편의점 쿠폰이나 커피 쿠폰 등)을 제공해주시면 됩니다. 창의적이고 독특한 공통점을 찾은 조에게도 특별히 격려해주세요.</div>
-                </li>
-                <li><strong>일잘러 사례 공유</strong>
-                    <div class="step-detail">각 조에서 나온 '일잘러' 사례 중에서 가장 인상 깊었던 것을 하나씩 소개하도록 안내해주세요. 다양한 롤모델과 기준을 통해 신입구성원들이 자신만의 성장 방향을 생각해볼 수 있는 기회입니다.</div>
-                </li>
-                <li><strong>SK에서의 목표 공유</strong>
-                    <div class="step-detail">각 조원들이 SK에서 하고 싶어하는 일이나 도전하고 싶은 업무에는 어떤 것들이 있었는지 간단히 공유하도록 안내해주세요. 비슷한 관심사를 가진 신입구성원들끼리 연결될 수 있는 기회이기도 합니다.</div>
-                </li>
-            </ol>
-
-            <div class="tip-box">
-                <div class="tip-title">⏰ 시간 관리 및 진행 Tips</div>
-                <ul>
-                    <li><strong>발표 시간 관리</strong>: 조별 활동 공유는 각 조당 2-3분씩 진행해주시고, 전체 시간이 20분을 넘지 않도록 적절히 시간 관리를 해주세요.</li>
-                    <li><strong>적극적 지지</strong>: 신입구성원들의 '일잘러' 사례와 SK에서의 목표에 대해서는 "정말 좋은 목표네요", "훌륭한 롤모델이네요" 같은 적극적인 지지와 격려를 해주세요.</li>
-                    <li><strong>상호 격려 분위기</strong>: 다른 조의 발표를 들을 때도 박수와 응원을 해주도록 분위기를 만들어주세요. "다른 조의 좋은 아이디어도 함께 응원해주세요"라고 안내하시면 됩니다.</li>
-                    <li><strong>시상 및 격려</strong>: 가장 많은 공통점을 찾은 조뿐만 아니라 창의적인 아이디어를 낸 조, 적극적으로 참여한 조에게도 다양한 형태로 격려해주시면 모든 신입구성원들이 성취감을 느낄 수 있습니다.</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- 마무리 -->
-        <div class="section">
-            <h2>✨ 마무리 및 다음 단계 안내</h2>
-            <div class="description">
-                Vision Building 활동을 통해 신입구성원들이 서로를 알아가고, 자신의 비전을 구체화하는 소중한 시간을 가졌습니다. 이제 이 결과물들이 앞으로의 교육과정에서 어떻게 활용될지 안내해주시고, 신입구성원들이 계속해서 성장해나갈 수 있도록 격려해주세요.
-            </div>
-
-            <div class="tip-box">
-                <div class="tip-title">🔄 연결성 안내</div>
-                <ul>
-                    <li><strong>Play SKMS 연계</strong>: 오늘 작성한 Vision Building 결과물은 내일 진행될 Play SKMS 프로그램에서 다시 활용될 예정입니다. 신입구성원들이 오늘 세운 목표와 비전이 SKMS 실천과 어떻게 연결되는지 생각해볼 기회가 될 것입니다.</li>
-                    <li><strong>성장 Roadmap 연계</strong>: 이후 성장 Roadmap 작성 시에도 오늘의 활동 결과가 기초 자료로 활용됩니다. 신입구성원들이 일관성 있는 성장 계획을 세울 수 있도록 도와주는 중요한 디딤돌 역할을 합니다.</li>
-                    <li><strong>지속적 관심</strong>: 1:1 면담이나 일상적인 대화에서도 오늘 나눈 이야기들을 기억하시고 지속적인 관심을 보여주시면 신입구성원들에게 큰 힘이 될 것입니다.</li>
-                </ul>
-            </div>
-
-            <div class="checklist">
-                <h4>✅ Vision Building 완료 체크리스트</h4>
-                <div class="checklist-item">
-                    <input type="checkbox" id="complete1">
-                    <label for="complete1">모든 신입구성원이 자기소개 빙고에 참여하고 서로를 알아가는 시간을 가졌습니다.</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="complete2">
-                    <label for="complete2">각 조가 팀 이름을 정하고 역할을 분담하며 팀워크를 다지는 시간을 가졌습니다.</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="complete3">
-                    <label for="complete3">4가지 핵심 질문을 통해 신입구성원들이 자신의 비전을 구체화하는 시간을 가졌습니다.</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="complete4">
-                    <label for="complete4">3번, 4번 질문의 결과물이 이젤패드에 작성되어 강의장 벽면에 부착되었습니다.</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="complete5">
-                    <label for="complete5">각 조의 활동 결과가 전체에 공유되고 우수 조에 대한 격려가 이루어졌습니다.</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="complete6">
-                    <label for="complete6">오픈카톡방 접속 안내 및 다음 프로그램에 대한 안내가 완료되었습니다.</label>
-                </div>
-            </div>
+            <button class="start-button" onclick="switchView('live')">
+                🚀 실행 모드로 시작하기
+            </button>
         </div>
     </div>
 
-    <!-- 맨 위로 버튼 -->
-    <button class="jump-button" onclick="scrollToTop()">↑</button>
+    <!-- 라이브 모드 -->
+    <div id="liveMode" class="live-mode">
+        <div class="live-container">
+            <div class="step-cards" id="stepCards">
+                
+                <!-- 1단계: 멘토 소개 -->
+                <div class="step-card">
+                    <div class="live-card">
+                        <div class="step-header">
+                            <div class="step-icon">👋</div>
+                            <div class="step-title">멘토 소개</div>
+                            <div class="step-time">13:30-13:35 (5분)</div>
+                        </div>
+                        
+                        <div class="step-content">
+                            <div class="context-section">
+                                <div class="context-title">
+                                    <span>💡</span>
+                                    이 단계의 의도
+                                </div>
+                                <div class="context-text">
+                                    신입구성원들의 긴장을 풀고 편안한 분위기를 만드는 것이 목적입니다. 
+                                    첫인상이 전체 활동의 분위기를 좌우하므로 따뜻하고 친근하게 접근해주세요.
+                                </div>
+                            </div>
+
+                            <ul class="guide-list">
+                                <li class="guide-item">
+                                    <div class="guide-title">따뜻한 인사 & 자기소개</div>
+                                    <div class="guide-desc">"안녕하세요! 저는 여러분의 멘토 ○○입니다. 앞으로 10일간 함께하게 되어 정말 기대됩니다."</div>
+                                    <div class="guide-tip">
+                                        <div class="tip-label">💡 포인트</div>
+                                        <div class="tip-text">개인적인 경험이나 취미를 간단히 공유하면 친근감이 높아집니다.</div>
+                                    </div>
+                                </li>
+                                
+                                <li class="guide-item">
+                                    <div class="guide-title">활동 목적 설명</div>
+                                    <div class="guide-desc">"오늘은 서로를 알아가고 팀을 만드는 시간입니다. 정답은 없으니 편안하게 참여해주세요."</div>
+                                </li>
+                                
+                                <li class="guide-item">
+                                    <div class="guide-title">분위기 조성</div>
+                                    <div class="guide-desc">신입구성원들의 이름을 기억하려 노력하고, 눈맞춤과 미소로 안정감을 주세요.</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2단계: 자기소개 빙고 -->
+                <div class="step-card">
+                    <div class="live-card">
+                        <div class="step-header">
+                            <div class="step-icon">🎲</div>
+                            <div class="step-title">자기소개 빙고</div>
+                            <div class="step-time">13:35-14:20 (45분)</div>
+                        </div>
+                        
+                        <div class="step-content">
+                            <div class="context-section">
+                                <div class="context-title">
+                                    <span>🎯</span>
+                                    이 활동의 진짜 목적
+                                </div>
+                                <div class="context-text">
+                                    경쟁이나 게임이 목적이 아닙니다. 서로의 키워드에 관심을 갖게 하여 
+                                    자연스러운 대화의 물꼬를 트는 아이스브레이킹입니다.
+                                </div>
+                            </div>
+
+                            <ul class="guide-list">
+                                <li class="guide-item">
+                                    <div class="guide-title">키워드 작성 안내</div>
+                                    <div class="guide-desc">"자신을 가장 잘 표현하는 키워드 하나를 포스트잇에 써주세요."</div>
+                                    <div class="guide-tip">
+                                        <div class="tip-label">⚠️ 주의</div>
+                                        <div class="tip-text">키워드가 겹치면 "조금 더 구체적으로 표현해볼까요?" 안내</div>
+                                    </div>
+                                </li>
+                                
+                                <li class="guide-item">
+                                    <div class="guide-title">빙고판 만들기</div>
+                                    <div class="guide-desc">"SK 노트에 4X4 빙고판을 그리고, 벽의 키워드들을 보며 칸을 채워주세요."</div>
+                                </li>
+                                
+                                <li class="guide-item">
+                                    <div class="guide-title">자기소개 진행 (1분씩)</div>
+                                    <div class="guide-desc">① 이름/소속 ② 본인 키워드 소개 ③ 선택한 키워드로 다음 사람 지명</div>
+                                    <div class="guide-tip">
+                                        <div class="tip-label">🎤 멘토 역할</div>
+                                        <div class="tip-text">"정말 흥미로운 키워드네요!" 같은 적극적 반응 보이기</div>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <div class="situation-card" onclick="showSituation('빙고')">
+                                <div class="situation-title">🚨 이런 상황이라면?</div>
+                                <div class="situation-desc">키워드 겹침, 빙고판 어려움, 소극적 참여 시 대응법</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3단계: 팀 빌딩 -->
+                <div class="step-card">
+                    <div class="live-card">
+                        <div class="step-header">
+                            <div class="step-title">팀 빌딩</div>
+                            <div class="step-time">14:30-14:50 (20분)</div>
+                        </div>
+                        
+                        <div class="step-content">
+                            <div class="context-section">
+                                <div class="context-title">
+                                    <span>🤝</span>
+                                    팀 만들기의 의미
+                                </div>
+                                <div class="context-text">
+                                    앞으로 10일간 함께 활동할 팀의 기초를 다지는 시간입니다. 
+                                    단순한 조 편성이 아니라 서로를 이해하고 협력할 수 있는 관계를 만드는 것이 목적입니다.
+                                </div>
+                            </div>
+
+                            <ul class="guide-list">
+                                <li class="guide-item">
+                                    <div class="guide-title">조 이름 정하기</div>
+                                    <div class="guide-desc">"우리 조만의 특색이 드러나는 창의적인 이름으로 정해보세요."</div>
+                                </li>
+                                
+                                <li class="guide-item">
+                                    <div class="guide-title">역할 분담</div>
+                                    <div class="guide-desc">조장, 서기, 타임키퍼는 기본. 나머지는 자유롭게</div>
+                                </li>
+                                
+                                <li class="guide-item">
+                                    <div class="guide-title">공통점 찾기</div>
+                                    <div class="guide-desc">"우리 조만의 특별한 공통점을 찾아보세요. 전체에 해당되는 건 -1점이에요!"</div>
+                                </li>
+                                
+                                <li class="guide-item">
+                                    <div class="guide-title">분과장 선정</div>
+                                    <div class="guide-desc">분과 대표로 멘토를 도와줄 분과장 선정 후 현황판에 기입</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4단계: 비전 빌딩 -->
+                <div class="step-card">
+                    <div class="live-card">
+                        <div class="step-header">
+                            <div class="step-icon">🎯</div>
+                            <div class="step-title">비전 빌딩</div>
+                            <div class="step-time">14:50-15:40 (50분) ⭐</div>
+                        </div>
+                        
+                        <div class="step-content">
+                            <div class="context-section">
+                                <div class="context-title">
+                                    <span>💎</span>
+                                    가장 중요한 시간
+                                </div>
+                                <div class="context-text">
+                                    과거→현재→미래 순서로 신입구성원들이 자신의 성장 여정을 돌아보고 
+                                    구체적인 비전을 세우는 핵심 활동입니다.
+                                </div>
+                            </div>
+
+                            <ul class="guide-list">
+                                <li class="guide-item">
+                                    <div class="guide-title">질문 1: 취업 과정의 기억</div>
+                                    <div class="guide-desc">"취업 준비하면서 가장 기억에 남는 순간은?"</div>
+                                    <div class="guide-tip">
+                                        <div class="tip-label">💡 안내</div>
+                                        <div class="tip-text">과거 경험을 통해 자신의 성장을 돌아보는 시간</div>
+                                    </div>
+                                </li>
+                                
+                                <li class="guide-item">
+                                    <div class="guide-title">질문 2: 직장인으로서의 꿈</div>
+                                    <div class="guide-desc">"직장인이 되고 가장 하고 싶었던 일은?"</div>
+                                </li>
+                                
+                                <li class="guide-item">
+                                    <div class="guide-title">질문 3: 일잘러 사례 ⭐</div>
+                                    <div class="guide-desc">"내가 생각하는 '일잘러'의 사례를 공유해주세요!"</div>
+                                    <div class="guide-tip">
+                                        <div class="tip-label">📝 중요</div>
+                                        <div class="tip-text">포스트잇에 작성 → Play SKMS에서 재활용</div>
+                                    </div>
+                                </li>
+                                
+                                <li class="guide-item">
+                                    <div class="guide-title">질문 4: SK에서의 목표 ⭐</div>
+                                    <div class="guide-desc">"SK에서 내가 맡고 싶은 역할이나 도전하고 싶은 업무는?"</div>
+                                    <div class="guide-tip">
+                                        <div class="tip-label">📝 중요</div>
+                                        <div class="tip-text">포스트잇에 작성 → 성장 로드맵 연결</div>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <div class="situation-card" onclick="showSituation('비전')">
+                                <div class="situation-title">🚨 이런 상황이라면?</div>
+                                <div class="situation-desc">토의가 활발하지 않을 때, 너무 추상적일 때 대응법</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5단계: 결과 공유 -->
+                <div class="step-card">
+                    <div class="live-card">
+                        <div class="step-header">
+                            <div class="step-icon">🎪</div>
+                            <div class="step-title">결과 공유</div>
+                            <div class="step-time">15:40-16:00 (20분)</div>
+                        </div>
+                        
+                        <div class="step-content">
+                            <div class="context-section">
+                                <div class="context-title">
+                                    <span>🏆</span>
+                                    마무리의 의미
+                                </div>
+                                <div class="context-text">
+                                    각 조의 성과를 공유하고 서로를 격려하는 시간입니다. 
+                                    경쟁보다는 서로의 다양한 생각을 나누고 응원하는 분위기를 만들어주세요.
+                                </div>
+                            </div>
+
+                            <ul class="guide-list">
+                                <li class="guide-item">
+                                    <div class="guide-title">팀빌딩 결과 공유</div>
+                                    <div class="guide-desc">"우리 조 이름과 특별한 공통점을 소개해주세요!"</div>
+                                </li>
+                                
+                                <li class="guide-item">
+                                    <div class="guide-title">공통점 경진대회</div>
+                                    <div class="guide-desc">가장 많은 공통점을 찾은 조에게 상품 증정</div>
+                                </li>
+                                
+                                <li class="guide-item">
+                                    <div class="guide-title">일잘러 사례 공유</div>
+                                    <div class="guide-desc">"가장 인상 깊었던 일잘러 사례를 소개해주세요!"</div>
+                                    <div class="guide-tip">
+                                        <div class="tip-label">💡 멘토 역할</div>
+                                        <div class="tip-text">각 사례에 대해 적극적으로 지지하고 격려</div>
+                                    </div>
+                                </li>
+                                
+                                <li class="guide-item">
+                                    <div class="guide-title">SK 목표 공유</div>
+                                    <div class="guide-desc">"SK에서 도전하고 싶은 일들을 들어보겠습니다!"</div>
+                                </li>
+                                
+                                <li class="guide-item">
+                                    <div class="guide-title">이젤패드 부착</div>
+                                    <div class="guide-desc">3번, 4번 질문 포스트잇이 붙은 이젤패드를 분과장 벽면에 부착</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6단계: 마무리 -->
+                <div class="step-card">
+                    <div class="live-card">
+                        <div class="step-header">
+                            <div class="step-icon">🎉</div>
+                            <div class="step-title">마무리</div>
+                            <div class="step-time">16:00~ (5분)</div>
+                        </div>
+                        
+                        <div class="step-content">
+                            <div class="context-section">
+                                <div class="context-title">
+                                    <span>🌟</span>
+                                    활동 완료
+                                </div>
+                                <div class="context-text">
+                                    오늘의 성과를 정리하고 내일 활동에 대한 기대감을 높여주세요.
+                                </div>
+                            </div>
+
+                            <ul class="guide-list">
+                                <li class="guide-item">
+                                    <div class="guide-title">오픈카톡방 안내</div>
+                                    <div class="guide-desc">분과 단위 소통을 위한 오픈카톡방 접속 안내</div>
+                                </li>
+                                
+                                <li class="guide-item">
+                                    <div class="guide-title">오늘의 소감</div>
+                                    <div class="guide-desc">"오늘 서로에 대해 알게 된 것 중 가장 기억에 남는 것은?"</div>
+                                </li>
+                                
+                                <li class="guide-item">
+                                    <div class="guide-title">내일 예고</div>
+                                    <div class="guide-desc">"내일은 오늘 세운 비전을 SKMS와 연결해보는 시간입니다!"</div>
+                                </li>
+                                
+                                <li class="guide-item">
+                                    <div class="guide-title">격려 메시지</div>
+                                    <div class="guide-desc">"모두 정말 멋진 목표와 꿈을 가지고 계시네요. 응원합니다!"</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="nav-controls">
+            <button class="nav-btn" id="prevBtn" onclick="previousStep()" disabled>이전</button>
+            <span class="step-indicator" id="stepIndicator">1 / 6</span>
+            <button class="nav-btn primary" id="nextBtn" onclick="nextStep()">다음</button>
+        </div>
+    </div>
 
     <script>
-        function goBack() {
-            if (document.referrer) {
-                window.history.back();
-            } else {
-                window.location.href = '../index.html';
-            }
-        }
-
-        function scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        }
-
-        // 체크리스트 상태 저장
+        // 초기화 및 이벤트 리스너
         document.addEventListener('DOMContentLoaded', function() {
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            console.log('Vision Building 가이드 v2 로드 완료');
             
-            checkboxes.forEach(checkbox => {
-                const savedState = localStorage.getItem(`vision_building_${checkbox.id}`);
-                if (savedState === 'true') {
-                    checkbox.checked = true;
-                }
-                
-                checkbox.addEventListener('change', function() {
-                    localStorage.setItem(`vision_building_${this.id}`, this.checked);
-                    
-                    // 체크박스 변경시 부드러운 햅틱 피드백 (지원되는 기기에서)
-                    if (navigator.vibrate) {
-                        navigator.vibrate(50);
+            const container = document.getElementById('stepCards');
+            
+            if (container) {
+                let startX = 0;
+
+                container.addEventListener('touchstart', function(e) {
+                    startX = e.touches[0].clientX;
+                });
+
+                container.addEventListener('touchend', function(e) {
+                    const endX = e.changedTouches[0].clientX;
+                    const diffX = startX - endX;
+
+                    if (Math.abs(diffX) > 50) {
+                        if (diffX > 0 && currentStep < totalSteps - 1) {
+                            nextStep();
+                        } else if (diffX < 0 && currentStep > 0) {
+                            previousStep();
+                        }
                     }
                 });
-            });
-        });
 
-        // 부드러운 스크롤
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // 현재 섹션 하이라이트 (스크롤 시)
-        window.addEventListener('scroll', function() {
-            const sections = document.querySelectorAll('.section[id]');
-            const navChips = document.querySelectorAll('.nav-chip');
+                container.addEventListener('scroll', function() {
+                    const cardWidth = container.clientWidth;
+                    const newStep = Math.round(container.scrollLeft / cardWidth);
+                    if (newStep !== currentStep && newStep >= 0 && newStep < totalSteps) {
+                        currentStep = newStep;
+                        updateNavigation();
+                    }
+                });
+            }
             
-            let currentSection = '';
-            
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop - 100;
-                const sectionHeight = section.clientHeight;
-                
-                if (window.pageYOffset >= sectionTop && window.pageYOffset < sectionTop + sectionHeight) {
-                    currentSection = section.getAttribute('id');
-                }
-            });
-            
-            navChips.forEach(chip => {
-                chip.style.background = '#f8f9fa';
-                chip.style.color = '#666';
-                
-                if (chip.getAttribute('href') === `#${currentSection}`) {
-                    chip.style.background = '#e3f2fd';
-                    chip.style.color = '#1976d2';
-                }
-            });
+            updateNavigation();
         });
     </script>
 </body>
