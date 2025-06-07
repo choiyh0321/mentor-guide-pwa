@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🚨 긴급 연락처 - SK 멘토 가이드</title>
+<link rel="manifest" href="../manifest.json">
+<meta name="theme-color" content="#EA4335">
+<link rel="stylesheet" href="../assets/css/main.css">
+
+<style>
+.center-buttons {
+    grid-template-columns: 1fr;
+    gap: 6px;
+}
+
+.center-button {
+    padding: 10px 6px;
+}
+
+.center-name {
+    font-size: 11px;
+}
+.guide-container {
+max-width: 800px;
+margin: 0 auto;
+padding: 20px;
+padding-bottom: 100px;
+}
+
+.guide-header {
+background: linear-gradient(135deg, #F44336, #E91E63);
+color: white;
+padding: 30px 20px;
+border-radius: 16px;
+margin-bottom: 30px;
+text-align: center;
+}
+
+.guide-title {
+font-size: 28px;
+font-weight: 700;
+margin-bottom: 8px;
+}
+
+.guide-subtitle {
+font-size: 16px;
+opacity: 0.9;
+}
+
+.emergency-banner {
+background: linear-gradient(135deg, #ffebee, #fce4ec);
+border: 2px solid #f44336;
+border-radius: 16px;
+padding: 20px;
+margin-bottom: 30px;
+text-align: center;
+}
+
+.emergency-title {
+font-size: 18px;
+font-weight: 600;
+color: #c62828;
+margin-bottom: 8px;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
+}
+
+.emergency-text {
+font-size: 14px;
+color: #d32f2f;
+line-height: 1.5;
+}
+
+.emergency-section {
+background: white;
+border-radius: 16px;
+padding: 24px;
+margin-bottom: 24px;
+box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+border-left: 4px solid #f44336;
+}
+
+.section-title {
+font-size: 20px;
+font-weight: 600;
+color: #f44336;
+margin-bottom: 16px;
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.emergency-contacts {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+gap: 16px;
+}
+
+.contact-card {
+background: #f8f9fa;
+border: 2px solid #e0e0e0;
+border-radius: 12px;
+padding: 20px;
+text-align: center;
+transition: all 0.3s ease;
+cursor: pointer;
+position: relative;
+}
+
+.contact-card:hover {
+border-color: #f44336;
+background: #ffebee;
+transform: translateY(-4px);
+box-shadow: 0 8px 25px rgba(244, 67, 54, 0.3);
+}
+
+.contact-card.priority {
+border-color: #f44336;
+background: linear-gradient(135deg, #ffebee, #fce4ec);
+}
+
+.contact-icon {
+font-size: 48px;
+margin-bottom: 12px;
+display: block;
+}
+
+.contact-name {
+font-weight: 600;
+font-size: 16px;
+margin-bottom: 8px;
+color: #333;
+}
+
+.contact-phone {
+font-size: 20px;
+font-weight: 700;
+color: #f44336;
+margin-bottom: 8px;
+font-family: 'Courier New', monospace;
+}
+
+.contact-description {
+font-size: 13px;
+color: #666;
+line-height: 1.4;
+}
+
+.contact-card .call-button {
+position: absolute;
+top: 8px;
+right: 8px;
+background: #f44336;
+color: white;
+border: none;
+width: 32px;
+height: 32px;
+border-radius: 50%;
+font-size: 16px;
+cursor: pointer;
+transition: all 0.3s ease;
+}
+
+.contact-card .call-button:hover {
+background: #d32f2f;
+transform: scale(1.1);
+}
+
+.training-centers {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+gap: 20px;
+}
+
+.center-card {
+background: white;
+border: 2px solid #4caf50;
+border-radius: 12px;
+padding: 20px;
+transition: all 0.3s ease;
+}
+
+.center-card:hover {
+transform: translateY(-2px);
+box-shadow: 0 6px 20px rgba(76, 175, 80, 0.2);
+}
+
+.center-name {
+font-size: 18px;
+font-weight: 600;
+color: #2e7d32;
+margin-bottom: 16px;
+text-align: center;
+border-bottom: 2px solid #e8f5e8;
+padding-bottom: 8px;
+}
+
+.center-contacts {
+display: flex;
+flex-direction: column;
+gap: 12px;
+}
+
+.center-contact {
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 12px;
+background: #f8f9fa;
+border-radius: 8px;
+cursor: pointer;
+transition: all 0.3s ease;
+}
+
+.center-contact:hover {
+background: #e8f5e8;
+}
+
+.center-contact-icon {
+font-size: 20px;
+color: #4caf50;
+}
+
+.center-contact-info {
+flex: 1;
+}
+
+.center-contact-name {
+font-weight: 600;
+color: #333;
+margin-bottom: 2px;
+}
+
+.center-contact-phone {
+font-size: 14px;
+font-weight: 600;
+color: #4caf50;
+font-family: 'Courier New', monospace;
+}
+
+.emergency-procedure {
+background: linear-gradient(135deg, #fff3e0, #fffde7);
+border: 2px solid #ff9800;
+border-radius: 16px;
+padding: 24px;
+margin-bottom: 24px;
+}
+
+.procedure-title {
+font-size: 20px;
+font-weight: 600;
+color: #e65100;
+margin-bottom: 16px;
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.procedure-steps {
+display: grid;
+gap: 12px;
+}
+
+.procedure-step {
+display: flex;
+align-items: flex-start;
+gap: 12px;
+padding: 12px;
+background: rgba(255, 255, 255, 0.8);
+border-radius: 8px;
+}
+
+.step-number {
+background: #ff9800;
+color: white;
+width: 24px;
+height: 24px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 600;
+font-size: 14px;
+flex-shrink: 0;
+}
+
+.step-content {
+flex: 1;
+font-size: 14px;
+line-height: 1.5;
+color: #333;
+}
+
+.step-title {
+font-weight: 600;
+margin-bottom: 4px;
+}
+
+.back-button {
+position: fixed;
+top: 20px;
+left: 20px;
+background: rgba(255, 255, 255, 0.9);
+border: 1px solid #e0e0e0;
+border-radius: 50%;
+width: 48px;
+height: 48px;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+font-size: 20px;
+transition: all 0.3s ease;
+z-index: 1000;
+backdrop-filter: blur(10px);
+}
+
+.back-button:hover {
+background: white;
+transform: scale(1.1);
+box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.center-selector {
+background: white;
+border-radius: 12px;
+padding: 16px;
+margin-bottom: 20px;
+box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+border: 1px solid #e0e0e0;
+}
+
+.selector-title {
+font-size: 16px;
+font-weight: 600;
+color: #f44336;
+margin-bottom: 12px;
+text-align: center;
+}
+
+.center-buttons {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 8px;
+}
+
+.center-button {
+background: #f8f9fa;
+border: 1px solid #e0e0e0;
+border-radius: 8px;
+padding: 12px 8px;
+text-align: center;
+cursor: pointer;
+transition: all 0.3s ease;
+font-weight: 500;
+}
+
+.center-button:hover {
+border-color: #f44336;
+background: #ffebee;
+}
+
+.center-button.active {
+background: #f44336;
+color: white;
+border-color: #f44336;
+}
+
+.center-icon {
+font-size: 20px;
+margin-bottom: 6px;
+display: block;
+}
+
+.center-name {
+font-size: 12px;
+line-height: 1.3;
+}
+@media (max-width: 768px) {
+.guide-container {
+    padding: 16px;
+    padding-bottom: 100px;
+}
+
+.guide-header {
+    padding: 20px 16px;
+}
+
+.guide-title {
+    font-size: 24px;
+}
+
+.emergency-section {
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.emergency-contacts {
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.training-centers {
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+.contact-card {
+    padding: 12px;
+}
+
+.contact-icon {
+    font-size: 28px;
+}
+
+.contact-phone {
+    font-size: 14px;
+}
+
+.center-card {
+    padding: 12px;
+}
+}
+</style>
+</head>
+<body>
+<button class="back-button" onclick="goBack()">←</button>
+
+<div class="guide-container">
+<!-- 헤더 -->
+<div class="guide-header">
+<div class="guide-title">🚨 긴급 연락처</div>
+<div class="guide-subtitle">응급상황 발생 시 즉시 연락할 수 있는 연락처 모음</div>
+</div>
+
+<!-- 연수원 선택 -->
+<div class="center-selector">
+<div class="selector-title">🏢 연수원별 맞춤 연락처</div>
+<div class="center-buttons">
+    <button class="center-button active" data-center="icheon" onclick="selectCenter('icheon')">
+        <div class="center-icon">🏢</div>
+        <div class="center-name">이천<br>FMI인재개발원</div>
+    </button>
+    <button class="center-button" data-center="yongin" onclick="selectCenter('yongin')">
+        <div class="center-icon">🏫</div>
+        <div class="center-name">용인<br>SK아카데미</div>
+    </button>
+    <button class="center-button" data-center="incheon" onclick="selectCenter('incheon')">
+        <div class="center-icon">🌊</div>
+        <div class="center-name">인천<br>SK무의연수원</div>
+    </button>
+</div>
+</div>
+<div class="emergency-banner">
+<div class="emergency-title">
+    <span>⚠️</span>
+    응급상황 발생 시
+</div>
+<div class="emergency-text">
+    <strong>1차:</strong> 119 또는 응급실 직접 연락<br>
+    <strong>2차:</strong> 멘토 또는 운영진에게 즉시 보고
+</div>
+</div>
+
+<!-- 최우선 응급 연락처 -->
+<div class="emergency-section">
+<div class="section-title">
+    <span>🚑</span>
+    최우선 응급 연락처
+</div>
+
+<div class="emergency-contacts">
+    <div class="contact-card priority" onclick="callNumber('119')">
+        <button class="call-button" onclick="event.stopPropagation(); callNumber('119')">📞</button>
+        <div class="contact-icon">🚑</div>
+        <div class="contact-name">긴급구조</div>
+        <div class="contact-phone">119</div>
+        <div class="contact-description">화재, 응급의료, 구조 상황</div>
+    </div>
+    
+    <div class="contact-card priority" onclick="callNumber('112')">
+        <button class="call-button" onclick="event.stopPropagation(); callNumber('112')">📞</button>
+        <div class="contact-icon">🚔</div>
+        <div class="contact-name">경찰</div>
+        <div class="contact-phone">112</div>
+        <div class="contact-description">범죄신고, 안전사고</div>
+    </div>
+</div>
+</div>
+
+<!-- 병원 응급실 -->
+<div class="emergency-section">
+<div class="section-title">
+    <span>🏥</span>
+    인근 병원 응급실
+</div>
+
+<div class="emergency-contacts" id="hospital-contacts">
+    <!-- 연수원별 병원 정보가 동적으로 로드됩니다 -->
+</div>
+</div>
+
+<!-- 연수원 연락처 -->
+<div class="emergency-section">
+<div class="section-title">
+    <span>🏢</span>
+    <span id="center-title">연수원 운영 연락처</span>
+</div>
+
+<div class="training-centers">
+    <div class="center-card" id="current-center-card">
+        <!-- 선택된 연수원 정보가 동적으로 로드됩니다 -->
+    </div>
+</div>
+</div>
+
+<!-- 응급상황 대응 절차 -->
+<div class="emergency-procedure">
+<div class="procedure-title">
+    <span>📋</span>
+    응급상황 대응 절차
+</div>
+
+<div class="procedure-steps">
+    <div class="procedure-step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+            <div class="step-title">즉시 응급처치</div>
+            안전 확보 후 가능한 범위 내에서 응급처치 실시
+        </div>
+    </div>
+    
+    <div class="procedure-step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+            <div class="step-title">119 신고</div>
+            중상 또는 의식 잃음 등 심각한 상황 시 즉시 119 신고
+        </div>
+    </div>
+    
+    <div class="procedure-step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+            <div class="step-title">병원 직접 연락</div>
+            경미한 상황도 가까운 병원 응급실에 직접 연락하여 상담
+        </div>
+    </div>
+    
+    <div class="procedure-step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+            <div class="step-title">운영진 보고</div>
+            멘토 또는 연수원 운영진에게 즉시 상황 보고 및 지원 요청
+        </div>
+    </div>
+    
+    <div class="procedure-step">
+        <div class="step-number">5</div>
+        <div class="step-content">
+            <div class="step-title">후속 조치</div>
+            필요 시 소속 회사 HR 및 가족에게 연락, 사고 보고서 작성
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<script>
+function callNumber(phoneNumber) {
+// 전화번호에서 하이픈 제거
+const cleanNumber = phoneNumber.replace(/-/g, '');
+
+// 모바일에서 전화 걸기
+if (navigator.userAgent.match(/iPhone|iPad|iPod|Android/i)) {
+    window.location.href = `tel:${cleanNumber}`;
+} else {
+    // 데스크톱에서는 번호 복사
+    navigator.clipboard.writeText(phoneNumber).then(function() {
+        showToast(`${phoneNumber} 번호가 복사되었습니다`);
+    }).catch(function() {
+        // 복사 실패 시 번호 표시
+        alert(`전화번호: ${phoneNumber}`);
+    });
+}
+}
+
+function showToast(message) {
+const toast = document.createElement('div');
+toast.style.cssText = `
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #333;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    z-index: 10000;
+    animation: fadeInOut 2s ease;
+`;
+
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fadeInOut {
+        0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+        20% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+    }
+`;
+document.head.appendChild(style);
+
+toast.textContent = message;
+document.body.appendChild(toast);
+
+setTimeout(() => {
+    if (toast.parentNode) {
+        toast.parentNode.removeChild(toast);
+    }
+    if (style.parentNode) {
+        style.parentNode.removeChild(style);
+    }
+}, 2000);
+}
+
+function goBack() {
+if (document.referrer && document.referrer.includes(window.location.origin)) {
+    history.back();
+} else {
+    window.location.href = '../index.html';
+}
+}
+
+// 연수원별 응급 연락처 데이터 (나중에 Google Sheets 연동 예정)
+const emergencyData = {
+icheon: {
+    name: "이천 FMI인재개발원",
+    hospitals: [
+        {
+            icon: "🏥",
+            name: "경기도립의료원 이천병원",
+            phone: "031-639-4888",
+            description: "24시간 응급실 운영<br>경기도 이천시 경충대로 2742"
+        },
+        {
+            icon: "🏥",
+            name: "이천 파티마 병원",
+            phone: "031-635-2624",
+            description: "24시간 응급실 운영<br>경기도 이천시 경충대로 2560-2"
+        },
+        {
+            icon: "🚔",
+            name: "이천경찰서",
+            phone: "031-637-0112",
+            description: "경기도 이천시 부악로 32"
+        }
+    ],
+    centerContacts: [
+        {
+            icon: "🏢",
+            name: "중앙통제실",
+            phone: "031-630-8914"
+        },
+        {
+            icon: "🏃‍♂️",
+            name: "Actium 안내데스크",
+            phone: "031-630-8890"
+        }
+    ]
+},
+yongin: {
+    name: "용인 SK아카데미",
+    hospitals: [
+        {
+            icon: "🏥",
+            name: "분당서울대병원",
+            phone: "031-787-7114",
+            description: "24시간 응급실 운영<br>경기도 성남시 분당구"
+        },
+        {
+            icon: "🚔",
+            name: "용인서부경찰서",
+            phone: "031-XXX-XXXX",
+            description: "용인시 처인구"
+        }
+    ],
+    centerContacts: [
+        {
+            icon: "🏢",
+            name: "운영실",
+            phone: "031-XXX-XXXX"
+        }
+    ]
+},
+incheon: {
+    name: "인천 SK무의연수원",
+    hospitals: [
+        {
+            icon: "🏥",
+            name: "인하대병원",
+            phone: "032-890-2114",
+            description: "24시간 응급실 운영<br>인천광역시 중구"
+        },
+        {
+            icon: "🚔",
+            name: "인천중부경찰서",
+            phone: "032-XXX-XXXX",
+            description: "인천광역시 중구"
+        }
+    ],
+    centerContacts: [
+        {
+            icon: "🏢",
+            name: "운영실",
+            phone: "032-XXX-XXXX"
+        }
+    ]
+}
+};
+
+let currentCenter = 'icheon';
+
+function selectCenter(centerId) {
+currentCenter = centerId;
+
+// 버튼 상태 업데이트
+document.querySelectorAll('.center-button').forEach(btn => {
+    btn.classList.remove('active');
+});
+document.querySelector(`[data-center="${centerId}"]`).classList.add('active');
+
+// 데이터 업데이트
+updateEmergencyInfo();
+}
+
+function updateEmergencyInfo() {
+const data = emergencyData[currentCenter];
+
+// 병원 응급실 업데이트
+const hospitalContainer = document.getElementById('hospital-contacts');
+hospitalContainer.innerHTML = data.hospitals.map(hospital => `
+    <div class="contact-card" onclick="callNumber('${hospital.phone}')">
+        <button class="call-button" onclick="event.stopPropagation(); callNumber('${hospital.phone}')">📞</button>
+        <div class="contact-icon">${hospital.icon}</div>
+        <div class="contact-name">${hospital.name}</div>
+        <div class="contact-phone">${hospital.phone}</div>
+        <div class="contact-description">${hospital.description}</div>
+    </div>
+`).join('');
+
+// 연수원 제목 업데이트
+document.getElementById('center-title').textContent = `${data.name} 연락처`;
+
+// 연수원 연락처 업데이트
+const centerCard = document.getElementById('current-center-card');
+const centerIcon = currentCenter === 'icheon' ? '🏢' : currentCenter === 'yongin' ? '🏫' : '🌊';
+centerCard.innerHTML = `
+    <div class="center-name">${centerIcon} ${data.name}</div>
+    <div class="center-contacts">
+        ${data.centerContacts.map(contact => `
+            <div class="center-contact" onclick="callNumber('${contact.phone}')">
+                <div class="center-contact-icon">${contact.icon}</div>
+                <div class="center-contact-info">
+                    <div class="center-contact-name">${contact.name}</div>
+                    <div class="center-contact-phone">${contact.phone}</div>
+                </div>
+            </div>
+        `).join('')}
+    </div>
+`;
+}
+// 페이지 로드 시 초기화
+document.addEventListener('DOMContentLoaded', function() {
+// localStorage 대신 기본값 사용 (샌드박스 환경 대응)
+let selectedCenter = 'icheon';
+try {
+    selectedCenter = localStorage.getItem('selectedCenter') || 'icheon';
+} catch (e) {
+    console.log('localStorage 접근 불가, 기본값(이천) 사용');
+    selectedCenter = 'icheon';
+}
+
+if (selectedCenter && emergencyData[selectedCenter]) {
+    selectCenter(selectedCenter);
+} else {
+    selectCenter('icheon');
+}
+
+// 애니메이션
+const sections = document.querySelectorAll('.emergency-section, .emergency-procedure');
+sections.forEach((section, index) => {
+    section.style.opacity = '0';
+    section.style.transform = 'translateY(30px)';
+    
+    setTimeout(() => {
+        section.style.transition = 'all 0.6s ease';
+        section.style.opacity = '1';
+        section.style.transform = 'translateY(0)';
+    }, index * 150);
+});
+});
+</script>
+</body>
+</html>

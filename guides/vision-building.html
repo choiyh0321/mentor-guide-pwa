@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 Vision Building 가이드 - SK 멘토 가이드</title>
+    <meta name="theme-color" content="#9c27b0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+            background: #f8f9fa;
+            color: #202124;
+            line-height: 1.7;
+            font-size: 16px;
+            padding-bottom: 20px;
+        }
+
+        /* 상단 헤더 */
+        .header {
+            background: linear-gradient(135deg, #9c27b0, #673ab7);
+            color: white;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(156, 39, 176, 0.3);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 12px;
+            transition: background 0.3s ease;
+            min-height: 44px;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .header .subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        /* 빠른 네비게이션 */
+        .quick-nav {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 12px 20px;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .quick-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-chip {
+            background: #f8f9fa;
+            color: #666;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .nav-chip:hover {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        /* 컨테이너 */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 섹션 */
+        .section {
+            background: white;
+            margin-bottom: 24px;
+            padding: 28px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #9c27b0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: #333;
+            border-left: 4px solid #9c27b0;
+            padding-left: 16px;
+            margin-top: 24px;
+        }
+
+        .section h3:first-of-type {
+            margin-top: 0;
+        }
+
+        /* 설명 텍스트 */
+        .description {
+            background: linear-gradient(135deg, #f3e5f5, #fff);
+            border: 1px solid #e1bee7;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 16px 0;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* 시간표 */
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+            margin: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #9c27b0;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 28px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -30px;
+            top: 24px;
+            width: 12px;
+            height: 12px;
+            background: #9c27b0;
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+
+        .time-badge {
+            background: #9c27b0;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .activity-description {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        /* 단계별 가이드 */
+        .step-list {
+            list-style: none;
+            counter-reset: step-counter;
+            margin: 20px 0;
+        }
+
+        .step-list li {
+            counter-increment: step-counter;
+            margin-bottom: 20px;
+            position: relative;
+            padding-left: 50px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 2px;
+            background: #9c27b0;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .step-list li strong {
+            color: #9c27b0;
+            font-weight: 600;
+        }
+
+        .step-detail {
+            margin-top: 8px;
+            padding-left: 16px;
+            color: #555;
+            font-size: 14px;
+            border-left: 2px solid #f0f0f0;
+        }
+
+        /* 체크리스트 */
+        .checklist {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .checklist h4 {
+            color: #2e7d32;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            min-height: 44px;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #4caf50;
+            margin-top: 2px;
+        }
+
+        .checklist-item label {
+            flex: 1;
+            cursor: pointer;
+            line-height: 1.5;
+            font-size: 15px;
+        }
+
+        /* 팁 박스 */
+        .tip-box {
+            background: linear-gradient(135deg, #fff3e0, #fce4ec);
+            border: 1px solid #ffb74d;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .tip-box .tip-title {
+            font-weight: 600;
+            color: #e65100;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+        }
+
+        .tip-box ul {
+            margin-left: 20px;
+        }
+
+        .tip-box li {
+            margin-bottom: 8px;
+            color: #bf360c;
+            line-height: 1.5;
+            font-size: 15px;
+        }
+
+        .tip-box li strong {
+            color: #e65100;
+        }
+
+        /* 질문 섹션 */
+        .question-section {
+            background: linear-gradient(135deg, #f3e5f5, #fff);
+            border: 2px solid #e1bee7;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+
+        .question-title {
+            color: #9c27b0;
+            font-weight: 600;
+            margin-bottom: 16px;
+            font-size: 18px;
+        }
+
+        .question-list {
+            list-style: none;
+            counter-reset: question-counter;
+        }
+
+        .question-list li {
+            counter-increment: question-counter;
+            margin-bottom: 20px;
+            position: relative;
+            padding-left: 40px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .question-list li::before {
+            content: counter(question-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #9c27b0;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .question-list li strong {
+            color: #7b1fa2;
+        }
+
+        .question-note {
+            background: #fff3e0;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+            font-size: 14px;
+            border-left: 4px solid #ff9800;
+        }
+
+        .question-note strong {
+            color: #e65100;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .section {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .header h1 {
+                font-size: 18px;
+            }
+
+            body {
+                font-size: 15px;
+            }
+
+            .step-list li {
+                padding-left: 40px;
+            }
+
+            .step-list li::before {
+                width: 24px;
+                height: 24px;
+                font-size: 12px;
+            }
+        }
+
+        /* 점프 버튼 */
+        .jump-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: #9c27b0;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);
+            z-index: 90;
+            transition: all 0.3s ease;
+        }
+
+        .jump-button:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- 헤더 -->
+    <div class="header">
+        <div class="header-content">
+            <button class="back-button" onclick="goBack()">← 뒤로가기</button>
+            <div>
+                <h1>🎯 Vision Building 완전 가이드</h1>
+                <div class="subtitle">자기소개 & 팀빌딩 활동 진행법</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 빠른 네비게이션 -->
+    <div class="quick-nav">
+        <a href="#prepare" class="nav-chip">📋 준비사항</a>
+        <a href="#schedule" class="nav-chip">⏰ 전체일정</a>
+        <a href="#bingo" class="nav-chip">🎲 자기소개빙고</a>
+        <a href="#team" class="nav-chip">👥 팀빌딩</a>
+        <a href="#vision" class="nav-chip">🎯 비전빌딩</a>
+        <a href="#sharing" class="nav-chip">📢 결과공유</a>
+    </div>
+
+    <div class="container">
+        <!-- 사전 준비사항 -->
+        <div class="section" id="prepare">
+            <h2>📋 사전 준비사항</h2>
+            <div class="description">
+                Vision Building을 성공적으로 진행하기 위해서는 사전 준비가 매우 중요합니다. 아래 준비물들을 미리 확인하시고, 활동 시작 전에 모든 준비가 완료되었는지 다시 한번 체크해주세요.
+            </div>
+            
+            <div class="checklist">
+                <h4>✅ 준비물 체크리스트</h4>
+                <div class="checklist-item">
+                    <input type="checkbox" id="prep1">
+                    <label for="prep1">Vision Building 장표를 준비해주세요. 발표용 장표와 함께 배경음악(BGM)도 미리 틀어두시면 신입구성원들이 편안한 분위기에서 시작할 수 있습니다.</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="prep2">
+                    <label for="prep2">조별 이젤패드를 분과당 총 4개 준비해주세요. 각 조가 활동 결과물을 작성할 때 사용됩니다.</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="prep3">
+                    <label for="prep3">12색 사인펜을 충분히 준비해주세요. 신입구성원들이 다양한 색깔로 창의적으로 표현할 수 있도록 도와주는 도구입니다.</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="prep4">
+                    <label for="prep4">여러 색상의 포스트잇을 준비해주세요. 자기소개 빙고와 Vision Building 활동에서 핵심적으로 사용됩니다.</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="prep5">
+                    <label for="prep5">4X4 빙고판을 준비해주세요. 신입구성원들이 자기소개 빙고 게임을 위해 사용할 빙고판입니다.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 전체 진행 일정 -->
+        <div class="section" id="schedule">
+            <h2>⏰ 전체 진행 일정</h2>
+            <div class="description">
+                Vision Building은 총 2시간 30분에 걸쳐 진행되는 활동입니다. 각 단계별로 정해진 시간을 지켜주시는 것이 중요하며, 신입구성원들이 자연스럽게 서로 알아가고 팀을 형성할 수 있도록 따뜻하고 격려하는 분위기로 이끌어주세요.
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="time-badge">13:30~13:35 (5분)</div>
+                    <div class="activity-title">멘토 소개 및 진행방식 안내</div>
+                    <div class="activity-description">신입구성원들에게 따뜻한 인사말과 함께 멘토님을 소개해주시고, 오늘 진행될 Vision Building 활동에 대해 간단히 안내해주세요. 긴장을 풀고 편안한 분위기를 만드는 것이 중요합니다.</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="time-badge">13:35~13:50 (15분)</div>
+                    <div class="activity-title">개인별 자기소개 준비</div>
+                    <div class="activity-description">신입구성원들이 자신을 표현하는 키워드를 생각하고 작성할 수 있도록 안내해주세요. 이후 4X4 빙고판을 만들어 서로의 키워드를 채워가는 시간입니다.</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="time-badge">13:50~14:20 (30분)</div>
+                    <div class="activity-title">릴레이 자기소개 (인당 1분)</div>
+                    <div class="activity-description">빙고게임과 함께 진행되는 자기소개 시간입니다. 각자 1분씩 자기소개를 하면서 다음 사람을 키워드로 지명하는 방식으로 진행해주세요.</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="time-badge">14:20~14:30 (10분)</div>
+                    <div class="activity-title">쉬는 시간</div>
+                    <div class="activity-description">간단한 다과와 함께 휴식시간을 가져주세요. 신입구성원들이 서로 자연스럽게 대화할 수 있는 시간이기도 합니다.</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="time-badge">14:30~14:50 (20분)</div>
+                    <div class="activity-title">조별 Team Building</div>
+                    <div class="activity-description">조 이름 정하기, 역할 분담, 공통점 찾기 등을 통해 팀의 결속을 다지는 시간입니다. 신입구성원들이 협력할 수 있는 기반을 마련해주세요.</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="time-badge">14:50~15:40 (50분)</div>
+                    <div class="activity-title">조별 Vision Building</div>
+                    <div class="activity-description">4가지 핵심 질문을 통해 신입구성원들이 자신의 취업 경험과 목표, SK에서의 비전을 구체화하는 핵심 시간입니다.</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="time-badge">15:40~16:00 (20분)</div>
+                    <div class="activity-title">조별 활동 결과 공유</div>
+                    <div class="activity-description">각 조가 활동 결과를 발표하고, 공통점 찾기 우수 조에 대한 시상을 진행해주세요. 모든 신입구성원들의 노력을 격려해주시는 것이 중요합니다.</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="time-badge">16:00~ (마무리)</div>
+                    <div class="activity-title">마무리 및 오픈카톡방 안내</div>
+                    <div class="activity-description">오늘 활동에 대한 소감을 나누고, 앞으로의 교육과정에 대해 안내해주세요. 오픈카톡방 접속도 함께 안내해주시면 됩니다.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 자기소개 빙고 -->
+        <div class="section" id="bingo">
+            <h2>🎲 자기소개 빙고 진행법</h2>
+            <div class="description">
+                자기소개 빙고는 신입구성원들이 서로를 알아가는 재미있는 방법입니다. 게임 형식을 통해 자연스럽게 소통할 수 있도록 격려해주시고, 모든 신입구성원이 적극적으로 참여할 수 있는 분위기를 만들어주세요.
+            </div>
+
+            <h3>1단계: 키워드 작성 & 빙고판 만들기</h3>
+            <ol class="step-list">
+                <li><strong>키워드 작성 안내</strong>
+                    <div class="step-detail">신입구성원들에게 "자신을 가장 잘 표현하는 키워드 하나를 생각해보세요"라고 안내해주세요. 너무 어려워하지 않도록 "취미, 성격, 특기, 출신지역 등 무엇이든 괜찮다"고 격려해주시면 됩니다. 각자 포스트잇에 키워드를 작성하고 벽에 붙이도록 안내해주세요.</div>
+                </li>
+                <li><strong>빙고판 작성</strong>
+                    <div class="step-detail">신입구성원들이 SK 노트에 4X4 빙고판을 그리도록 안내해주세요. 그리고 벽에 붙어있는 분과 동기들의 키워드를 보면서 빙고판의 각 칸에 키워드를 채워넣도록 해주세요. 이때 같은 키워드가 여러 번 적히지 않도록 주의 깊게 봐주시면 됩니다.</div>
+                </li>
+                <li><strong>인상적인 키워드 선택</strong>
+                    <div class="step-detail">빙고판을 완성한 후, 신입구성원들에게 "가장 인상적이거나 궁금한 키워드 하나를 선택해서 자리로 가져오세요"라고 안내해주세요. 이 키워드로 다음 사람을 지명하게 됩니다.</div>
+                </li>
+            </ol>
+            
+            <h3>2단계: 릴레이 자기소개</h3>
+            <ol class="step-list">
+                <li><strong>첫 번째 발표자 지명</strong>
+                    <div class="step-detail">멘토님께서 신입구성원들이 작성한 키워드 중 가장 인상 깊었던 것을 소개하면서 해당 키워드를 작성한 신입구성원을 첫 번째 발표자로 지명해주세요. "○○○라는 키워드가 정말 인상적이었는데, 누가 작성했나요?"라고 자연스럽게 시작하시면 됩니다.</div>
+                </li>
+                <li><strong>자기소개 진행</strong>
+                    <div class="step-detail">지명된 신입구성원이 공통질문에 따라 1분간 자기소개를 하도록 안내해주세요. 공통질문은 ① 이름과 소속 ② 본인 키워드 소개 ③ 본인이 선택한 다른 사람의 키워드입니다. 1분이 넘어가지 않도록 시간 관리를 해주시는 것이 중요합니다.</div>
+                </li>
+                <li><strong>다음 사람 지명 및 빙고 체크</strong>
+                    <div class="step-detail">자기소개를 마친 신입구성원이 본인이 선택한 키워드를 말하면서 다음 발표자를 지명하도록 해주세요. 동시에 다른 신입구성원들은 지명된 사람의 이름에 빙고판에서 동그라미를 치도록 안내해주세요. 4빙고를 가장 먼저 완성하는 분에게는 소정의 상품을 준비해주시면 더욱 좋습니다.</div>
+                </li>
+            </ol>
+
+            <div class="tip-box">
+                <div class="tip-title">🎯 멘토 진행 Tips</div>
+                <ul>
+                    <li><strong>키워드 중복 방지</strong>: 신입구성원들이 키워드를 작성할 때 다른 사람과 겹치지 않도록 해주세요. 만약 겹치는 키워드가 있다면 "조금 더 구체적으로 표현해볼까요?" 하고 재작성을 유도해주세요.</li>
+                    <li><strong>시간 관리</strong>: 각자 1분을 넘어가지 않도록 적절히 시간을 안내해주세요. "30초 남았습니다" 같은 안내를 해주시면 됩니다.</li>
+                    <li><strong>참여 격려</strong>: 자기소개 중간중간 "정말 흥미로운 이야기네요", "멋진 키워드네요" 같은 격려의 말을 해주시면 신입구성원들이 더욱 적극적으로 참여할 수 있습니다.</li>
+                    <li><strong>미니게임 추가</strong>: 자기소개 소요시간이 1분에 가장 가까운 신입구성원에게 별도 상품을 주는 미니게임을 진행하시면 더욱 재미있게 활동할 수 있습니다.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Team Building -->
+        <div class="section" id="team">
+            <h2>👥 Team Building 진행법</h2>
+            <div class="description">
+                Team Building은 신입구성원들이 앞으로 함께 활동할 팀의 기초를 다지는 중요한 시간입니다. 각 조가 하나의 팀으로 결속될 수 있도록 도와주시고, 모든 구성원이 자신의 역할을 찾을 수 있도록 격려해주세요.
+            </div>
+            
+            <ol class="step-list">
+                <li><strong>조별 인사 및 조 이름 정하기</strong>
+                    <div class="step-detail">각 조별로 모여앉도록 안내한 후, 먼저 조원들끼리 간단한 인사시간을 가지도록 해주세요. 그 다음 조를 대표할 수 있는 창의적이고 기억하기 쉬운 조 이름을 함께 정하도록 안내해주세요. "우리 조만의 특색이 드러나는 이름으로 정해보세요"라고 격려해주시면 됩니다.</div>
+                </li>
+                <li><strong>조원별 역할 정하기</strong>
+                    <div class="step-detail">팀 활동이 원활하게 진행될 수 있도록 조원들의 역할을 정해주세요. 조장, 서기, 타임키퍼는 기본 역할이며, 나머지 역할은 조원들이 자유롭게 정할 수 있도록 해주세요. "각자의 장점을 살릴 수 있는 역할로 정해보세요"라고 안내해주시면 됩니다.</div>
+                </li>
+                <li><strong>Ground Rule 정하기</strong>
+                    <div class="step-detail">조원들이 함께 지킬 하나의 약속을 정하도록 안내해주세요. 팀워크 향상과 상호 존중을 위한 규칙이면 무엇이든 좋습니다. "서로를 배려하고 팀워크를 높일 수 있는 우리만의 약속을 하나 정해보세요"라고 제안해주시면 됩니다.</div>
+                </li>
+                <li><strong>조 내 공통점 찾기</strong>
+                    <div class="step-detail">조원들 사이의 공통점을 최대한 많이 찾아보도록 안내해주세요. 다만 전체 신입구성원에게 해당되는 공통점(예: 모두 SK 신입구성원, 모두 20-30대 등)은 -1점 처리된다는 것을 미리 안내해주세요. "우리 조만의 특별한 공통점을 찾아보세요"라고 격려해주시면 됩니다.</div>
+                </li>
+            </ol>
+            
+            <div class="tip-box">
+                <div class="tip-title">📝 분과장 선정 안내</div>
+                <ul>
+                    <li>Team Building 과정에서 분과를 대표하여 멘토님을 도와줄 분과장을 선정해주세요. 분과장은 조장과는 별개의 역할로, 전체 분과의 의견을 대변하고 멘토님과 소통하는 역할을 합니다.</li>
+                    <li>분과장이 선정되면 신입구성원과정 분과현황판에 이름을 기입해주세요.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Vision Building 핵심 질문 -->
+        <div class="section" id="vision">
+            <h2>🎯 Vision Building 핵심 질문</h2>
+            <div class="description">
+                Vision Building의 핵심은 4가지 질문을 통해 신입구성원들이 자신의 과거 경험을 돌아보고, 현재의 목표를 구체화하며, 미래의 비전을 그려보는 것입니다. 각 질문에 대해 충분히 생각하고 토의할 수 있도록 시간을 배분해주시고, 신입구성원들이 진솔한 이야기를 나눌 수 있는 분위기를 만들어주세요.
+            </div>
+
+            <div class="question-section">
+                <div class="question-title">4가지 핵심 질문 (포스트잇에 작성)</div>
+                <ol class="question-list">
+                    <li><strong>취업 과정 중에 가장 기억에 남는 순간은 무엇인가요?</strong>
+                        <div class="step-detail">신입구성원들이 취업 준비를 하면서 겪었던 다양한 경험들 중에서 특별히 기억에 남는 순간을 떠올려보도록 안내해주세요. 성공의 기쁨, 어려웠던 순간, 깨달음을 얻은 경험 등 무엇이든 괜찮다고 격려해주세요.</div>
+                    </li>
+                    <li><strong>직장인이 되고 가장 하고 싶었던 일은 어떤 것인가요?</strong>
+                        <div class="step-detail">입사 전부터 품고 있던 꿈이나 하고 싶었던 업무, 도전해보고 싶었던 분야에 대해 이야기해보도록 안내해주세요. 구체적인 업무뿐만 아니라 "이런 사람이 되고 싶다"는 추상적인 목표도 모두 좋다고 안내해주세요.</div>
+                    </li>
+                    <li><strong>내가 생각하는 '일잘러'의 사례를 공유해주세요!</strong>
+                        <div class="step-detail">실제 인물, 영화나 드라마의 캐릭터, 책에서 본 인물 등 어떤 형태든 상관없이 자신이 생각하는 '일 잘하는 사람'의 사례를 들어보도록 안내해주세요. 왜 그 사람을 일잘러라고 생각하는지 이유도 함께 나누도록 격려해주세요.</div>
+                    </li>
+                    <li><strong>SK에서 내가 맡고 싶은 역할이나 도전하고 싶은 업무는 무엇인가요?</strong>
+                        <div class="step-detail">SK 구성원으로서 앞으로 맡고 싶은 역할이나 도전해보고 싶은 업무에 대해 구체적으로 생각해보도록 안내해주세요. 현재 잘 모르더라도 "이런 분야에 관심이 있다", "이런 일을 해보고 싶다" 정도로 시작해도 좋다고 격려해주세요.</div>
+                    </li>
+                </ol>
+                
+                <div class="question-note">
+                    <strong>📌 중요 안내:</strong> 3번과 4번 질문의 답은 반드시 포스트잇에 작성한 후 조별 이젤패드에 부착해주세요. 이후 작성된 이젤패드는 강의장 벽면에 부착해주시면 됩니다. 이 결과물은 이후 Play SKMS 프로그램에서 다시 활용될 예정입니다.
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <div class="tip-title">🎯 Vision Building 진행 Tips</div>
+                <ul>
+                    <li><strong>조장 역할 안내</strong>: Vision Building 시간에는 각 조의 조장이 토의를 이끌어갈 수 있도록 역할을 다시 한번 안내해주세요. "조장님이 각 질문에 대해 조원들의 의견을 들어보는 시간으로 진행해주세요"라고 안내하시면 됩니다.</li>
+                    <li><strong>적극적 개입</strong>: 만약 어떤 조의 토의가 활발하지 않다면 멘토님이 직접 해당 조에 가서 "어떤 이야기들이 나오고 있나요?"라고 질문을 던져주세요. 자연스럽게 대화가 이어질 수 있도록 도와주시면 됩니다.</li>
+                    <li><strong>멘토 사례 공유</strong>: 신입구성원들이 질문에 대한 감을 잡을 수 있도록 멘토님의 실제 경험이나 사례를 간단히 공유해주시면 좋습니다. "저 같은 경우에는..." 하고 시작하시면 신입구성원들이 더 편안하게 이야기할 수 있습니다.</li>
+                    <li><strong>결과물 관리</strong>: Vision Building 결과물은 Play SKMS에서 다시 참고할 예정이므로, 신입구성원들이 작성한 포스트잇과 이젤패드를 분과장 벽면에 잘 보관해주세요.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 조별 활동 결과 공유 -->
+        <div class="section" id="sharing">
+            <h2>📢 조별 활동 결과 전체 공유</h2>
+            <div class="description">
+                각 조가 열심히 활동한 결과를 전체가 함께 나누는 소중한 시간입니다. 모든 조의 발표를 경청하고 격려해주시며, 우수한 활동에 대해서는 적극적으로 칭찬해주세요. 신입구성원들이 서로의 비전과 목표를 알아가며 더욱 가까워질 수 있는 기회입니다.
+            </div>
+            
+            <ol class="step-list">
+                <li><strong>팀빌딩 결과 공유</strong>
+                    <div class="step-detail">각 조가 정한 조 이름과 그 의미, 조원들의 역할 분담 결과를 간단히 소개하도록 안내해주세요. "우리 조의 이름은 ○○이고, 이런 의미가 담겨있습니다"라는 식으로 발표하도록 격려해주세요.</div>
+                </li>
+                <li><strong>공통점 찾기 결과 발표</strong>
+                    <div class="step-detail">각 조가 찾아낸 공통점들을 발표하도록 안내해주세요. 가장 많은 공통점을 찾은 조에게는 소정의 상품(연수원별로 편의점 쿠폰이나 커피 쿠폰 등)을 제공해주시면 됩니다. 창의적이고 독특한 공통점을 찾은 조에게도 특별히 격려해주세요.</div>
+                </li>
+                <li><strong>일잘러 사례 공유</strong>
+                    <div class="step-detail">각 조에서 나온 '일잘러' 사례 중에서 가장 인상 깊었던 것을 하나씩 소개하도록 안내해주세요. 다양한 롤모델과 기준을 통해 신입구성원들이 자신만의 성장 방향을 생각해볼 수 있는 기회입니다.</div>
+                </li>
+                <li><strong>SK에서의 목표 공유</strong>
+                    <div class="step-detail">각 조원들이 SK에서 하고 싶어하는 일이나 도전하고 싶은 업무에는 어떤 것들이 있었는지 간단히 공유하도록 안내해주세요. 비슷한 관심사를 가진 신입구성원들끼리 연결될 수 있는 기회이기도 합니다.</div>
+                </li>
+            </ol>
+
+            <div class="tip-box">
+                <div class="tip-title">⏰ 시간 관리 및 진행 Tips</div>
+                <ul>
+                    <li><strong>발표 시간 관리</strong>: 조별 활동 공유는 각 조당 2-3분씩 진행해주시고, 전체 시간이 20분을 넘지 않도록 적절히 시간 관리를 해주세요.</li>
+                    <li><strong>적극적 지지</strong>: 신입구성원들의 '일잘러' 사례와 SK에서의 목표에 대해서는 "정말 좋은 목표네요", "훌륭한 롤모델이네요" 같은 적극적인 지지와 격려를 해주세요.</li>
+                    <li><strong>상호 격려 분위기</strong>: 다른 조의 발표를 들을 때도 박수와 응원을 해주도록 분위기를 만들어주세요. "다른 조의 좋은 아이디어도 함께 응원해주세요"라고 안내하시면 됩니다.</li>
+                    <li><strong>시상 및 격려</strong>: 가장 많은 공통점을 찾은 조뿐만 아니라 창의적인 아이디어를 낸 조, 적극적으로 참여한 조에게도 다양한 형태로 격려해주시면 모든 신입구성원들이 성취감을 느낄 수 있습니다.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 마무리 -->
+        <div class="section">
+            <h2>✨ 마무리 및 다음 단계 안내</h2>
+            <div class="description">
+                Vision Building 활동을 통해 신입구성원들이 서로를 알아가고, 자신의 비전을 구체화하는 소중한 시간을 가졌습니다. 이제 이 결과물들이 앞으로의 교육과정에서 어떻게 활용될지 안내해주시고, 신입구성원들이 계속해서 성장해나갈 수 있도록 격려해주세요.
+            </div>
+
+            <div class="tip-box">
+                <div class="tip-title">🔄 연결성 안내</div>
+                <ul>
+                    <li><strong>Play SKMS 연계</strong>: 오늘 작성한 Vision Building 결과물은 내일 진행될 Play SKMS 프로그램에서 다시 활용될 예정입니다. 신입구성원들이 오늘 세운 목표와 비전이 SKMS 실천과 어떻게 연결되는지 생각해볼 기회가 될 것입니다.</li>
+                    <li><strong>성장 Roadmap 연계</strong>: 이후 성장 Roadmap 작성 시에도 오늘의 활동 결과가 기초 자료로 활용됩니다. 신입구성원들이 일관성 있는 성장 계획을 세울 수 있도록 도와주는 중요한 디딤돌 역할을 합니다.</li>
+                    <li><strong>지속적 관심</strong>: 1:1 면담이나 일상적인 대화에서도 오늘 나눈 이야기들을 기억하시고 지속적인 관심을 보여주시면 신입구성원들에게 큰 힘이 될 것입니다.</li>
+                </ul>
+            </div>
+
+            <div class="checklist">
+                <h4>✅ Vision Building 완료 체크리스트</h4>
+                <div class="checklist-item">
+                    <input type="checkbox" id="complete1">
+                    <label for="complete1">모든 신입구성원이 자기소개 빙고에 참여하고 서로를 알아가는 시간을 가졌습니다.</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="complete2">
+                    <label for="complete2">각 조가 팀 이름을 정하고 역할을 분담하며 팀워크를 다지는 시간을 가졌습니다.</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="complete3">
+                    <label for="complete3">4가지 핵심 질문을 통해 신입구성원들이 자신의 비전을 구체화하는 시간을 가졌습니다.</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="complete4">
+                    <label for="complete4">3번, 4번 질문의 결과물이 이젤패드에 작성되어 강의장 벽면에 부착되었습니다.</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="complete5">
+                    <label for="complete5">각 조의 활동 결과가 전체에 공유되고 우수 조에 대한 격려가 이루어졌습니다.</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="complete6">
+                    <label for="complete6">오픈카톡방 접속 안내 및 다음 프로그램에 대한 안내가 완료되었습니다.</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 맨 위로 버튼 -->
+    <button class="jump-button" onclick="scrollToTop()">↑</button>
+
+    <script>
+        function goBack() {
+            if (document.referrer) {
+                window.history.back();
+            } else {
+                window.location.href = '../index.html';
+            }
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // 체크리스트 상태 저장
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            
+            checkboxes.forEach(checkbox => {
+                const savedState = localStorage.getItem(`vision_building_${checkbox.id}`);
+                if (savedState === 'true') {
+                    checkbox.checked = true;
+                }
+                
+                checkbox.addEventListener('change', function() {
+                    localStorage.setItem(`vision_building_${this.id}`, this.checked);
+                    
+                    // 체크박스 변경시 부드러운 햅틱 피드백 (지원되는 기기에서)
+                    if (navigator.vibrate) {
+                        navigator.vibrate(50);
+                    }
+                });
+            });
+        });
+
+        // 부드러운 스크롤
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // 현재 섹션 하이라이트 (스크롤 시)
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('.section[id]');
+            const navChips = document.querySelectorAll('.nav-chip');
+            
+            let currentSection = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                const sectionHeight = section.clientHeight;
+                
+                if (window.pageYOffset >= sectionTop && window.pageYOffset < sectionTop + sectionHeight) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+            
+            navChips.forEach(chip => {
+                chip.style.background = '#f8f9fa';
+                chip.style.color = '#666';
+                
+                if (chip.getAttribute('href') === `#${currentSection}`) {
+                    chip.style.background = '#e3f2fd';
+                    chip.style.color = '#1976d2';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

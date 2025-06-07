@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌅 Daily Opening 가이드 - SK 멘토 가이드</title>
+    <meta name="theme-color" content="#43e97b">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+            background: #f8f9fa;
+            color: #202124;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #43e97b, #38ef7d);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(67, 233, 123, 0.3);
+            position: relative;
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .header .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Section */
+        .section {
+            background: white;
+            margin-bottom: 24px;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-size: 20px;
+            margin-bottom: 16px;
+            color: #43e97b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: #333;
+            border-left: 4px solid #43e97b;
+            padding-left: 12px;
+        }
+
+        /* 일정 안내 */
+        .schedule-info {
+            background: linear-gradient(135deg, #e8f5e8, #f0fff0);
+            border: 2px solid #43e97b;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .schedule-info::before {
+            content: "📅";
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            font-size: 24px;
+            background: white;
+            padding: 8px;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .schedule-dates {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        .schedule-note {
+            color: #4caf50;
+            font-size: 14px;
+        }
+
+        /* 시간표 */
+        .timeline {
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #43e97b;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 12px;
+            border-left: 4px solid #43e97b;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 20px;
+            width: 12px;
+            height: 12px;
+            background: #43e97b;
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+
+        .time-badge {
+            background: #43e97b;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #333;
+        }
+
+        .activity-description {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* 체크리스트 */
+        .checklist {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .checklist h4 {
+            color: #2e7d32;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            padding: 8px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #4caf50;
+        }
+
+        /* 진행 단계 */
+        .step-list {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+
+        .step-list li {
+            counter-increment: step-counter;
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #43e97b;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Tips */
+        .tip-box {
+            background: linear-gradient(135deg, #fff3e0, #fce4ec);
+            border: 1px solid #ffb74d;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .tip-box .tip-title {
+            font-weight: 600;
+            color: #e65100;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tip-box ul {
+            margin-left: 16px;
+        }
+
+        .tip-box li {
+            margin-bottom: 4px;
+            color: #bf360c;
+        }
+
+        /* Biz Manner 예시 */
+        .manner-examples {
+            background: #f3e5f5;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 16px 0;
+            border: 1px solid #e1bee7;
+        }
+
+        .manner-topic {
+            background: white;
+            padding: 12px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        .manner-topic h5 {
+            font-weight: 600;
+            color: #9c27b0;
+            margin-bottom: 4px;
+        }
+
+        .manner-topic p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .section {
+                padding: 16px;
+                margin-bottom: 16px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <button class="back-button" onclick="goBack()">← 뒤로가기</button>
+        <h1>🌅 Daily Opening 완전 가이드</h1>
+        <div class="subtitle">매일 아침 분과별 오프닝 진행법</div>
+    </div>
+
+    <div class="container">
+        <!-- 일정 안내 -->
+        <div class="section">
+            <h2>📅 Daily Opening 일정</h2>
+            <div class="schedule-info">
+                <div class="schedule-dates">1/7(화) ~ 1/10(금), 1/15(수)</div>
+                <div class="schedule-note">※ 아침에 대강의장에 모이지 않고 분과장에서 멘토 주도 下에 오프닝 진행</div>
+            </div>
+        </div>
+
+        <!-- 사전 준비사항 -->
+        <div class="section">
+            <h2>📋 사전 준비사항</h2>
+            <div class="checklist">
+                <h4>✅ 준비물 체크리스트</h4>
+                <div class="checklist-item">
+                    <input type="checkbox" id="prep1">
+                    <label for="prep1">8시 30분 전에 분과장 도착</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="prep2">
+                    <label for="prep2">오프닝 장표 준비</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="prep3">
+                    <label for="prep3">BGM 틀어두기</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="prep4">
+                    <label for="prep4">당일 시간표 및 장소 확인</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="prep5">
+                    <label for="prep5">Biz. Manner 주제 선정 (하루 1개)</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 전체 진행 순서 -->
+        <div class="section">
+            <h2>⏰ 진행 순서 (총 20분)</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="time-badge">1~2분</div>
+                    <div class="activity-title">Daily Opening</div>
+                    <div class="activity-description">출결 확인, 컨디션 체크, 오늘 일정 안내</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="time-badge">15분 이내</div>
+                    <div class="activity-title">Biz. Manner</div>
+                    <div class="activity-description">하루 1개 주제로 비즈니스 매너 교육</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="time-badge">1~2분</div>
+                    <div class="activity-title">마무리</div>
+                    <div class="activity-description">다음 강의 안내 및 이동 준비</div>
+                </div>
+            </div>
+            
+            <div class="tip-box">
+                <div class="tip-title">⚠️ 중요 안내</div>
+                <ul>
+                    <li>Daily Opening 후 첫 번째 강의는 모두 9시 30분에 시작합니다!</li>
+                    <li>신입구성원이 다음 강의를 위해 이동하거나 재정비할 수 있도록 9시 20분 전에는 종료해주시고, 이어서 진행되는 강의장을 안내해주세요</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Daily Opening 상세 -->
+        <div class="section">
+            <h2>🌅 Daily Opening 진행법</h2>
+            <ol class="step-list">
+                <li><strong>구성원 출결 및 특이사항을 파악해주세요</strong>
+                    <ul style="margin-left: 20px; margin-top: 8px;">
+                        <li>오늘 컨디션 어떤지, 아픈 사람 없는지 등</li>
+                        <li>해당 내용은 출결 현황판에 업데이트 해주세요</li>
+                    </ul>
+                </li>
+                <li><strong>오늘의 시간표 및 진행장소를 Remind 해주세요</strong>
+                    <ul style="margin-left: 20px; margin-top: 8px;">
+                        <li>타임테이블 참고하여 안내 (3p 참고)</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <!-- Biz. Manner 상세 -->
+        <div class="section">
+            <h2>💼 Biz. Manner 진행법</h2>
+            
+            <h3>주제별 진행 내용</h3>
+            <div class="manner-examples">
+                <div class="manner-topic">
+                    <h5>📋 Day 1: 인사/호칭</h5>
+                    <p>올바른 인사법, 직장에서의 호칭 사용법, 상황별 인사 매너</p>
+                </div>
+                <div class="manner-topic">
+                    <h5>⏰ Day 2: 근태/식사</h5>
+                    <p>출퇴근 시간 관리, 식사 예절, 회식 매너</p>
+                </div>
+                <div class="manner-topic">
+                    <h5>🪑 Day 3: 상석</h5>
+                    <p>회의실, 식당, 승강기에서의 상석 개념과 실습</p>
+                </div>
+                <div class="manner-topic">
+                    <h5>📧 Day 4: 메일/전화/메신저</h5>
+                    <p>비즈니스 이메일 작성법, 전화 응대, 메신저 예절</p>
+                </div>
+                <div class="manner-topic">
+                    <h5>🎊 Day 5: 경조사</h5>
+                    <p>부조금, 축의금, 경조사 참석 매너</p>
+                </div>
+                <div class="manner-topic">
+                    <h5>🏢 Day 6: 회의/보고/미팅</h5>
+                    <p>회의 참석 자세, 보고서 작성, 미팅 매너</p>
+                </div>
+                <div class="manner-topic">
+                    <h5>📝 Day 7: 기타</h5>
+                    <p>복장, 대화법, 에티켓 종합 정리</p>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <div class="tip-title">🎯 Biz. Manner 진행 Tips</div>
+                <ul>
+                    <li>경직된 분위기가 되지 않도록 멘토님들의 다양한 사례를 들어 설명해주시고, 신입구성원과 함께 실습도 해보시길 추천드려요!</li>
+                    <li>중간중간 신입구성원들에게 질문을 던져보는 등 Interaction 요소를 만들어 주시면 좋습니다</li>
+                    <li>실습을 도와준 신입구성원에게 쿠폰을 지급하시면 좋습니다</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 상황별 대응법 -->
+        <div class="section">
+            <h2>🚨 상황별 대응법</h2>
+            
+            <h3>상황별 대응법</h3>
+            <ol class="step-list">
+                <li>지각한 구성원에게 사유를 확인하고 출결 현황판에 기록</li>
+                <li>결석한 구성원이 있다면 운영진에게 즉시 연락</li>
+                <li>컨디션 난조로 인한 지각/결석은 별도 관리</li>
+            </ol>
+
+            <h3>질문/건의사항 접수 시</h3>
+            <ol class="step-list">
+                <li>즉시 답변 가능한 내용은 바로 안내</li>
+                <li>확인이 필요한 사항은 운영진에게 전달 후 회신</li>
+                <li>개인적인 고민이나 상담은 1:1 면담 시간 활용 안내</li>
+            </ol>
+
+            <h3>응급상황 발생 시</h3>
+            <ol class="step-list">
+                <li>즉시 운영진에게 연락 (응급실: 031-639-4888)</li>
+                <li>구성원 안전 확보가 최우선</li>
+                <li>상황 전파 및 대응 방안 공유</li>
+            </ol>
+        </div>
+
+        <!-- 마무리 체크리스트 -->
+        <div class="section">
+            <h2>✅ 마무리 체크리스트</h2>
+            <div class="checklist">
+                <h4>🎯 Daily Opening 완료 후 확인사항</h4>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check1">
+                    <label for="check1">출결 현황판 작성 완료</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check2">
+                    <label for="check2">다음 강의장 위치 안내 완료</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check3">
+                    <label for="check3">특이사항 운영진 전달</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check4">
+                    <label for="check4">분과장 정리정돈</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check5">
+                    <label for="check5">9시 20분 전 종료 확인</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            history.back();
+        }
+
+        // 체크리스트 상태 저장
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            
+            checkboxes.forEach(checkbox => {
+                const savedState = localStorage.getItem(checkbox.id);
+                if (savedState === 'true') {
+                    checkbox.checked = true;
+                }
+                
+                checkbox.addEventListener('change', function() {
+                    localStorage.setItem(this.id, this.checked);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

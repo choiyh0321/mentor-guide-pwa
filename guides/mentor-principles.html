@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💡 멘토 핵심 원칙 - SK 멘토 가이드</title>
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#EA4335">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    
+    <style>
+        /* 가이드 페이지 전용 스타일 */
+        .guide-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+
+        .guide-header {
+            background: linear-gradient(135deg, #EA4335, #4285F4);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .guide-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .guide-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .principles-intro {
+            background: rgba(66, 133, 244, 0.1);
+            border: 2px solid #4285F4;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .intro-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #4285F4;
+            margin-bottom: 12px;
+        }
+
+        .intro-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .principles-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .principles-column {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+        }
+
+        .principles-column.do {
+            border-color: #34A853;
+            background: linear-gradient(135deg, #E6F4EA, #F0F9F0);
+        }
+
+        .principles-column.dont {
+            border-color: #EA4335;
+            background: linear-gradient(135deg, #FCE8E6, #FFF0F0);
+        }
+
+        .column-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid;
+        }
+
+        .principles-column.do .column-header {
+            border-bottom-color: #34A853;
+        }
+
+        .principles-column.dont .column-header {
+            border-bottom-color: #EA4335;
+        }
+
+        .column-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .principles-column.do .column-title {
+            color: #34A853;
+        }
+
+        .principles-column.dont .column-title {
+            color: #EA4335;
+        }
+
+        .principle-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 16px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .principle-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .principle-number {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: white;
+        }
+
+        .principles-column.do .principle-number {
+            background: #34A853;
+        }
+
+        .principles-column.dont .principle-number {
+            background: #EA4335;
+        }
+
+        .principle-text {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .key-tips {
+            background: linear-gradient(135deg, #FFF3E0, #FFFDE7);
+            border: 2px solid #FF9800;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .tips-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #E65100;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tip-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+        }
+
+        .tip-icon {
+            font-size: 16px;
+            margin-top: 2px;
+        }
+
+        .tip-text {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #e0e0e0;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-button:hover {
+            background: white;
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .principles-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .guide-header {
+                padding: 20px 16px;
+            }
+            
+            .guide-title {
+                font-size: 24px;
+            }
+            
+            .principles-column {
+                padding: 20px;
+            }
+            
+            .principle-item {
+                padding: 12px;
+            }
+            
+            .principle-text {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="goBack()">←</button>
+
+    <div class="guide-container">
+        <!-- 헤더 -->
+        <div class="guide-header">
+            <div class="guide-title">💡 멘토 핵심 원칙</div>
+            <div class="guide-subtitle">그룹 신입구성원과정 멘토 마음가짐 가이드</div>
+        </div>
+
+        <!-- 인트로 -->
+        <div class="principles-intro">
+            <div class="intro-title">📋 2025년 1월 신입구성원 멘토양성과정 결과</div>
+            <div class="intro-text">
+                멘토들이 직접 뽑아준 <strong>멘토 마음가짐 Do & Don'ts Top 5</strong><br>
+                "그룹 신입구성원과정에 참여하는 멘토는 이렇게 행동합니다"
+            </div>
+        </div>
+
+        <!-- Do & Don'ts 그리드 -->
+        <div class="principles-grid">
+            <!-- Do 항목 -->
+            <div class="principles-column do">
+                <div class="column-header">
+                    <span style="font-size: 24px;">✅</span>
+                    <div class="column-title">이렇게 해주세요</div>
+                </div>
+                
+                <div class="principle-item">
+                    <div class="principle-number">1</div>
+                    <div class="principle-text">
+                        미소와 여유를 잃지 않고 긍정적인 말과 태도로 편안한 분위기를 조성합니다
+                    </div>
+                </div>
+                
+                <div class="principle-item">
+                    <div class="principle-number">2</div>
+                    <div class="principle-text">
+                        모든 멘티들에게 관심을 갖고 건강/스트레스/고민을 체크합니다
+                    </div>
+                </div>
+                
+                <div class="principle-item">
+                    <div class="principle-number">3</div>
+                    <div class="principle-text">
+                        안전사고 예방을 위해 금기사항을 확실하게 안내하고, 발생 시 빠르게 대처합니다
+                    </div>
+                </div>
+                
+                <div class="principle-item">
+                    <div class="principle-number">4</div>
+                    <div class="principle-text">
+                        멘토로서 단정하고 모범이 되도록 행동합니다
+                    </div>
+                </div>
+                
+                <div class="principle-item">
+                    <div class="principle-number">5</div>
+                    <div class="principle-text">
+                        시간관리를 철저히 하고 질문에 적극적으로 응답합니다
+                    </div>
+                </div>
+            </div>
+
+            <!-- Don't 항목 -->
+            <div class="principles-column dont">
+                <div class="column-header">
+                    <span style="font-size: 24px;">❌</span>
+                    <div class="column-title">이런 행동은 지양해주세요</div>
+                </div>
+                
+                <div class="principle-item">
+                    <div class="principle-number">1</div>
+                    <div class="principle-text">
+                        기분이 태도가 되지 않도록 유의합니다
+                    </div>
+                </div>
+                
+                <div class="principle-item">
+                    <div class="principle-number">2</div>
+                    <div class="principle-text">
+                        특정 멘티를 편애하지 않습니다
+                    </div>
+                </div>
+                
+                <div class="principle-item">
+                    <div class="principle-number">3</div>
+                    <div class="principle-text">
+                        적절한 관리는 필요하지만 과하게 통제하거나 강압적인 말투를 사용하지 않습니다
+                    </div>
+                </div>
+                
+                <div class="principle-item">
+                    <div class="principle-number">4</div>
+                    <div class="principle-text">
+                        사소한 질문이라도 불친절하게 대응하지 않습니다<br>
+                        <small style="opacity: 0.8;">단, 확실치 않은 정보는 이야기하지 않습니다</small>
+                    </div>
+                </div>
+                
+                <div class="principle-item">
+                    <div class="principle-number">5</div>
+                    <div class="principle-text">
+                        프로젝트나 과제에 지나치게 간섭하지 않습니다
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 핵심 포인트 -->
+        <div class="key-tips">
+            <div class="tips-title">
+                <span>💡</span>
+                핵심 포인트
+            </div>
+            
+            <div class="tip-item">
+                <div class="tip-icon">🎯</div>
+                <div class="tip-text">
+                    <strong>멘토의 역할:</strong> 신입구성원이 원활히 교육과정에 참여하고 몰입할 수 있도록 지원
+                </div>
+            </div>
+            
+            <div class="tip-item">
+                <div class="tip-icon">👥</div>
+                <div class="tip-text">
+                    <strong>관계 형성:</strong> 멘티 중심의 접근, 경청과 격려를 통한 신뢰 관계 구축
+                </div>
+            </div>
+            
+            <div class="tip-item">
+                <div class="tip-icon">⚖️</div>
+                <div class="tip-text">
+                    <strong>균형감각:</strong> 적절한 가이드와 자율성 보장 사이의 균형 유지
+                </div>
+            </div>
+            
+            <div class="tip-item">
+                <div class="tip-icon">🔄</div>
+                <div class="tip-text">
+                    <strong>지속적 체크:</strong> 멘티들의 상태를 주기적으로 확인하고 필요 시 운영진과 공유
+                </div>
+            </div>
+        </div>
+
+        <!-- 상황별 대응 예시 -->
+        <div class="key-tips" style="border-color: #4285F4; background: linear-gradient(135deg, #E3F2FD, #F3E5F5);">
+            <div class="tips-title" style="color: #1976D2;">
+                <span>🎭</span>
+                상황별 대응 예시
+            </div>
+            
+            <div class="tip-item">
+                <div class="tip-icon">😟</div>
+                <div class="tip-text">
+                    <strong>멘티가 소극적일 때:</strong> 개별적으로 다가가 관심을 보이고, 작은 성취라도 인정하고 격려
+                </div>
+            </div>
+            
+            <div class="tip-item">
+                <div class="tip-icon">😤</div>
+                <div class="tip-text">
+                    <strong>멘티가 불만을 표할 때:</strong> 먼저 충분히 들어주고, 공감한 후 건설적인 해결방안 모색
+                </div>
+            </div>
+            
+            <div class="tip-item">
+                <div class="tip-icon">🤔</div>
+                <div class="tip-text">
+                    <strong>답변이 어려운 질문:</strong> "잘 모르겠네요, 운영진에게 확인해서 알려드릴게요"라고 솔직하게 대응
+                </div>
+            </div>
+            
+            <div class="tip-item">
+                <div class="tip-icon">⏰</div>
+                <div class="tip-text">
+                    <strong>시간이 지연될 때:</strong> 미리 상황을 설명하고 이해를 구한 후, 신속하게 대안 마련
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            if (document.referrer && document.referrer.includes(window.location.origin)) {
+                history.back();
+            } else {
+                window.location.href = '../index.html';
+            }
+        }
+
+        // 페이지 로드 시 애니메이션
+        document.addEventListener('DOMContentLoaded', function() {
+            const items = document.querySelectorAll('.principle-item');
+            items.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    item.style.transition = 'all 0.5s ease';
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

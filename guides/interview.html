@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💬 1:1 면담 가이드 - SK 멘토 가이드</title>
+    <meta name="theme-color" content="#4facfe">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+            background: #f8f9fa;
+            color: #202124;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(79, 172, 254, 0.3);
+            position: relative;
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .header .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Section */
+        .section {
+            background: white;
+            margin-bottom: 24px;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-size: 20px;
+            margin-bottom: 16px;
+            color: #4facfe;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: #333;
+            border-left: 4px solid #4facfe;
+            padding-left: 12px;
+        }
+
+        /* 개요 카드 */
+        .overview-card {
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            border: 2px solid #4facfe;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 16px 0;
+            position: relative;
+        }
+
+        .overview-title {
+            color: #1976d2;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+        }
+
+        .overview-content {
+            color: #333;
+            line-height: 1.7;
+        }
+
+        /* 면담 기법 카드 */
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .technique-card {
+            background: white;
+            border: 2px solid #e8eaed;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .technique-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--technique-color);
+        }
+
+        .technique-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-color: var(--technique-color);
+        }
+
+        .technique-card.star { --technique-color: #4285F4; }
+        .technique-card.grow { --technique-color: #34A853; }
+        .technique-card.mdfp { --technique-color: #EA4335; }
+        .technique-card.active-listening { --technique-color: #FBBC04; }
+
+        .technique-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--technique-color);
+            font-size: 16px;
+        }
+
+        .technique-full-name {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+            font-style: italic;
+        }
+
+        .technique-description {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .technique-steps {
+            list-style: none;
+            margin-top: 12px;
+        }
+
+        .technique-steps li {
+            margin-bottom: 6px;
+            padding-left: 16px;
+            position: relative;
+            font-size: 13px;
+        }
+
+        .technique-steps li::before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            color: var(--technique-color);
+        }
+
+        /* 질문 예시 섹션 */
+        .question-category {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 16px 0;
+            border-left: 4px solid #4facfe;
+        }
+
+        .category-title {
+            color: #1976d2;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .question-list {
+            list-style: none;
+        }
+
+        .question-item {
+            background: white;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            border-left: 3px solid #4facfe;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .question-item:hover {
+            background: #e3f2fd;
+            transform: translateX(4px);
+        }
+
+        .question-text {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .question-purpose {
+            font-size: 12px;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* 상황별 대응 */
+        .scenario-card {
+            background: linear-gradient(135deg, #fff3e0, #fce4ec);
+            border: 2px solid #ff9800;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+
+        .scenario-title {
+            color: #e65100;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .scenario-situation {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            border-left: 4px solid #ff9800;
+        }
+
+        .situation-label {
+            font-weight: 600;
+            color: #e65100;
+            margin-bottom: 8px;
+        }
+
+        .situation-description {
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .response-approach {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 3px solid #4caf50;
+        }
+
+        .approach-label {
+            font-weight: 600;
+            color: #2e7d32;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .approach-text {
+            color: #333;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* 멘토 자세 */
+        .mentor-attitude {
+            background: linear-gradient(135deg, #e8f5e8, #f1f8e9);
+            border: 2px solid #4caf50;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+
+        .attitude-title {
+            color: #2e7d32;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .attitude-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .attitude-item {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+        }
+
+        .attitude-item h4 {
+            color: #2e7d32;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        .attitude-item p {
+            color: #333;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* 체크리스트 */
+        .checklist {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .checklist-title {
+            color: #2e7d32;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 8px;
+            padding: 8px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #4caf50;
+            margin-top: 2px;
+        }
+
+        .checklist-item label {
+            flex: 1;
+            cursor: pointer;
+            line-height: 1.5;
+        }
+
+        /* 주의사항 */
+        .warning-box {
+            background: #ffebee;
+            border: 2px solid #f44336;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .warning-title {
+            color: #c62828;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Tips 박스 */
+        .tip-box {
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            border: 1px solid #2196f3;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .tip-title {
+            font-weight: 600;
+            color: #1976d2;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tip-list {
+            margin-left: 16px;
+            color: #1565c0;
+        }
+
+        .tip-list li {
+            margin-bottom: 6px;
+            line-height: 1.5;
+        }
+
+        /* 면담 결과 기록 */
+        .record-template {
+            background: #f8f9fa;
+            border: 2px solid #6c757d;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+
+        .record-title {
+            color: #495057;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .record-form {
+            display: grid;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .form-input,
+        .form-textarea {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 2px rgba(79, 172, 254, 0.2);
+        }
+
+        /* Apps Script 설정 */
+        .apps-script-config {
+            background: linear-gradient(135deg, #e8f5e8, #f1f8e9);
+            border: 2px solid #4caf50;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+
+        .config-title {
+            color: #2e7d32;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .config-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #4caf50;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 13px;
+            background: white;
+        }
+
+        .config-note {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* 제출 버튼 */
+        .submit-section {
+            background: linear-gradient(135deg, #e8f5e8, #f1f8e9);
+            border: 2px solid #4caf50;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 16px 0;
+            text-align: center;
+        }
+
+        .submit-button {
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .submit-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .submit-status {
+            margin-top: 12px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .submit-status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .submit-status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .submit-status.loading {
+            background: #cce7ff;
+            color: #004085;
+            border: 1px solid #b8daff;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .section {
+                padding: 16px;
+                margin-bottom: 16px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .technique-grid,
+            .attitude-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .record-form {
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <button class="back-button" onclick="goBack()">← 뒤로가기</button>
+        <h1>💬 1:1 면담 완전 가이드</h1>
+        <div class="subtitle">질문 예시 & 상황별 대응법</div>
+    </div>
+
+    <div class="container">
+        <!-- 면담 개요 -->
+        <div class="section">
+            <h2>🎯 1:1 면담 개요</h2>
+            <div class="overview-card">
+                <div class="overview-title">💡 면담의 목적</div>
+                <div class="overview-content">
+                    <strong>1:1 면담은 신입구성원의 효과적인 조직 적응을 위해 실시됩니다.</strong><br>
+                    면담은 '담당 분과 구성원 전원'과 진행해주세요 (1인당 1회)<br><br>
+                    
+                    <strong>📋 면담 주제 (3가지 영역)</strong><br>
+                    ① 교육과정에 대한 의견<br>
+                    ② 직장생활에 대한 기대/고민<br>
+                    ③ 기타 개인적인 고민
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <div class="warning-title">⚠️ 중요 안내</div>
+                <ul style="margin-left: 16px; margin-top: 8px;">
+                    <li><strong>면담을 위한 시간은 별도로 부여되지 않습니다.</strong></li>
+                    <li>아침/점심/저녁 시간, 쉬는 시간, 팀프로젝트 시간을 활용해주세요.</li>
+                    <li>교육이 진행되고 있는 동안에 면담은 피해주시고, 면담으로 인해 교육 시간 및 클로징 시간에 늦지 않도록 주의해주세요!</li>
+                    <li><strong>면담 결과지에 전원 면담 결과를 작성하신 후 제출해주세요. (~1/14, 화)</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 멘토의 자세 -->
+        <div class="section">
+            <h2>🤝 멘토의 자세</h2>
+            <div class="mentor-attitude">
+                <div class="attitude-title">💚 멘토의 마음가짐을 잊지 말아주세요!</div>
+                <div class="attitude-grid">
+                    <div class="attitude-item">
+                        <h4>👂 멘티 중심</h4>
+                        <p>먼저 답을 제시하기보다 잘 듣는다. 멘토의 의견을 존중하고 잘한 점을 인정/칭찬해준다.</p>
+                    </div>
+                    <div class="attitude-item">
+                        <h4>⏰ 약속 지키기</h4>
+                        <p>멘티와의 약속은 꼭 지킴으로써 모범을 보이고 신뢰를 형성한다.</p>
+                    </div>
+                    <div class="attitude-item">
+                        <h4>🔒 비밀 지키기</h4>
+                        <p>멘토링 과정에서 알게 된 사적인 이야기를 타인에게 하지 않는다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 면담 기법 -->
+        <div class="section">
+            <h2>🛠️ 면담 기법</h2>
+            <p style="margin-bottom: 16px; color: #666;">멘토과정에서 학습한 다양한 질문 기법을 활용해보세요!</p>
+            
+            <div class="technique-grid">
+                <div class="technique-card star">
+                    <div class="technique-name">STAR</div>
+                    <div class="technique-full-name">Story - Target - Action Planning - Recap</div>
+                    <div class="technique-description">친밀감 형성부터 실행계획까지 체계적 접근</div>
+                    <ul class="technique-steps">
+                        <li>Story: 친밀감을 형성하는 도입 대화</li>
+                        <li>Target: 목표 설정</li>
+                        <li>Action Planning: 실행 계획 수립</li>
+                        <li>Recap: 마무리</li>
+                    </ul>
+                </div>
+
+                <div class="technique-card grow">
+                    <div class="technique-name">GROW</div>
+                    <div class="technique-full-name">Goal - Reality - Option - Will</div>
+                    <div class="technique-description">목표 중심의 코칭 대화법</div>
+                    <ul class="technique-steps">
+                        <li>Goal: 대화 또는 성장의 목표 정하기</li>
+                        <li>Reality: 멘티의 현실 점검</li>
+                        <li>Option: 해보고 싶은 대안 열거</li>
+                        <li>Will: 실행 아이템 결정</li>
+                    </ul>
+                </div>
+
+                <div class="technique-card mdfp">
+                    <div class="technique-name">MDFP</div>
+                    <div class="technique-full-name">Mega-view - Detail - Future - Past</div>
+                    <div class="technique-description">관점 확장을 위한 질문법</div>
+                    <ul class="technique-steps">
+                        <li>Mega-view: 숲을 보게 하는 질문</li>
+                        <li>Detail: 나무를 보게 하는 질문</li>
+                        <li>Future: 미래에 대한 질문</li>
+                        <li>Past: 과거에 대한 질문</li>
+                    </ul>
+                </div>
+
+                <div class="technique-card active-listening">
+                    <div class="technique-name">Active Listening</div>
+                    <div class="technique-full-name">적극적 경청</div>
+                    <div class="technique-description">효과적인 소통을 위한 기본기</div>
+                    <ul class="technique-steps">
+                        <li>경청: 끝까지 들어주기</li>
+                        <li>공감: 감정 이해하고 표현하기</li>
+                        <li>요약: 핵심 내용 정리하기</li>
+                        <li>질문: 더 깊이 탐색하기</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 질문 예시 -->
+        <div class="section">
+            <h2>❓ 영역별 질문 예시</h2>
+            
+            <h3>💭 들어가기 (아이스브레이킹)</h3>
+            <div class="question-category">
+                <div class="category-title">🌱 편안한 분위기 조성</div>
+                <ul class="question-list">
+                    <li class="question-item">
+                        <div class="question-text">오늘 컨디션은 어떤가요? 교육과정에 잘 집중하고 있나요?</div>
+                        <div class="question-purpose">현재 상태 파악 및 관심 표현</div>
+                    </li>
+                    <li class="question-item">
+                        <div class="question-text">어제 교육 종료 후 무엇을 하며 시간을 보냈나요? 동기들과는 많이 친해졌나요?</div>
+                        <div class="question-purpose">일상 공유를 통한 친밀감 형성</div>
+                    </li>
+                </ul>
+            </div>
+
+            <h3>📚 교육과정에 대한 의견</h3>
+            <div class="question-category">
+                <div class="category-title">🎓 교육 관련 피드백</div>
+                <ul class="question-list">
+                    <li class="question-item">
+                        <div class="question-text">신입구성원과정에 참여하는데 어려움은 없나요?</div>
+                        <div class="question-purpose">전반적인 적응도 확인</div>
+                    </li>
+                    <li class="question-item">
+                        <div class="question-text">(내용) 가장 인상 깊었던 과목은? 개선이 필요한 과목은? 그 이유는 무엇인가요?</div>
+                        <div class="question-purpose">교육 콘텐츠 만족도 파악</div>
+                    </li>
+                    <li class="question-item">
+                        <div class="question-text">(방식) 교육 운영 및 방식 관련하여 좋았던 부분 또는 개선이 필요한 부분이 있다면 무엇인가요?</div>
+                        <div class="question-purpose">운영 방식 개선점 수집</div>
+                    </li>
+                    <li class="question-item">
+                        <div class="question-text">(생활) 강의장 및 숙소 관련 불편한 점이 있나요? 생활에 있어서 힘들거나 어려운 점이 있나요?</div>
+                        <div class="question-purpose">생활 환경 만족도 확인</div>
+                    </li>
+                </ul>
+            </div>
+
+            <h3>💼 직장생활에 대한 기대/고민</h3>
+            <div class="question-category">
+                <div class="category-title">🚀 커리어 및 직장 적응</div>
+                <ul class="question-list">
+                    <li class="question-item">
+                        <div class="question-text">회사생활에 대해 기대되는 점 또는 걱정되는 점이 있다면 무엇인가요?</div>
+                        <div class="question-purpose">직장 생활 기대치 및 우려사항 파악</div>
+                    </li>
+                    <li class="question-item">
+                        <div class="question-text">(기입사자의 경우) 입사 전/후 좋았던 점 또는 기대와 달랐던 점</div>
+                        <div class="question-purpose">현실 적응도 확인</div>
+                    </li>
+                    <li class="question-item">
+                        <div class="question-text">1년/3년/5년/10년 등 개인적인 커리어 목표와 바람이 있나요?</div>
+                        <div class="question-purpose">장기적 비전 및 목표 확인</div>
+                    </li>
+                    <li class="question-item">
+                        <div class="question-text">SK 구성원이나 선배에게 물어보고 싶었던 점이 있나요?</div>
+                        <div class="question-purpose">궁금증 해결 및 조직 이해도 향상</div>
+                    </li>
+                </ul>
+            </div>
+
+            <h3>💭 기타 개인적 고민</h3>
+            <div class="question-category">
+                <div class="category-title">🤗 개인적 지원 및 상담</div>
+                <ul class="question-list">
+                    <li class="question-item">
+                        <div class="question-text">분과원들과는 잘 지내고 있나요? 지원이 필요한 부분이 있을까요?</div>
+                        <div class="question-purpose">팀워크 및 관계 형성 확인</div>
+                    </li>
+                    <li class="question-item">
+                        <div class="question-text">나누고 싶은 개인적인 고민이나 의견이 있을까요?</div>
+                        <div class="question-purpose">개인적 지원 및 상담</div>
+                    </li>
+                </ul>
+            </div>
+
+            <h3>🌟 마무리하기</h3>
+            <div class="question-category">
+                <div class="category-title">💝 격려 및 마무리</div>
+                <ul class="question-list">
+                    <li class="question-item">
+                        <div class="question-text">면담 내용 중 좋았던 점 또는 기억에 남는 점을 신입구성원에게 전달</div>
+                        <div class="question-purpose">긍정적 피드백 제공</div>
+                    </li>
+                    <li class="question-item">
+                        <div class="question-text">인정과 감사의 마음 표현</div>
+                        <div class="question-purpose">관계 강화 및 동기 부여</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 상황별 대응법 -->
+        <div class="section">
+            <h2>🎭 상황별 대응법</h2>
+            
+            <div class="scenario-card">
+                <div class="scenario-title">😟 소극적이거나 말이 없는 멘티</div>
+                <div class="scenario-situation">
+                    <div class="situation-label">상황</div>
+                    <div class="situation-description">질문을 해도 "네", "아니요" 정도로만 답하거나 대화를 이어가지 못하는 경우</div>
+                    <div class="response-approach">
+                        <div class="approach-label">대응 방법</div>
+                        <div class="approach-text">
+                            • <strong>편안한 분위기 조성</strong>: "긴장하지 마세요, 편하게 얘기해도 돼요"<br>
+                            • <strong>구체적 질문</strong>: "어떤 부분이 어려우셨나요?" 등 Yes/No 질문 피하기<br>
+                            • <strong>공통 관심사 찾기</strong>: 취미, 관심사 등으로 대화의 실마리 만들기<br>
+                            • <strong>충분한 시간 주기</strong>: 답변을 재촉하지 않고 기다려주기
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scenario-card">
+                <div class="scenario-title">😤 불만이나 부정적 의견이 많은 멘티</div>
+                <div class="scenario-situation">
+                    <div class="situation-label">상황</div>
+                    <div class="situation-description">교육과정이나 환경에 대해 계속 불만을 표현하거나 부정적인 반응을 보이는 경우</div>
+                    <div class="response-approach">
+                        <div class="approach-label">대응 방법</div>
+                        <div class="approach-text">
+                            • <strong>일단 경청하기</strong>: 충분히 듣고 공감 표현 "그런 부분이 힘드셨군요"<br>
+                            • <strong>구체적 파악</strong>: "어떤 점이 가장 어려우셨나요?" 구체적 원인 탐색<br>
+                            • <strong>건설적 방향 전환</strong>: "그럼 어떻게 하면 더 좋을까요?" 해결책 모색<br>
+                            • <strong>긍정적 측면 발견</strong>: 좋았던 부분이나 성과 인정해주기
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scenario-card">
+                <div class="scenario-title">😢 개인적 고민이 깊은 멘티</div>
+                <div class="scenario-situation">
+                    <div class="situation-label">상황</div>
+                    <div class="situation-description">가족, 연애, 경제적 문제 등 개인적인 고민을 털어놓는 경우</div>
+                    <div class="response-approach">
+                        <div class="approach-label">대응 방법</div>
+                        <div class="approach-text">
+                            • <strong>공감과 지지</strong>: "많이 힘드셨겠어요" 감정을 인정하고 지지<br>
+                            • <strong>전문가 연계</strong>: 필요시 상담센터나 EAP 프로그램 안내<br>
+                            • <strong>경계 설정</strong>: 멘토로서 도울 수 있는 범위 명확히 하기<br>
+                            • <strong>비밀 보장</strong>: 개인적 고민은 절대 타인에게 공유하지 않기
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scenario-card">
+                <div class="scenario-title">🤔 진로나 적성에 대한 고민을 호소하는 멘티</div>
+                <div class="scenario-situation">
+                    <div class="situation-label">상황</div>
+                    <div class="situation-description">"이 일이 저에게 맞는지 모르겠어요", "다른 분야가 더 좋을 것 같아요" 등의 고민</div>
+                    <div class="response-approach">
+                        <div class="approach-label">대응 방법</div>
+                        <div class="approach-text">
+                            • <strong>충분한 경험 강조</strong>: "아직 충분히 경험해보지 않았으니 시간을 두고 판단해보세요"<br>
+                            • <strong>강점 발견 도움</strong>: "어떤 일을 할 때 가장 즐거우셨나요?" 강점 탐색<br>
+                            • <strong>현실적 조언</strong>: 다양한 경험의 중요성과 성장 기회로 인식<br>
+                            • <strong>롤모델 제시</strong>: 비슷한 고민을 겪었던 선배 사례 공유
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 면담 체크리스트 -->
+        <div class="section">
+            <h2>✅ 면담 진행 체크리스트</h2>
+            
+            <div class="checklist">
+                <div class="checklist-title">📋 면담 전 준비사항</div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="pre1">
+                    <label for="pre1">조용하고 편안한 면담 장소 확보</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="pre2">
+                    <label for="pre2">충분한 시간 확보 (1인당 15-20분)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="pre3">
+                    <label for="pre3">면담 질문 미리 준비 및 숙지</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="pre4">
+                    <label for="pre4">면담 결과 기록지 준비</label>
+                </div>
+            </div>
+
+            <div class="checklist">
+                <div class="checklist-title">💬 면담 중 체크사항</div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="during1">
+                    <label for="during1">편안하고 따뜻한 분위기 조성</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="during2">
+                    <label for="during2">적극적 경청 및 공감 표현</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="during3">
+                    <label for="during3">3가지 영역 모두 다루기 (교육/직장/개인)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="during4">
+                    <label for="during4">구체적이고 열린 질문 활용</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="during5">
+                    <label for="during5">멘티의 강점과 좋은 점 인정 및 격려</label>
+                </div>
+            </div>
+
+            <div class="checklist">
+                <div class="checklist-title">📝 면담 후 정리사항</div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="post1">
+                    <label for="post1">면담 내용 즉시 기록 정리</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="post2">
+                    <label for="post2">후속 조치나 지원 필요사항 파악</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="post3">
+                    <label for="post3">면담 결과지 작성 및 제출 (1/14까지)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="post4">
+                    <label for="post4">필요시 운영진과 공유 (심각한 이슈 발견시)</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 면담 결과 기록 템플릿 -->
+        <div class="section">
+            <h2>📋 면담 결과 기록 템플릿</h2>
+            
+            <div class="record-template">
+                <div class="record-title">📝 면담 기록지</div>
+                <div class="record-form">
+                    <div class="form-group">
+                        <label class="form-label">멘티 이름</label>
+                        <input type="text" class="form-input" id="studentName" placeholder="홍길동">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">면담 일시</label>
+                        <input type="text" class="form-input" id="interviewDate" placeholder="2025.01.10 14:30~14:50">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">전반적 상태 (컨디션, 적응도 등)</label>
+                        <textarea class="form-textarea" id="generalStatus" placeholder="교육 적응도, 건강 상태, 전반적 분위기 등"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">교육과정 관련 의견</label>
+                        <textarea class="form-textarea" id="educationFeedback" placeholder="만족도, 개선사항, 어려운 점 등"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">직장생활 기대/고민사항</label>
+                        <textarea class="form-textarea" id="careerConcerns" placeholder="커리어 목표, 우려사항, 궁금증 등"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">개인적 고민 (간단히)</label>
+                        <textarea class="form-textarea" id="personalConcerns" placeholder="개인 정보 보호를 위해 간단히만 기록"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">멘토 소감 및 후속 조치사항</label>
+                        <textarea class="form-textarea" id="mentorNotes" placeholder="면담 소감, 필요한 지원사항, 특이사항 등"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <div class="warning-title">🔒 개인정보 보호 주의사항</div>
+                <ul style="margin-left: 16px; margin-top: 8px;">
+                    <li>개인적이고 민감한 내용은 상세히 기록하지 않기</li>
+                    <li>면담 기록지는 안전하게 보관하고 무단 공유 금지</li>
+                    <li>심각한 상황 발견시에만 운영진과 공유</li>
+                    <li>면담 내용은 해당 멘티의 동의 없이 타인에게 공개 금지</li>
+                </ul>
+            </div>
+        </div>
+
+
+
+        <!-- 면담 결과 제출 -->
+        <div class="section">
+            <h2>📤 면담 결과 제출</h2>
+            
+            <div class="submit-section">
+                <h3 style="margin-bottom: 16px; color: #2e7d32;">✅ 운영진에게 자동 제출</h3>
+                <p style="margin-bottom: 20px; color: #666;">
+                    제출하기 버튼을 누르면 작성하신 면담 기록이 운영진에게 자동으로 제출됩니다.<br>
+                    제출 전 내용을 다시 한 번 확인해주세요.
+                </p>
+                
+                <button class="submit-button" onclick="submitToAppsScript()" id="submitBtn">
+                    📤 운영진에게 제출하기
+                </button>
+                
+                <div class="submit-status" id="submitStatus"></div>
+            </div>
+        </div>
+
+        <!-- 면담 성공 Tips -->
+        <div class="section">
+            <h2>💡 성공적인 면담을 위한 Tips</h2>
+            
+            <div class="tip-box">
+                <div class="tip-title">🎯 효과적인 면담 진행법</div>
+                <ul class="tip-list">
+                    <li><strong>80:20 법칙</strong>: 멘티가 80% 말하고, 멘토는 20% 말하기</li>
+                    <li><strong>열린 질문 활용</strong>: "어떻게 생각하세요?" "어떤 느낌이었나요?" 등</li>
+                    <li><strong>감정 인정하기</strong>: "그렇게 느끼셨을 것 같아요" "이해할 만해요" 등</li>
+                    <li><strong>구체적 탐색</strong>: "예를 들어 설명해주시겠어요?" "좀 더 자세히 말씀해주세요"</li>
+                    <li><strong>강점 발견 도움</strong>: 멘티의 좋은 점, 잘하는 것 찾아서 격려하기</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <div class="tip-title">⚠️ 피해야 할 것들</div>
+                <ul class="tip-list">
+                    <li><strong>성급한 조언</strong>: 충분히 듣기 전에 답을 제시하지 않기</li>
+                    <li><strong>판단하기</strong>: "그건 잘못된 생각이에요" 등 평가 금지</li>
+                    <li><strong>비교하기</strong>: "다른 사람은 이렇게 해요" 등 비교 발언 피하기</li>
+                    <li><strong>해결책 강요</strong>: 멘토의 생각을 일방적으로 주입하지 않기</li>
+                    <li><strong>시간 재촉</strong>: 면담 시간을 너무 서두르지 않기</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <div class="tip-title">🌟 관계 형성 및 신뢰 구축</div>
+                <ul class="tip-list">
+                    <li><strong>진정성 있는 관심</strong>: "정말 궁금해서 여쭤보는 거예요"</li>
+                    <li><strong>개인적 경험 공유</strong>: 적절한 선에서 멘토의 경험담 나누기</li>
+                    <li><strong>지속적 관심</strong>: 면담 후에도 "그 이후 어떠세요?" 등 관심 표현</li>
+                    <li><strong>약속 이행</strong>: 면담에서 약속한 것은 반드시 지키기</li>
+                    <li><strong>격려와 응원</strong>: "잘 하고 있어요" "응원하고 있어요" 등 지지 표현</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            history.back();
+        }
+
+        // Apps Script URL 저장 (개발자/운영진용)
+        // 실제 배포시에는 이 URL을 하드코딩하거나 config.json에서 가져와야 함
+        function getAppsScriptUrl() {
+            // 🔧 개발자/운영진 설정: 여기에 실제 Apps Script 웹앱 URL을 입력하세요
+            const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwMjskB4jASOc4Yg-H0TeMFXeJMSxbQwsvGk25T5H7Al9FA2cj6Xy4SAlDSRGJ2_SqVJw/exec';
+            
+            // 개발 중에는 로컬 스토리지에서도 확인 (테스트용)
+            const devUrl = localStorage.getItem('sk-mentor-apps-script-url');
+            
+            if (devUrl && window.location.hostname === 'localhost') {
+                return devUrl; // 개발 환경에서는 로컬 스토리지 사용
+            }
+            
+            return APPS_SCRIPT_URL; // 실제 환경에서는 하드코딩된 URL 사용
+        }
+
+        // Apps Script로 데이터 제출
+        async function submitToAppsScript() {
+            const submitBtn = document.getElementById('submitBtn');
+            const submitStatus = document.getElementById('submitStatus');
+            
+            // Apps Script URL 확인
+            const appsScriptUrl = getAppsScriptUrl();
+            if (!appsScriptUrl || appsScriptUrl.includes('YOUR_SCRIPT_ID')) {
+                showSubmitStatus('error', '⚠️ 시스템 설정이 완료되지 않았습니다. 운영진에게 문의해주세요.');
+                return;
+            }
+
+            // 입력 데이터 수집
+            const data = {
+                studentName: document.getElementById('studentName').value.trim(),
+                interviewDate: document.getElementById('interviewDate').value.trim(),
+                generalStatus: document.getElementById('generalStatus').value.trim(),
+                educationFeedback: document.getElementById('educationFeedback').value.trim(),
+                careerConcerns: document.getElementById('careerConcerns').value.trim(),
+                personalConcerns: document.getElementById('personalConcerns').value.trim(),
+                mentorNotes: document.getElementById('mentorNotes').value.trim(),
+                submittedAt: new Date().toLocaleString('ko-KR'),
+                mentorName: localStorage.getItem('sk-mentor-name') || '미입력'
+            };
+
+            // 필수 필드 검증
+            if (!data.studentName || !data.interviewDate) {
+                showSubmitStatus('error', '⚠️ 멘티 이름과 면담 일시는 필수 입력 항목입니다.');
+                return;
+            }
+
+            // 제출 시작
+            submitBtn.disabled = true;
+            showSubmitStatus('loading', '📤 제출 중입니다...');
+
+            try {
+                // Apps Script 웹앱으로 POST 요청
+                const response = await fetch(appsScriptUrl, {
+                    method: 'POST',
+                    mode: 'no-cors', // Apps Script는 CORS 설정이 필요 없음
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                // no-cors 모드에서는 response 상태를 확인할 수 없으므로 
+                // 성공으로 가정하고 처리
+                showSubmitStatus('success', '✅ 면담 기록이 성공적으로 제출되었습니다!');
+                clearForm();
+                
+                // 제출 기록 저장 (오프라인 대비)
+                saveSubmissionRecord(data);
+                
+            } catch (error) {
+                console.error('제출 오류:', error);
+                
+                // 오프라인 저장
+                saveOfflineSubmission(data);
+                showSubmitStatus('error', '❌ 인터넷 연결을 확인해주세요. 오프라인으로 임시 저장되었습니다.');
+                
+            } finally {
+                submitBtn.disabled = false;
+            }
+        }
+
+        // 제출 상태 표시
+        function showSubmitStatus(type, message) {
+            const submitStatus = document.getElementById('submitStatus');
+            submitStatus.className = `submit-status ${type}`;
+            submitStatus.textContent = message;
+            submitStatus.style.display = 'block';
+            
+            if (type === 'success') {
+                setTimeout(() => {
+                    submitStatus.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // 폼 초기화
+        function clearForm() {
+            document.querySelectorAll('.form-input, .form-textarea').forEach(input => {
+                input.value = '';
+                // 로컬 스토리지에서도 제거
+                const key = `interview_template_${input.id}`;
+                localStorage.removeItem(key);
+            });
+        }
+
+        // 제출 기록 저장
+        function saveSubmissionRecord(data) {
+            const submissions = JSON.parse(localStorage.getItem('sk-mentor-submissions') || '[]');
+            submissions.push({
+                ...data,
+                id: Date.now(),
+                type: 'interview',
+                status: 'submitted'
+            });
+            localStorage.setItem('sk-mentor-submissions', JSON.stringify(submissions));
+        }
+
+        // 오프라인 임시 저장
+        function saveOfflineSubmission(data) {
+            const offlineData = JSON.parse(localStorage.getItem('sk-mentor-offline-submissions') || '[]');
+            offlineData.push({
+                ...data,
+                id: Date.now(),
+                type: 'interview',
+                status: 'pending',
+                savedAt: new Date().toISOString()
+            });
+            localStorage.setItem('sk-mentor-offline-submissions', JSON.stringify(offlineData));
+        }
+
+        // 체크리스트 상태 저장
+        document.addEventListener('DOMContentLoaded', function() {
+            // 체크박스 상태 복원
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                const savedState = localStorage.getItem(`interview_${checkbox.id}`);
+                if (savedState === 'true') {
+                    checkbox.checked = true;
+                }
+                
+                checkbox.addEventListener('change', function() {
+                    localStorage.setItem(`interview_${this.id}`, this.checked);
+                });
+            });
+
+            // 폼 데이터 자동 저장 및 복원
+            document.querySelectorAll('.form-input, .form-textarea').forEach(input => {
+                // 저장된 값 복원
+                const savedValue = localStorage.getItem(`interview_template_${input.id}`);
+                if (savedValue) {
+                    input.value = savedValue;
+                }
+
+                // 실시간 저장
+                input.addEventListener('input', function() {
+                    const key = `interview_template_${this.id}`;
+                    localStorage.setItem(key, this.value);
+                });
+            });
+        });
+
+        // 면담 기법 카드 클릭 이벤트
+        document.querySelectorAll('.technique-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const technique = this.querySelector('.technique-name').textContent;
+                const fullName = this.querySelector('.technique-full-name').textContent;
+                const description = this.querySelector('.technique-description').textContent;
+                
+                // 모든 카드 원상복구
+                document.querySelectorAll('.technique-card').forEach(c => {
+                    c.style.transform = 'translateY(0)';
+                    c.style.boxShadow = '';
+                });
+                
+                // 선택된 카드 하이라이트
+                this.style.transform = 'translateY(-8px)';
+                this.style.boxShadow = '0 12px 30px rgba(0,0,0,0.2)';
+                
+                setTimeout(() => {
+                    this.style.transform = 'translateY(-4px)';
+                    this.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
+                }, 2000);
+            });
+        });
+
+        // 질문 항목 클릭 이벤트
+        document.querySelectorAll('.question-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.style.backgroundColor = '#e3f2fd';
+                setTimeout(() => {
+                    this.style.backgroundColor = '';
+                }, 2000);
+            });
+        });
+
+        // 진행률 추적
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const checkedCount = document.querySelectorAll('input[type="checkbox"]:checked').length;
+            const totalCount = checkboxes.length;
+            const progress = Math.round((checkedCount / totalCount) * 100);
+            
+            console.log(`1:1 면담 준비 진행률: ${progress}% (${checkedCount}/${totalCount})`);
+        }
+
+        // 체크박스 변경시 진행률 업데이트
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', updateProgress);
+        });
+
+        // 페이지 로드시 초기 진행률 계산
+        setTimeout(updateProgress, 500);
+
+        // 네트워크 상태 확인 및 오프라인 데이터 동기화
+        window.addEventListener('online', async function() {
+            console.log('🌐 인터넷 연결됨 - 오프라인 데이터 동기화 시도');
+            
+            const offlineData = JSON.parse(localStorage.getItem('sk-mentor-offline-submissions') || '[]');
+            const appsScriptUrl = getAppsScriptUrl();
+            
+            if (offlineData.length > 0 && appsScriptUrl) {
+                for (const submission of offlineData) {
+                    try {
+                        await fetch(appsScriptUrl, {
+                            method: 'POST',
+                            mode: 'no-cors',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(submission)
+                        });
+                        
+                        // 성공한 데이터는 제출 기록으로 이동
+                        saveSubmissionRecord(submission);
+                        
+                    } catch (error) {
+                        console.error('오프라인 데이터 동기화 실패:', error);
+                        break; // 하나라도 실패하면 중단
+                    }
+                }
+                
+                // 동기화 완료 후 오프라인 데이터 삭제
+                localStorage.removeItem('sk-mentor-offline-submissions');
+                
+                // 성공 메시지 표시
+                if (document.getElementById('submitStatus')) {
+                    showSubmitStatus('success', '✅ 오프라인 중 저장된 면담 기록이 동기화되었습니다!');
+                }
+            }
+        });
+
+        // 개발자 도구에서 Apps Script 예시 코드 출력
+        console.log(`
+📋 Google Apps Script 코드 예시:
+
+function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    
+    // 스프레드시트 열기 (스프레드시트 ID를 실제 값으로 변경)
+    const sheet = SpreadsheetApp.openById('YOUR_SPREADSHEET_ID').getSheetByName('면담기록');
+    
+    // 데이터 추가
+    sheet.appendRow([
+      new Date(),
+      data.mentorName || '',
+      data.studentName || '',
+      data.interviewDate || '',
+      data.generalStatus || '',
+      data.educationFeedback || '',
+      data.careerConcerns || '',
+      data.personalConcerns || '',
+      data.mentorNotes || '',
+      data.submittedAt || ''
+    ]);
+    
+    return ContentService
+      .createTextOutput(JSON.stringify({success: true}))
+      .setMimeType(ContentService.MimeType.JSON);
+      
+  } catch (error) {
+    return ContentService
+      .createTextOutput(JSON.stringify({success: false, error: error.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+📝 스프레드시트 헤더 설정:
+A1: 제출일시
+B1: 멘토명  
+C1: 멘티명
+D1: 면담일시
+E1: 전반적상태
+F1: 교육과정의견
+G1: 직장생활고민
+H1: 개인적고민
+I1: 멘토소감
+J1: 제출시간
+        `);
+    </script>
+</body>
+</html>

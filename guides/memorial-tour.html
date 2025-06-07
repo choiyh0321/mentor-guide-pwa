@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏛️ 기념관 Tour 가이드 - SK 멘토 가이드</title>
+    <meta name="theme-color" content="#f093fb">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+            background: #f8f9fa;
+            color: #202124;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(240, 147, 251, 0.3);
+            position: relative;
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .header .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Section */
+        .section {
+            background: white;
+            margin-bottom: 24px;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-size: 20px;
+            margin-bottom: 16px;
+            color: #f093fb;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: #333;
+            border-left: 4px solid #f093fb;
+            padding-left: 12px;
+        }
+
+        /* 관람 순서 */
+        .tour-route {
+            display: grid;
+            gap: 16px;
+        }
+
+        .floor-section {
+            background: linear-gradient(135deg, #fff1f3, #f3e5f5);
+            border: 2px solid #f093fb;
+            border-radius: 16px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .floor-badge {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #f093fb;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .exhibits {
+            margin-top: 12px;
+        }
+
+        .exhibit-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .exhibit-number {
+            background: #f093fb;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .exhibit-info {
+            flex: 1;
+        }
+
+        .exhibit-title {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .exhibit-feature {
+            font-size: 12px;
+            color: #666;
+            background: #fff3e0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        /* 스토리텔링 섹션 */
+        .story-section {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+
+        .story-title {
+            color: #2e7d32;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .story-content {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            border-left: 4px solid #4caf50;
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        .story-highlight {
+            background: linear-gradient(135deg, #fff59d, #ffcc02);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* 포인트 박스 */
+        .point-box {
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            border: 1px solid #2196f3;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .point-title {
+            font-weight: 600;
+            color: #1976d2;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* 시간 관리 */
+        .time-management {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .time-title {
+            color: #e65100;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .time-table {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 8px;
+            align-items: center;
+            background: white;
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .time-table.header {
+            background: #ff9800;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* 체험 포인트 */
+        .experience-point {
+            background: linear-gradient(135deg, #ffebee, #fce4ec);
+            border: 1px solid #e91e63;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 12px 0;
+        }
+
+        .experience-icon {
+            color: #e91e63;
+            font-size: 18px;
+            margin-right: 8px;
+        }
+
+        /* 주의사항 */
+        .warning-box {
+            background: #ffebee;
+            border: 2px solid #f44336;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .warning-title {
+            color: #c62828;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .section {
+                padding: 16px;
+                margin-bottom: 16px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .time-table {
+                grid-template-columns: 1fr;
+                gap: 4px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <button class="back-button" onclick="goBack()">← 뒤로가기</button>
+        <h1>🏛️ 기념관 Tour 완전 가이드</h1>
+        <div class="subtitle">스토리텔링 스크립트 & 핵심 포인트</div>
+    </div>
+
+    <div class="container">
+        <!-- 사전 준비사항 -->
+        <div class="section">
+            <h2>📋 사전 준비사항</h2>
+            <div class="warning-box">
+                <div class="warning-title">⚠️ 중요 안내</div>
+                <p><strong>용인 이동 시, 개인 노트북 챙겨갈 수 있도록 사전 안내 필요!</strong><br>
+                기념관 투어 후 팀 프로젝트 진행을 위해 노트북이 필요합니다.</p>
+            </div>
+        </div>
+
+        <!-- 관람 순서 -->
+        <div class="section">
+            <h2>🗺️ 관람 순서 및 층별 콘텐츠</h2>
+            <div class="tour-route">
+                <div class="floor-section">
+                    <div class="floor-badge">기념관 1층</div>
+                    <div class="exhibits">
+                        <div class="exhibit-item">
+                            <div class="exhibit-number">1</div>
+                            <div class="exhibit-info">
+                                <div class="exhibit-title">기념관 안내</div>
+                                <div class="exhibit-feature">*터치스크린, *QR 출퇴근기록기</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="floor-section">
+                    <div class="floor-badge">기념관 2층</div>
+                    <div class="exhibits">
+                        <div class="exhibit-item">
+                            <div class="exhibit-number">2</div>
+                            <div class="exhibit-info">
+                                <div class="exhibit-title">그룹 태동과 성장기틀의 마련</div>
+                                <div class="exhibit-feature">*터치스크린</div>
+                            </div>
+                        </div>
+                        <div class="exhibit-item">
+                            <div class="exhibit-number">3</div>
+                            <div class="exhibit-info">
+                                <div class="exhibit-title">창업과 성장 발전과정</div>
+                                <div class="exhibit-feature">*창업회장 경영활동시기 영상</div>
+                            </div>
+                        </div>
+                        <div class="exhibit-item">
+                            <div class="exhibit-number">4</div>
+                            <div class="exhibit-info">
+                                <div class="exhibit-title">선경직물 집무실 재현</div>
+                                <div class="exhibit-feature">*창업∙선대회장 명함 ARS</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="floor-section">
+                    <div class="floor-badge">기념관 B1층</div>
+                    <div class="exhibits">
+                        <div class="exhibit-item">
+                            <div class="exhibit-number">5</div>
+                            <div class="exhibit-info">
+                                <div class="exhibit-title">에너지 · 화학으로 한국경제 대동맥이 되다</div>
+                                <div class="exhibit-feature">*터치스크린</div>
+                            </div>
+                        </div>
+                        <div class="exhibit-item">
+                            <div class="exhibit-number">6</div>
+                            <div class="exhibit-info">
+                                <div class="exhibit-title">수직계열화의 완성 CLX</div>
+                                <div class="exhibit-feature">*4면 투명 디스플레이</div>
+                            </div>
+                        </div>
+                        <div class="exhibit-item">
+                            <div class="exhibit-number">7</div>
+                            <div class="exhibit-info">
+                                <div class="exhibit-title">풍요로운 정보통신 사회를 열어가다</div>
+                            </div>
+                        </div>
+                        <div class="exhibit-item">
+                            <div class="exhibit-number">8</div>
+                            <div class="exhibit-info">
+                                <div class="exhibit-title">에너지화학과 정보통신의 두 날개</div>
+                                <div class="exhibit-feature">*슬라이딩비전</div>
+                            </div>
+                        </div>
+                        <div class="exhibit-item">
+                            <div class="exhibit-number">9</div>
+                            <div class="exhibit-info">
+                                <div class="exhibit-title">불굴의 도전과 열정으로</div>
+                                <div class="exhibit-feature">*RFID 미디어비전</div>
+                            </div>
+                        </div>
+                        <div class="exhibit-item">
+                            <div class="exhibit-number">10</div>
+                            <div class="exhibit-info">
+                                <div class="exhibit-title">따로 또 같이</div>
+                                <div class="exhibit-feature">*터치스크린, 프로젝션 맵핑</div>
+                            </div>
+                        </div>
+                        <div class="exhibit-item">
+                            <div class="exhibit-number">11</div>
+                            <div class="exhibit-info">
+                                <div class="exhibit-title">History Snap</div>
+                                <div class="exhibit-feature">*터치스크린, 크로마키 사진촬영 체험</div>
+                            </div>
+                        </div>
+                        <div class="exhibit-item">
+                            <div class="exhibit-number">12</div>
+                            <div class="exhibit-info">
+                                <div class="exhibit-title">Spirit & Culture</div>
+                                <div class="exhibit-feature">*터치스크린</div>
+                            </div>
+                        </div>
+                        <div class="exhibit-item">
+                            <div class="exhibit-number">13</div>
+                            <div class="exhibit-info">
+                                <div class="exhibit-title">디지털라이브러리</div>
+                                <div class="exhibit-feature">*터치스크린</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 분과별 시간표 -->
+        <div class="section">
+            <h2>⏰ 분과별 관람 시간표</h2>
+            <div class="time-management">
+                <div class="time-title">📅 분과별 Tour 시간 (45분)</div>
+                <div class="time-table header">
+                    <div>분과</div>
+                    <div>기념관 Tour 시간</div>
+                    <div>Team PJT</div>
+                </div>
+                <div class="time-table">
+                    <div>1분과</div>
+                    <div>14:00~14:45</div>
+                    <div>나머지 시간</div>
+                </div>
+                <div class="time-table">
+                    <div>2분과</div>
+                    <div>14:15~15:00</div>
+                    <div>나머지 시간</div>
+                </div>
+                <div class="time-table">
+                    <div>3분과</div>
+                    <div>14:30~15:15</div>
+                    <div>나머지 시간</div>
+                </div>
+                <div class="time-table">
+                    <div>4분과</div>
+                    <div>14:45~15:30</div>
+                    <div>나머지 시간</div>
+                </div>
+                <div class="time-table">
+                    <div>5분과</div>
+                    <div>15:00~15:45</div>
+                    <div>나머지 시간</div>
+                </div>
+                <div class="time-table">
+                    <div>6분과</div>
+                    <div>15:15~16:00</div>
+                    <div>나머지 시간</div>
+                </div>
+                <div class="time-table">
+                    <div>7분과</div>
+                    <div>15:30~16:15</div>
+                    <div>나머지 시간</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 창업의 계기 스토리 -->
+        <div class="section">
+            <h2>📖 핵심 스토리텔링: 창업의 계기</h2>
+            <div class="story-section">
+                <div class="story-title">🎬 1층 창업 재현 공간에서 전할 이야기</div>
+                <div class="story-content">
+                    1층은 창업당시의 공장을 재현하였습니다. 여기 직기를 수리하는 젊은 청년이 바로 <span class="story-highlight">최종건 창업회장님</span>이십니다.
+                    <br><br>
+                    최종건 창업회장님은 지금은 과학기술대, 이전에는 서울산업대, 그 전신인 경성직업학교 기계과를 나오시고, 고향 수원에서 바로 집 앞에 일제시대 당시 조선에서는 조선과 일본이 합작으로 만든 가장 큰 직물공장이 있었는데, 그곳에 입사하시고 기술과 리더십이 인정받아 빨리 승진하신 편이었고, 해방 때에는 생산부장으로써 실질적인 경영활동에 참여하셨습니다.
+                    <br><br>
+                    실제 경영을 하시다 보니 자기 사업에 대한 꿈이 생겼고, 공장을 나와 전국을 돌며 사업을 구상하시던 중에 <span class="story-highlight">한국전쟁</span>이 일어나게 됩니다.
+                    <br><br>
+                    전쟁 후 고향에 돌아와보니 대부분 전쟁으로 폐허가 되어있었고, 직물공장은 파괴되고, 함께 일했던 동료들, 고향사람들은 모두 길거리에 나앉아 굶어 죽게 생긴 것을 보고 머리속에 품고 있던 사업구상을 지워버리고, <span class="story-highlight">"안되겠다. 내가 저 직물공장을 인수해서 사람들 다시 불러모아 먹고 살게 해야겠다"</span> 다짐하십니다.
+                </div>
+            </div>
+
+            <div class="point-box">
+                <div class="point-title">💡 감동 포인트</div>
+                <ul>
+                    <li><strong>나이 28세</strong>에 불과한 청년이 보인 리더십</li>
+                    <li><strong>개인의 이익보다 공동체를 먼저 생각</strong>한 마음</li>
+                    <li><strong>부모님의 반대를 설득</strong>하며 보인 의지와 비전</li>
+                    <li><strong>벽돌 하나하나 주워서 다시 쌓아올린</strong> 끈기와 열정</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 2층 핵심 스토리 -->
+        <div class="section">
+            <h2>👥 2층 핵심 스토리: 따뜻하고 배려있는 최종건 회장</h2>
+            
+            <div class="story-section">
+                <div class="story-title">💼 1) 직원모집도 남다르게 [1955년 사진]</div>
+                <div class="story-content">
+                    1953년 창업이후 1년 뒤 신규직원 100명을 모집합니다. 선발기준을 첫째, <span class="story-highlight">예쁘고 멋진 거 필요 없고 일을 잘할 것 같이 생긴 사람</span>, 둘째, 공장 혹은 직물관련 근무 경험이 있는 사람, 이렇게 선발하기로 약속했는데, 당일에 천명이 몰려오는 것을 보고 최종건 회장은 갑자기 선발기준을 바꾸십니다.
+                    <br><br>
+                    <span class="story-highlight">"식구들이 많은 순으로 뽑아라"</span> 당시 선발을 담당했던 직원분들(원로)이 엄청 힘들었다고 합니다.
+                </div>
+            </div>
+
+            <div class="story-section">
+                <div class="story-title">🎉 2) 창립 3주년부터 시작된 사원 운동회 [1956년 사진]</div>
+                <div class="story-content">
+                    창립 3주년부터 매년 운동회를 열었는데, 저희 운동회는 지역사회에 유명했던 것이, 단순 직원들만의 운동회 혹은 가족 초청이 아니라 <span class="story-highlight">지역주민 전체를 초청</span>해 군용트럭 15,16대에 태우고 여주 신륵사까지 가서 대운동회와 잔치를 열었다고 합니다.
+                </div>
+            </div>
+
+            <div class="experience-point">
+                <span class="experience-icon">🖐️</span>
+                <strong>체험 포인트:</strong> 선경직물이 생산했던 원단 샘플 체험 가능 - 월급대신 받았던 직물을 고이 간직하고 계시다가 기념관을 위해 기증해 주셔서 이렇게 여러분이 직접 보고 만질 수 있게 되었습니다.
+            </div>
+        </div>
+
+        <!-- B1층 주요 포인트 -->
+        <div class="section">
+            <h2>⚡ B1층 주요 체험 포인트</h2>
+            
+            <div class="point-box">
+                <div class="point-title">🎮 RFID 미디어비전 체험법</div>
+                <ul>
+                    <li>RFID 카드 한 개를 선택하여 콘트롤 포디움 위로 올리기</li>
+                    <li>영상이 끝나면 조그다이얼을 돌려 테마별 스토리 감상</li>
+                    <li><strong>⚠️ 참가자가 직접 조작하지 않도록 안내</strong></li>
+                </ul>
+            </div>
+
+            <div class="point-box">
+                <div class="point-title">📸 History Snap 사진 촬영</div>
+                <ul>
+                    <li>기념관 1층에서(또는 사전에) QR코드를 찍어 출퇴근 기록카드를 생성하고 받은 인증번호를 화면에 입력</li>
+                    <li>배경화면 선택 후 촬영 진행</li>
+                    <li>사진을 찍으면 바로 출퇴근 기록카드에 수록되면서 메일로 전송, 저장 가능</li>
+                    <li><strong>시간 관계상 출력은 진행하지 않음</strong></li>
+                </ul>
+            </div>
+
+            <div class="experience-point">
+                <span class="experience-icon">🚗</span>
+                <strong>전시 차량:</strong> 창업회장님과 선대회장님이 사용하시던 차량 전시 (파손의 위험이 있어 직접 승차는 불가)
+            </div>
+        </div>
+
+        <!-- 마무리 활동 -->
+        <div class="section">
+            <h2>📝 투어 마무리</h2>
+            <div class="warning-box">
+                <div class="warning-title">📋 필수 활동</div>
+                <p><strong>분과장 복귀하여 조별로 결과지 작성, 제출</strong><br>
+                기념관에서 느낀 점, 인상 깊었던 부분 등을 조별로 정리하여 제출합니다.</p>
+            </div>
+
+            <div class="point-box">
+                <div class="point-title">🏢 인재관 1층 분과장 이용 안내</div>
+                <p>기념관 방문 시, 인재관 1층 분과장을 사용해주세요!<br>
+                멘토과정에서 학습하신 <strong>캔미팅 가이드, FT Skill을 활용</strong>해 보세요!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            history.back();
+        }
+    </script>
+</body>
+</html>

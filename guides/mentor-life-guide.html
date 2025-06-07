@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👨‍🏫 멘토 생활 백서 - SK 멘토 가이드</title>
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#EA4335">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    
+    <style>
+        .guide-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+
+        .guide-header {
+            background: linear-gradient(135deg, #4285F4, #34A853);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .guide-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .guide-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .info-section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-left: 4px solid #4285F4;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #4285F4;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 16px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .info-item:hover {
+            background: #e3f2fd;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.1);
+        }
+
+        .info-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .info-content {
+            flex: 1;
+        }
+
+        .info-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .info-description {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        .info-highlight {
+            background: #fff3e0;
+            border: 1px solid #ff9800;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 8px;
+            font-size: 13px;
+            color: #e65100;
+        }
+
+        .center-specific {
+            background: linear-gradient(135deg, #e8f5e8, #f1f8e9);
+            border-left-color: #34A853;
+        }
+
+        .center-specific .section-title {
+            color: #34A853;
+        }
+
+        .warning-section {
+            background: linear-gradient(135deg, #ffebee, #fce4ec);
+            border-left-color: #f44336;
+        }
+
+        .warning-section .section-title {
+            color: #f44336;
+        }
+
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .schedule-table th,
+        .schedule-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .schedule-table th {
+            background: #4285F4;
+            color: white;
+            font-weight: 600;
+        }
+
+        .schedule-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .schedule-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #e0e0e0;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-button:hover {
+            background: white;
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .quick-tip {
+            background: linear-gradient(135deg, #fff8e1, #f3e5ab);
+            border: 2px solid #ffa726;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .quick-tip-icon {
+            font-size: 20px;
+            margin-top: 2px;
+        }
+
+        .quick-tip-content {
+            flex: 1;
+        }
+
+        .quick-tip-title {
+            font-weight: 600;
+            color: #e65100;
+            margin-bottom: 4px;
+        }
+
+        .quick-tip-text {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .guide-container {
+                padding: 16px;
+                padding-bottom: 100px;
+            }
+            
+            .guide-header {
+                padding: 20px 16px;
+            }
+            
+            .guide-title {
+                font-size: 24px;
+            }
+            
+            .info-section {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .info-item {
+                padding: 14px;
+                gap: 12px;
+            }
+            
+            .schedule-table th,
+            .schedule-table td {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="goBack()">←</button>
+
+    <div class="guide-container">
+        <!-- 헤더 -->
+        <div class="guide-header">
+            <div class="guide-title">👨‍🏫 멘토 생활 백서</div>
+            <div class="guide-subtitle">신입구성원과정 기간 중 멘토 생활 가이드</div>
+        </div>
+
+        <!-- 숙소 지원 -->
+        <div class="info-section">
+            <div class="section-title">
+                <span>🏠</span>
+                숙소 지원 안내
+            </div>
+            
+            <div class="info-item">
+                <div class="info-icon">🛏️</div>
+                <div class="info-content">
+                    <div class="info-title">멘토 숙소 제공</div>
+                    <div class="info-description">
+                        신입구성원과 동일한 건물 내 숙소를 제공하며, <strong>1인 1실</strong>로 제공됩니다<br>
+                        (신입구성원은 숙소 수용 인원에 맞춰 '2인 1실 or 3인 1실' 사용 예정)
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-icon">📅</div>
+                <div class="info-content">
+                    <div class="info-title">주말 숙박 정책</div>
+                    <div class="info-description">
+                        주말 숙박은 불가합니다<br>
+                        주말 동안 연수원 내 짐 보관 장소에 짐 거치 가능
+                    </div>
+                    <div class="info-highlight">
+                        💡 멘토의 경우, 일요일 18시 이후 사전 입소 가능<br>
+                        (단, 일요일에는 식당/편의점 등 이용 불가)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 운영진과의 미팅 -->
+        <div class="info-section">
+            <div class="section-title">
+                <span>🤝</span>
+                운영진과의 미팅
+            </div>
+            
+            <div class="info-item">
+                <div class="info-icon">⏰</div>
+                <div class="info-content">
+                    <div class="info-title">일일 미팅 시간</div>
+                    <div class="info-description">
+                        매일 저녁식사 전 30분간 운영진과의 미팅 시간이 있습니다
+                    </div>
+                    <div class="info-highlight">
+                        🕕 시간: 18:00~18:30 (매일)<br>
+                        📋 내용: 당일 특이사항 공유 + 다음날 일정 안내
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 교통 및 이동 -->
+        <div class="info-section center-specific" id="transport-section">
+            <div class="section-title">
+                <span>🚌</span>
+                교통 및 이동 안내
+            </div>
+            
+            <!-- 이천 FMI인재개발원 (기본값, 나중에 동적으로 변경 예정) -->
+            <div class="info-item">
+                <div class="info-icon">📍</div>
+                <div class="info-content">
+                    <div class="info-title">버스 승하차 장소</div>
+                    <div class="info-description">
+                        <strong>이천 FMI인재개발원:</strong> 패기관 경비실<br>
+                        교육기간 중 이동 시 모든 승하차는 이 위치에서 진행됩니다
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-icon">🚗</div>
+                <div class="info-content">
+                    <div class="info-title">개인 차량 이용</div>
+                    <div class="info-description">
+                        개인 차량(부모, 지인 차량 포함)을 통한 개별 이동은 불가합니다 (멘토는 제외)<br>
+                        신입구성원 참가자는 모두 정해진 셔틀버스로만 이동 가능
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- mySUNI 커뮤니티 -->
+        <div class="info-section">
+            <div class="section-title">
+                <span>💻</span>
+                mySUNI 커뮤니티 활용
+            </div>
+            
+            <div class="info-item">
+                <div class="info-icon">👨‍🏫</div>
+                <div class="info-content">
+                    <div class="info-title">멘토과정 커뮤니티</div>
+                    <div class="info-description">
+                        '멘토+운영진'이 활용하는 커뮤니티<br>
+                        출결 현황판, 멘토 진행 장표 등 멘토에게 필요한 정보 중심으로 구성
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-icon">👥</div>
+                <div class="info-content">
+                    <div class="info-title">신입구성원과정 커뮤니티</div>
+                    <div class="info-description">
+                        '신입구성원'이 활용하는 커뮤니티<br>
+                        신입구성원과정 주요 공지사항 및 멘티들의 교육 내용 파악 가능
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 멘토 역할 및 업무 -->
+        <div class="info-section">
+            <div class="section-title">
+                <span>📋</span>
+                멘토 주요 역할
+            </div>
+            
+            <div class="info-item">
+                <div class="info-icon">📊</div>
+                <div class="info-content">
+                    <div class="info-title">출결 현황 관리</div>
+                    <div class="info-description">
+                        담당 분과의 Daily 출결 현황(오전/오후)을 파악하여 '신입구성원 출결 현황판'에 기입
+                    </div>
+                    <div class="info-highlight">
+                        💡 Tip: 1일차에 선정될 조장이 조원들의 출결을 확인하도록 하시면 좋습니다
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-icon">🎯</div>
+                <div class="info-content">
+                    <div class="info-title">프로그램 진행 지원</div>
+                    <div class="info-description">
+                        각 일자별 과목, 강의장 위치, 시간표 등 주요 학습 내용에 대해 안내<br>
+                        신입구성원이 원활히 교육과정에 참여하고 몰입할 수 있도록 지원
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-icon">⚠️</div>
+                <div class="info-content">
+                    <div class="info-title">특이사항 보고</div>
+                    <div class="info-description">
+                        담당 분과 구성원 관련 이슈 or 특이사항 발생 시 운영진에게 공유<br>
+                        신입구성원이 교육 과정 기간 동안 규율에 따라 행동할 수 있도록 가이드
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 분과장 관리 -->
+        <div class="info-section">
+            <div class="section-title">
+                <span>🏫</span>
+                분과장 관리
+            </div>
+            
+            <div class="info-item">
+                <div class="info-icon">📐</div>
+                <div class="info-content">
+                    <div class="info-title">분과장 Layout 관리</div>
+                    <div class="info-description">
+                        분과장은 멘토가 담당하고 책임지는 공간입니다<br>
+                        자유롭게 활용하되, 기본 Layout이 유지될 수 있도록 관리해주세요
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-icon">👥</div>
+                <div class="info-content">
+                    <div class="info-title">그룹 명칭 통일</div>
+                    <div class="info-description">
+                        혼선 방지를 위해 그룹 명칭을 통일해주세요
+                    </div>
+                    <div class="info-highlight">
+                        📝 멘토 담당 그룹: '분과'<br>
+                        📝 분과 내 소그룹: '조'
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-icon">👤</div>
+                <div class="info-content">
+                    <div class="info-title">분과장 선정</div>
+                    <div class="info-description">
+                        분과를 대표하여 멘토를 도와줄 분과장(조장 아님)을 선정하여<br>
+                        신입구성원과정 분과현황판에 기입해주세요
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 유용한 팁 -->
+        <div class="quick-tip">
+            <div class="quick-tip-icon">💡</div>
+            <div class="quick-tip-content">
+                <div class="quick-tip-title">멘토 생활 Tip</div>
+                <div class="quick-tip-text">
+                    • 분과 내 조 편성은 멘토 자율적으로 진행 가능<br>
+                    • 중요한 안내사항이 있는 Daily Closing, 팀 프로젝트 OT 시간에는 멘토도 참가하여 내용 숙지<br>
+                    • 멘토과정에서 학습한 캔미팅 가이드, FT Skill을 적극 활용해보세요
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            if (document.referrer && document.referrer.includes(window.location.origin)) {
+                history.back();
+            } else {
+                window.location.href = '../index.html';
+            }
+        }
+
+        // 페이지 로드 시 애니메이션
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.info-section');
+            sections.forEach((section, index) => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    section.style.transition = 'all 0.6s ease';
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+
+            // 연수원별 정보 업데이트 (나중에 동적으로 변경 예정)
+            updateTransportInfo();
+        });
+
+        // 나중에 동적 연동을 위한 함수 (현재는 기본값 유지)
+        function updateTransportInfo() {
+            // 현재는 이천 FMI인재개발원 정보를 기본값으로 사용
+            // 나중에 selectedCenter에 따라 동적으로 변경 예정
+            const selectedCenter = localStorage.getItem('selectedCenter') || 'icheon';
+            
+            // TODO: Google Sheets 연동 시 이 부분을 동적으로 변경
+            console.log('현재 선택된 연수원:', selectedCenter);
+        }
+    </script>
+</body>
+</html>

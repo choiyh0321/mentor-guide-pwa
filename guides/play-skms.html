@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 Play SKMS 가이드 - SK 멘토 가이드</title>
+    <meta name="theme-color" content="#a8edea">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+            background: #f8f9fa;
+            color: #202124;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(168, 237, 234, 0.3);
+            position: relative;
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .header .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Section */
+        .section {
+            background: white;
+            margin-bottom: 24px;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-size: 20px;
+            margin-bottom: 16px;
+            color: #00bcd4;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: #333;
+            border-left: 4px solid #00bcd4;
+            padding-left: 12px;
+        }
+
+        /* 시간표 */
+        .timeline {
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #00bcd4;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 12px;
+            border-left: 4px solid #00bcd4;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 20px;
+            width: 12px;
+            height: 12px;
+            background: #00bcd4;
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+
+        .time-badge {
+            background: #00bcd4;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #333;
+        }
+
+        .activity-description {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* VWBE 관찰 카드 */
+        .vwbe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .vwbe-card {
+            background: linear-gradient(135deg, #e8f5e8, #f1f8e9);
+            border: 2px solid #4caf50;
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vwbe-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--vwbe-color);
+        }
+
+        .vwbe-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .vwbe-card.virtue { --vwbe-color: #2196F3; }
+        .vwbe-card.will { --vwbe-color: #4CAF50; }
+        .vwbe-card.brain { --vwbe-color: #FF9800; }
+        .vwbe-card.communicate { --vwbe-color: #E91E63; }
+
+        .vwbe-title {
+            color: var(--vwbe-color);
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+        }
+
+        .vwbe-description {
+            color: #333;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .vwbe-behaviors {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid var(--vwbe-color);
+        }
+
+        .vwbe-behaviors h4 {
+            color: var(--vwbe-color);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .behavior-list {
+            list-style: none;
+        }
+
+        .behavior-list li {
+            margin-bottom: 4px;
+            padding-left: 16px;
+            position: relative;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .behavior-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--vwbe-color);
+            font-weight: 600;
+        }
+
+        /* 관찰 체크리스트 */
+        .observation-card {
+            background: linear-gradient(135deg, #fff3e0, #fce4ec);
+            border: 2px solid #ff9800;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+
+        .observation-title {
+            color: #e65100;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+        }
+
+        .observation-items {
+            display: grid;
+            gap: 12px;
+        }
+
+        .observation-item {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid #ff9800;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .observation-checkbox {
+            width: 18px;
+            height: 18px;
+            accent-color: #ff9800;
+            margin-top: 2px;
+        }
+
+        .observation-content {
+            flex: 1;
+        }
+
+        .observation-text {
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: #333;
+        }
+
+        .observation-detail {
+            font-size: 13px;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* 피드백 가이드 */
+        .feedback-guide {
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            border: 2px solid #2196f3;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+
+        .feedback-title {
+            color: #1976d2;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-steps {
+            display: grid;
+            gap: 12px;
+        }
+
+        .feedback-step {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+            position: relative;
+        }
+
+        .step-number {
+            background: #2196f3;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: #1976d2;
+            margin-bottom: 8px;
+        }
+
+        .step-content {
+            color: #333;
+            line-height: 1.5;
+        }
+
+        /* 게임 단계별 가이드 */
+        .game-phase {
+            background: #f8f9fa;
+            border: 2px solid #607d8b;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+
+        .phase-title {
+            color: #455a64;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .phase-content {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid #607d8b;
+        }
+
+        /* 로드맵 템플릿 */
+        .roadmap-template {
+            background: #f8f9fa;
+            border: 2px solid #00bcd4;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+
+        .roadmap-form {
+            display: grid;
+            gap: 16px;
+        }
+
+        .form-section {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            border-left: 4px solid #00bcd4;
+        }
+
+        .form-section h4 {
+            color: #00838f;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: auto 1fr 2fr;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+            min-width: 60px;
+        }
+
+        .form-input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #00bcd4;
+            box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.2);
+        }
+
+        .form-textarea {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: #00bcd4;
+            box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.2);
+        }
+        .tip-box {
+            background: linear-gradient(135deg, #e8f5e8, #f1f8e9);
+            border: 1px solid #4caf50;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .tip-title {
+            font-weight: 600;
+            color: #2e7d32;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tip-list {
+            margin-left: 16px;
+            color: #2e7d32;
+        }
+
+        .tip-list li {
+            margin-bottom: 6px;
+            line-height: 1.5;
+        }
+
+        /* 준비물 체크리스트 */
+        .checklist {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .checklist h4 {
+            color: #2e7d32;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            padding: 8px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #4caf50;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .section {
+                padding: 16px;
+                margin-bottom: 16px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .vwbe-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <button class="back-button" onclick="goBack()">← 뒤로가기</button>
+        <h1>🎮 Play SKMS 완전 가이드</h1>
+        <div class="subtitle">SKMS 게임 관찰 포인트 & VWBE 행동 발견법</div>
+    </div>
+
+    <div class="container">
+        <!-- 사전 준비사항 -->
+        <div class="section">
+            <h2>📋 사전 준비사항</h2>
+            <div class="checklist">
+                <h4>✅ 준비사항 체크리스트</h4>
+                <div class="checklist-item">
+                    <input type="checkbox" id="prep1">
+                    <label for="prep1">조별 이젤패드 (분과당 총 4개) 확인</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="prep2">
+                    <label for="prep2">사인펜 및 포스트잇 준비</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="prep3">
+                    <label for="prep3">VWBE 관찰 포인트 숙지</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="prep4">
+                    <label for="prep4">Vision Building 결과물 확인 (참고용)</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 전체 진행 일정 -->
+        <div class="section">
+            <h2>⏰ 전체 진행 일정</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="time-badge">09:20~12:00</div>
+                    <div class="activity-title">SKMS W/S</div>
+                    <div class="activity-description">SKMS FT가 진행 예정 - 출결 확인, 교육 물품 확인</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="time-badge">12:00~13:00</div>
+                    <div class="activity-title">점심 시간</div>
+                    <div class="activity-description">휴식 및 오후 활동 준비</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="time-badge">13:00~15:50</div>
+                    <div class="activity-title">SKMS Game</div>
+                    <div class="activity-description">Game 업체가 진행 예정 - 신입구성원 관찰 (VWBE 행동 발현)</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="time-badge">16:00~16:10</div>
+                    <div class="activity-title">SKMS Game Reflection</div>
+                    <div class="activity-description">조별 토의 안내</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="time-badge">16:10~16:40</div>
+                    <div class="activity-title">SKMS 실천 다짐</div>
+                    <div class="activity-description">실천 계획 관련 Q&A</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="time-badge">16:40~17:00</div>
+                    <div class="activity-title">실천 다짐 공유</div>
+                    <div class="activity-description">조별 발표 진행</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VWBE 관찰 포인트 -->
+        <div class="section">
+            <h2>👁️ VWBE 관찰 포인트</h2>
+            <p style="margin-bottom: 16px; color: #666;"><strong>패기 있는 구성원(VWBE)</strong>의 5가지 모습을 관찰해주세요!</p>
+            
+            <div class="vwbe-grid">
+                <div class="vwbe-card virtue">
+                    <div class="vwbe-title">🚀 스스로 동기부여하여 문제제기</div>
+                    <div class="vwbe-behaviors">
+                        <h4>관찰 포인트</h4>
+                        <ul class="behavior-list">
+                            <li>주도적으로 참여하는 모습</li>
+                            <li>현상에 대한 의문 제기</li>
+                            <li>개선점 발견 및 제안</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="vwbe-card will">
+                    <div class="vwbe-title">🎯 높은 목표에 도전</div>
+                    <div class="vwbe-behaviors">
+                        <h4>관찰 포인트</h4>
+                        <ul class="behavior-list">
+                            <li>어려운 과제에 도전</li>
+                            <li>높은 기준 설정</li>
+                            <li>포기하지 않는 의지</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="vwbe-card brain">
+                    <div class="vwbe-title">💥 기존의 틀을 깨는 과감한 실행</div>
+                    <div class="vwbe-behaviors">
+                        <h4>관찰 포인트</h4>
+                        <ul class="behavior-list">
+                            <li>창의적 접근 방식</li>
+                            <li>과감한 아이디어 실행</li>
+                            <li>혁신적 문제 해결</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="vwbe-card ethics">
+                    <div class="vwbe-title">📚 필요한 역량 개발</div>
+                    <div class="vwbe-behaviors">
+                        <h4>관찰 포인트</h4>
+                        <ul class="behavior-list">
+                            <li>새로운 지식 습득 노력</li>
+                            <li>부족한 부분 인정하고 학습</li>
+                            <li>지속적 자기계발 의지</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="vwbe-card communicate">
+                    <div class="vwbe-title">🤝 구성원과 적극적 소통</div>
+                    <div class="vwbe-behaviors">
+                        <h4>관찰 포인트</h4>
+                        <ul class="behavior-list">
+                            <li>팀원과 활발한 의견 교환</li>
+                            <li>협업을 통한 시너지 창출</li>
+                            <li>건설적인 피드백 제공</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <div class="tip-title">🎯 관찰 Tips</div>
+                <ul class="tip-list">
+                    <li>Game 도중 분과원들이 보여주는 VWBE한 모습들을 잘 관찰하고 기록해주세요</li>
+                    <li>관찰하고 기록한 내용을 SKMS Game Reflection 시간에 사례로 말씀해주세요</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SKMS Game Reflection 진행법 -->
+        <div class="section">
+            <h2>🔄 SKMS Game Reflection 진행법</h2>
+            <div class="feedback-guide">
+                <div class="feedback-title">💭 조별 토의 진행</div>
+                <div class="feedback-steps">
+                    <div class="feedback-step">
+                        <span class="step-number">1</span>
+                        <div class="step-title">오전 워크샵과 오후 Game을 통해 SKMS에 대해 자세히 알아보았는데요</div>
+                        <div class="step-content">
+                            다양한 'SKMS 실천방법' 중 중요하다고 생각하는 3가지 Action을 작성해주세요.
+                        </div>
+                    </div>
+                    
+                    <div class="feedback-step">
+                        <span class="step-number">2</span>
+                        <div class="step-title">멘토 관찰 피드백</div>
+                        <div class="step-content">
+                            멘토님이 관찰하신 신입구성원들의 VWBE한 모습들을 공유해주세요.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SKMS 실천 다짐 -->
+        <div class="section">
+            <h2>✊ SKMS 실천 다짐</h2>
+            <div class="feedback-guide">
+                <div class="feedback-title">📝 실천 계획 작성 양식</div>
+                <div class="roadmap-template">
+                    <div class="roadmap-form">
+                        <div class="form-section">
+                            <h4>🎯 Career 목표</h4>
+                            <input type="text" class="form-input" placeholder="예: 데이터 기반 마케팅 전문가가 되어 고객 인사이트를 발굴하는 역할을 하고 싶습니다" style="width: 100%; margin-bottom: 16px;">
+                            
+                            <h4>💎 내가 정의한 SKMS 실천</h4>
+                            <input type="text" class="form-input" placeholder="예: 고객을 위한 Value 창출을 위해 끊임없이 학습하고 혁신하는 구성원" style="width: 100%;">
+                        </div>
+
+                        <div class="form-section">
+                            <h4>📈 단계별 실천 계획</h4>
+                            <div class="form-row">
+                                <div class="form-label">시점</div>
+                                <div class="form-label">실천목표</div>
+                                <div class="form-label">실천Action Plan</div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-label">단기<br>(0~0)</div>
+                                <input type="text" class="form-input" placeholder="목표 입력">
+                                <textarea class="form-textarea" placeholder="구체적인 실천계획 입력"></textarea>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-label">중기<br>(0~0)</div>
+                                <input type="text" class="form-input" placeholder="목표 입력">
+                                <textarea class="form-textarea" placeholder="구체적인 실천계획 입력"></textarea>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-label">장기<br>(0~0)</div>
+                                <input type="text" class="form-input" placeholder="목표 입력">
+                                <textarea class="form-textarea" placeholder="구체적인 실천계획 입력"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <div class="tip-title">📝 실천 다짐 작성 방법</div>
+                <ul class="tip-list">
+                    <li><strong>1. 1일차 Vision Building 결과물을 참고하여 "Career 목표" 작성</strong></li>
+                    <li><strong>2. 시점 구분은 본인의 목표에 따라 자유롭게 설정</strong></li>
+                    <li><strong>3. 목표 및 실천 계획은 SKMS 실천 모습을 참고해 작성</strong></li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <div class="tip-title">🎯 실천 다짐 진행 Tips</div>
+                <ul class="tip-list">
+                    <li>1일차 Vision Building의 결과물 중 '일잘러'의 모습과 '내가 SK에서 하고 싶은 일' 결과물을 구성원들에게 Remind 해주세요</li>
+                    <li>멘토님의 사례 혹은 작성 예시를 통해 구성원들이 감을 잡을 수 있게 해주세요</li>
+                    <li>'내가 정의한 SKMS 실천'과 '목표' 그리고 '실천계획'이 내용적으로 통할 수 있도록 Guide 해주세요</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 실천 다짐 공유 -->
+        <div class="section">
+            <h2>📢 실천 다짐 공유</h2>
+            <div class="feedback-guide">
+                <div class="feedback-title">🗣️ 조별 발표 진행</div>
+                <div class="feedback-steps">
+                    <div class="feedback-step">
+                        <span class="step-number">1</span>
+                        <div class="step-title">조별로 1명씩 2~3분씩 발표</div>
+                        <div class="step-content">중간에 시간관리 해주세요</div>
+                    </div>
+                    
+                    <div class="feedback-step">
+                        <span class="step-number">2</span>
+                        <div class="step-title">조별 결과물 공유</div>
+                        <div class="step-content">최종 결과물 공유, 우수팀 선정</div>
+                    </div>
+                </div>
+            </div>
+        </div>                    <!-- 마무리 -->
+        <div class="section">
+            <h2>✨ 마무리 체크리스트</h2>
+            
+            <div class="checklist">
+                <h4>✅ 최종 확인사항</h4>
+                <div class="checklist-item">
+                    <input type="checkbox" id="final1">
+                    <label for="final1">모든 구성원이 SKMS 실천 다짐 작성 완료</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="final2">
+                    <label for="final2">관찰 내용 기록 및 피드백 제공 완료</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="final3">
+                    <label for="final3">조별 발표 진행 및 상호 격려 완료</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            history.back();
+        }
+
+        // 체크리스트 상태 저장
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            
+            checkboxes.forEach(checkbox => {
+                const savedState = localStorage.getItem(`play_skms_${checkbox.id}`);
+                if (savedState === 'true') {
+                    checkbox.checked = true;
+                }
+                
+                checkbox.addEventListener('change', function() {
+                    localStorage.setItem(`play_skms_${this.id}`, this.checked);
+                });
+            });
+        });
+
+        // VWBE 카드 클릭 이벤트
+        document.querySelectorAll('.vwbe-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const title = this.querySelector('.vwbe-title').textContent;
+                
+                // 모든 카드 원상복구
+                document.querySelectorAll('.vwbe-card').forEach(c => {
+                    c.style.transform = 'translateY(0)';
+                    c.style.boxShadow = '';
+                });
+                
+                // 선택된 카드 하이라이트
+                this.style.transform = 'translateY(-8px)';
+                this.style.boxShadow = '0 12px 30px rgba(0,0,0,0.2)';
+                
+                setTimeout(() => {
+                    alert(`${title}\n\n패기 있는 구성원의 모습을 관찰해주세요!`);
+                }, 300);
+            });
+        });
+
+        // 진행률 추적
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const checkedCount = document.querySelectorAll('input[type="checkbox"]:checked').length;
+            const totalCount = checkboxes.length;
+            const progress = Math.round((checkedCount / totalCount) * 100);
+            
+            console.log(`Play SKMS 준비 진행률: ${progress}% (${checkedCount}/${totalCount})`);
+        }
+
+        // 체크박스 변경시 진행률 업데이트
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', updateProgress);
+        });
+
+        // 로드맵 템플릿 자동 저장
+        document.querySelectorAll('.form-input, .form-textarea').forEach(input => {
+            input.addEventListener('input', function() {
+                const key = `play_skms_template_${input.placeholder}`;
+                localStorage.setItem(key, this.value);
+            });
+            
+            // 저장된 값 복원
+            const savedValue = localStorage.getItem(`play_skms_template_${input.placeholder}`);
+            if (savedValue) {
+                input.value = savedValue;
+            }
+        });
+
+        // 페이지 로드시 초기 진행률 계산
+        setTimeout(updateProgress, 500);
+    </script>
+</body>
+</html>

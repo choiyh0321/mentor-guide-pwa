@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏢 연수원 이용 안내 - SK 멘토 가이드</title>
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#EA4335">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    
+    <style>
+        .guide-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+
+        .guide-header {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .guide-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .guide-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .center-selector {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            border: 1px solid #e0e0e0;
+        }
+
+        .selector-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #4CAF50;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .center-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .center-button {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .center-button:hover {
+            border-color: #4CAF50;
+            background: #e8f5e8;
+        }
+
+        .center-button.active {
+            background: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .center-icon {
+            font-size: 20px;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .center-name {
+            font-size: 12px;
+            line-height: 1.3;
+        }
+
+        .facility-section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-left: 4px solid #4CAF50;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #4CAF50;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .facility-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .facility-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 16px;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .facility-item:hover {
+            background: #e8f5e8;
+            border-left-color: #4CAF50;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+        }
+
+        .facility-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .facility-icon {
+            font-size: 24px;
+        }
+
+        .facility-name {
+            font-weight: 600;
+            color: #333;
+            flex: 1;
+        }
+
+        .facility-info {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .facility-hours {
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid #4CAF50;
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 13px;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+
+        .facility-note {
+            background: rgba(255, 152, 0, 0.1);
+            border: 1px solid #ff9800;
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 13px;
+            color: #e65100;
+            margin-top: 8px;
+        }
+
+        .map-section {
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            border: 2px solid #2196f3;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .map-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1976d2;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .floor-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .floor-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .floor-card:hover {
+            border-color: #2196f3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(33, 150, 243, 0.2);
+        }
+
+        .floor-name {
+            font-weight: 600;
+            color: #1976d2;
+            margin-bottom: 12px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .room-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .room-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+
+        .room-item:last-child {
+            border-bottom: none;
+        }
+
+        .room-icon {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, #fff3e0, #fffde7);
+            border: 2px solid #ff9800;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .contact-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #e65100;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .contact-icon {
+            font-size: 20px;
+            color: #ff9800;
+        }
+
+        .contact-details {
+            flex: 1;
+        }
+
+        .contact-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 2px;
+        }
+
+        .contact-phone {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #e0e0e0;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-button:hover {
+            background: white;
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .guide-container {
+                padding: 16px;
+                padding-bottom: 100px;
+            }
+            
+            .guide-header {
+                padding: 20px 16px;
+            }
+            
+            .guide-title {
+                font-size: 24px;
+            }
+            
+            .center-buttons {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+            
+            .center-button {
+                padding: 10px 6px;
+            }
+            
+            .center-name {
+                font-size: 11px;
+            }
+            
+            .facility-section {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .facility-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .floor-layout {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="goBack()">←</button>
+
+    <div class="guide-container">
+        <!-- 헤더 -->
+        <div class="guide-header">
+            <div class="guide-title">🏢 연수원 이용 안내</div>
+            <div class="guide-subtitle">시설 위치 및 이용 방법 가이드</div>
+        </div>
+
+        <!-- 연수원 선택 -->
+        <div class="center-selector">
+            <div class="selector-title">🏢 연수원을 선택하세요</div>
+            <div class="center-buttons">
+                <button class="center-button active" data-center="icheon" onclick="selectCenter('icheon')">
+                    <div class="center-icon">🏢</div>
+                    <div class="center-name">이천<br>FMI인재개발원</div>
+                </button>
+                <button class="center-button" data-center="yongin" onclick="selectCenter('yongin')">
+                    <div class="center-icon">🏫</div>
+                    <div class="center-name">용인<br>SK아카데미</div>
+                </button>
+                <button class="center-button" data-center="incheon" onclick="selectCenter('incheon')">
+                    <div class="center-icon">🌊</div>
+                    <div class="center-name">인천<br>SK무의연수원</div>
+                </button>
+            </div>
+        </div>
+
+        <!-- 주요 시설 안내 -->
+        <div class="facility-section">
+            <div class="section-title">
+                <span>🏛️</span>
+                주요 시설 안내
+            </div>
+            
+            <div class="facility-grid" id="facility-grid">
+                <!-- 시설 정보가 동적으로 로드됩니다 -->
+            </div>
+        </div>
+
+        <!-- 연수원 지도 -->
+        <div class="map-section">
+            <div class="map-title">
+                <span>🗺️</span>
+                연수원 층별 시설 배치도
+            </div>
+            
+            <div class="floor-layout" id="floor-layout">
+                <!-- 층별 정보가 동적으로 로드됩니다 -->
+            </div>
+
+            <div style="background: rgba(255, 255, 255, 0.8); border-radius: 8px; padding: 12px; margin-top: 16px; text-align: center;">
+                <strong>📍 주소:</strong> <span id="center-address">경기 이천시 마장면 서이천로 481-28</span>
+            </div>
+        </div>
+
+        <!-- 부대시설 이용안내 -->
+        <div class="facility-section">
+            <div class="section-title">
+                <span>🕐</span>
+                부대시설 이용시간
+            </div>
+            
+            <div class="facility-grid" id="amenities-grid">
+                <!-- 부대시설 정보가 동적으로 로드됩니다 -->
+            </div>
+        </div>
+
+        <!-- 연락처 정보 -->
+        <div class="contact-info">
+            <div class="contact-title">
+                <span>📞</span>
+                연수원 연락처
+            </div>
+            
+            <div id="contact-list">
+                <!-- 연락처가 동적으로 로드됩니다 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 연수원별 데이터 (나중에 Google Sheets 연동 예정)
+        const centerData = {
+            icheon: {
+                name: "이천 FMI인재개발원",
+                address: "경기 이천시 마장면 서이천로 481-28",
+                facilities: [
+                    {
+                        icon: "🏢",
+                        name: "SUPEX Hall (대강의장)",
+                        info: "패기관 1층 위치",
+                        hours: "강의 시간에 따라 운영",
+                        note: "메인 강의 진행 장소"
+                    },
+                    {
+                        icon: "📚",
+                        name: "분과장 (중강의장)",
+                        info: "창조관 2-4층 위치",
+                        hours: "24시간 이용 가능",
+                        note: "멘토 주도 프로그램 진행"
+                    },
+                    {
+                        icon: "🛏️",
+                        name: "숙소",
+                        info: "패기관 지하층 위치",
+                        hours: "24시간 이용 가능",
+                        note: "멘토는 1인 1실 제공"
+                    },
+                    {
+                        icon: "🍽️",
+                        name: "식당",
+                        info: "패기관 지하층 위치",
+                        hours: "조식 7:20~8:30, 중식 11:30~13:00, 석식 17:30~19:00"
+                    }
+                ],
+                floors: [
+                    {
+                        name: "패기관 1층",
+                        rooms: [
+                            { icon: "🏢", name: "SUPEX Hall (대강의장)" },
+                            { icon: "🛏️", name: "멘토대기실 (108호)" },
+                            { icon: "📋", name: "운영실 (106호)" },
+                            { icon: "🏪", name: "편의점" }
+                        ]
+                    },
+                    {
+                        name: "창조관 2-4층",
+                        rooms: [
+                            { icon: "📚", name: "201호 (1분과/중강의장 A)" },
+                            { icon: "📚", name: "301호 (4분과/중강의장 B)" },
+                            { icon: "📚", name: "401호 (7분과/중강의장 D)" },
+                            { icon: "🏛️", name: "기념관" }
+                        ]
+                    },
+                    {
+                        name: "패기관 지하",
+                        rooms: [
+                            { icon: "🍽️", name: "식당" },
+                            { icon: "🛏️", name: "숙소" },
+                            { icon: "🧖‍♂️", name: "사우나" },
+                            { icon: "👕", name: "세탁실" }
+                        ]
+                    },
+                    {
+                        name: "Actium (체육관)",
+                        rooms: [
+                            { icon: "🏃‍♂️", name: "체육관" },
+                            { icon: "🏓", name: "탁구장" },
+                            { icon: "🏀", name: "농구장" }
+                        ]
+                    }
+                ],
+                amenities: [
+                    {
+                        icon: "🏃‍♂️",
+                        name: "Actium (체육관)",
+                        info: "별동 위치",
+                        hours: "7:00~22:00",
+                        note: "음식물 반입 및 취식 금지"
+                    },
+                    {
+                        icon: "🧖‍♂️",
+                        name: "사우나",
+                        info: "패기관 지하층",
+                        hours: "6:00~8:30, 18:00~22:00"
+                    },
+                    {
+                        icon: "👕",
+                        name: "세탁실",
+                        info: "패기관 지하층",
+                        hours: "20:00 이후 이용 가능",
+                        note: "신입구성원은 문의자에 한해 안내"
+                    },
+                    {
+                        icon: "🏪",
+                        name: "편의점",
+                        info: "패기관 1층",
+                        hours: "10:00~21:00"
+                    }
+                ],
+                contacts: [
+                    {
+                        icon: "🏢",
+                        name: "인재개발원 중앙통제실",
+                        phone: "031-630-8914"
+                    },
+                    {
+                        icon: "🏃‍♂️",
+                        name: "Actium 안내데스크",
+                        phone: "031-630-8890"
+                    }
+                ]
+            },
+            yongin: {
+                name: "용인 SK아카데미",
+                address: "용인시 처인구 모현읍 외대로 81",
+                facilities: [
+                    {
+                        icon: "🏢",
+                        name: "메인 강의장",
+                        info: "본관 1층 위치",
+                        hours: "강의 시간에 따라 운영"
+                    },
+                    {
+                        icon: "📚",
+                        name: "분과별 강의실",
+                        info: "본관 2-3층 위치",
+                        hours: "24시간 이용 가능"
+                    },
+                    {
+                        icon: "🛏️",
+                        name: "생활관",
+                        info: "별관 위치",
+                        hours: "24시간 이용 가능"
+                    },
+                    {
+                        icon: "🍽️",
+                        name: "카페테리아",
+                        info: "본관 지하 1층",
+                        hours: "조식 7:00~8:30, 중식 12:00~13:30, 석식 18:00~19:30"
+                    }
+                ],
+                floors: [
+                    {
+                        name: "본관 1층",
+                        rooms: [
+                            { icon: "🏢", name: "메인 강의장" },
+                            { icon: "📋", name: "운영실" },
+                            { icon: "🏪", name: "편의점" }
+                        ]
+                    },
+                    {
+                        name: "본관 2-3층",
+                        rooms: [
+                            { icon: "📚", name: "분과별 강의실" },
+                            { icon: "💻", name: "컴퓨터실" }
+                        ]
+                    },
+                    {
+                        name: "별관 (생활관)",
+                        rooms: [
+                            { icon: "🛏️", name: "숙소" },
+                            { icon: "🧖‍♂️", name: "휴게실" }
+                        ]
+                    }
+                ],
+                amenities: [
+                    {
+                        icon: "🏃‍♂️",
+                        name: "피트니스센터",
+                        info: "별관 1층",
+                        hours: "6:00~22:00"
+                    },
+                    {
+                        icon: "🏪",
+                        name: "편의점",
+                        info: "본관 1층",
+                        hours: "9:00~21:00"
+                    }
+                ],
+                contacts: [
+                    {
+                        icon: "🏢",
+                        name: "SK아카데미 운영실",
+                        phone: "031-XXX-XXXX"
+                    }
+                ]
+            },
+            incheon: {
+                name: "인천 SK무의연수원",
+                address: "인천광역시 중구 무의동",
+                facilities: [
+                    {
+                        icon: "🏢",
+                        name: "대강의실",
+                        info: "본관 위치",
+                        hours: "강의 시간에 따라 운영"
+                    },
+                    {
+                        icon: "🛏️",
+                        name: "숙박동",
+                        info: "별동 위치",
+                        hours: "24시간 이용 가능"
+                    }
+                ],
+                floors: [
+                    {
+                        name: "본관",
+                        rooms: [
+                            { icon: "🏢", name: "대강의실" },
+                            { icon: "📋", name: "운영실" }
+                        ]
+                    },
+                    {
+                        name: "숙박동",
+                        rooms: [
+                            { icon: "🛏️", name: "숙소" },
+                            { icon: "🍽️", name: "식당" }
+                        ]
+                    }
+                ],
+                amenities: [],
+                contacts: [
+                    {
+                        icon: "🏢",
+                        name: "무의연수원 운영실",
+                        phone: "031-XXX-XXXX"
+                    }
+                ]
+            }
+        };
+
+        let currentCenter = 'icheon';
+
+        function selectCenter(centerId) {
+            currentCenter = centerId;
+            
+            // 버튼 상태 업데이트
+            document.querySelectorAll('.center-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-center="${centerId}"]`).classList.add('active');
+            
+            // 데이터 업데이트
+            updateFacilityInfo();
+        }
+
+        function updateFacilityInfo() {
+            const data = centerData[currentCenter];
+            
+            // 주소 업데이트
+            document.getElementById('center-address').textContent = data.address;
+            
+            // 주요 시설 업데이트
+            const facilityGrid = document.getElementById('facility-grid');
+            facilityGrid.innerHTML = data.facilities.map(facility => `
+                <div class="facility-item">
+                    <div class="facility-header">
+                        <div class="facility-icon">${facility.icon}</div>
+                        <div class="facility-name">${facility.name}</div>
+                    </div>
+                    <div class="facility-info">${facility.info}</div>
+                    <div class="facility-hours">${facility.hours}</div>
+                    ${facility.note ? `<div class="facility-note">💡 ${facility.note}</div>` : ''}
+                </div>
+            `).join('');
+            
+            // 층별 배치도 업데이트
+            const floorLayout = document.getElementById('floor-layout');
+            floorLayout.innerHTML = data.floors.map(floor => `
+                <div class="floor-card">
+                    <div class="floor-name">${floor.name}</div>
+                    <ul class="room-list">
+                        ${floor.rooms.map(room => `
+                            <li class="room-item">
+                                <span class="room-icon">${room.icon}</span>
+                                <span>${room.name}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+            `).join('');
+            
+            // 부대시설 업데이트
+            const amenitiesGrid = document.getElementById('amenities-grid');
+            amenitiesGrid.innerHTML = data.amenities.map(amenity => `
+                <div class="facility-item">
+                    <div class="facility-header">
+                        <div class="facility-icon">${amenity.icon}</div>
+                        <div class="facility-name">${amenity.name}</div>
+                    </div>
+                    <div class="facility-info">${amenity.info}</div>
+                    <div class="facility-hours">${amenity.hours}</div>
+                    ${amenity.note ? `<div class="facility-note">💡 ${amenity.note}</div>` : ''}
+                </div>
+            `).join('');
+            
+            // 연락처 업데이트
+            const contactList = document.getElementById('contact-list');
+            contactList.innerHTML = data.contacts.map(contact => `
+                <div class="contact-item">
+                    <div class="contact-icon">${contact.icon}</div>
+                    <div class="contact-details">
+                        <div class="contact-name">${contact.name}</div>
+                        <div class="contact-phone">${contact.phone}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function goBack() {
+            if (document.referrer && document.referrer.includes(window.location.origin)) {
+                history.back();
+            } else {
+                window.location.href = '../index.html';
+            }
+        }
+
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            // localStorage 대신 기본값 사용 (샌드박스 환경 대응)
+            let selectedCenter = 'icheon';
+            try {
+                // localStorage가 사용 가능한 경우에만 읽기 시도
+                selectedCenter = localStorage.getItem('selectedCenter') || 'icheon';
+            } catch (e) {
+                // localStorage 접근 실패 시 기본값 사용
+                console.log('localStorage 접근 불가, 기본값(이천) 사용');
+                selectedCenter = 'icheon';
+            }
+            
+            if (selectedCenter && centerData[selectedCenter]) {
+                selectCenter(selectedCenter);
+            } else {
+                selectCenter('icheon'); // 기본값으로 이천 선택
+            }
+            
+            // 애니메이션
+            const sections = document.querySelectorAll('.facility-section, .map-section, .contact-info');
+            sections.forEach((section, index) => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    section.style.transition = 'all 0.6s ease';
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+        });
+    </script>
+</body>
+</html>

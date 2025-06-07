@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📋 출석체크 - SK 멘토 가이드</title>
+    <meta name="theme-color" content="#1976d2">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+            background: #f8f9fa;
+            color: #202124;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1976d2, #42a5f5);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(25, 118, 210, 0.3);
+            position: relative;
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .header .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Section */
+        .section {
+            background: white;
+            margin-bottom: 24px;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-size: 20px;
+            margin-bottom: 16px;
+            color: #1976d2;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* 시간대 선택 */
+        .time-selector {
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            border: 2px solid #1976d2;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .time-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .time-option {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .time-option:hover {
+            border-color: #1976d2;
+            transform: translateY(-2px);
+        }
+
+        .time-option.selected {
+            border-color: #1976d2;
+            background: #e3f2fd;
+        }
+
+        .time-option h3 {
+            color: #1976d2;
+            margin-bottom: 8px;
+        }
+
+        .time-option p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* 출석 현황 */
+        .attendance-form {
+            background: #f8f9fa;
+            border: 2px solid #1976d2;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+
+        .form-section {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            border-left: 4px solid #1976d2;
+        }
+
+        .form-section h4 {
+            color: #1976d2;
+            margin-bottom: 16px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .attendance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .attendance-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-input {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #1976d2;
+            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+        }
+
+        .form-input.error {
+            border-color: #f44336;
+            background-color: #fff5f5;
+        }
+
+        .form-input.valid {
+            border-color: #4caf50;
+            background-color: #f8fff8;
+        }
+
+        /* 특이사항 전용 스타일 */
+        .special-notes-section {
+            grid-column: 1 / -1;
+        }
+
+        .special-notes-textarea {
+            min-height: 120px;
+            max-height: 300px;
+            line-height: 1.5;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            width: 100%;
+        }
+
+        .special-notes-textarea:focus {
+            outline: none;
+            border-color: #1976d2;
+            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+        }
+
+        .character-count {
+            text-align: right;
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .character-count.warning {
+            color: #ff9800;
+        }
+
+        .character-count.error {
+            color: #f44336;
+        }
+
+        /* 기프티콘 지급 */
+        .gifticon-section {
+            background: linear-gradient(135deg, #fff3e0, #fce4ec);
+            border: 2px solid #ff9800;
+            border-radius: 16px;
+            padding: 24px;
+            margin: 16px 0;
+        }
+
+        .gifticon-title {
+            color: #e65100;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+        }
+
+        .gifticon-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .gifticon-item {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #ff9800;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 16px;
+        }
+
+        .gifticon-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .gifticon-number {
+            background: #ff9800;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .remove-gifticon {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s ease;
+        }
+
+        .remove-gifticon:hover {
+            background: #d32f2f;
+        }
+
+        .gifticon-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .gifticon-form .attendance-item:nth-child(4) {
+            grid-column: 1 / -1;
+        }
+
+        .add-gifticon {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(255, 152, 0, 0.3);
+        }
+
+        .add-gifticon:hover {
+            background: linear-gradient(135deg, #f57c00, #ef6c00);
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);
+        }
+
+        /* 제출 섹션 */
+        .submit-section {
+            background: linear-gradient(135deg, #e8f5e8, #f1f8e9);
+            border: 2px solid #4caf50;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 16px 0;
+            text-align: center;
+        }
+
+        .submit-button {
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .submit-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .submit-status {
+            margin-top: 12px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .submit-status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .submit-status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .submit-status.loading {
+            background: #cce7ff;
+            color: #004085;
+            border: 1px solid #b8daff;
+        }
+
+        /* 안내 박스 */
+        .info-box {
+            background: linear-gradient(135deg, #fff3e0, #fce4ec);
+            border: 1px solid #ffb74d;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .info-title {
+            font-weight: 600;
+            color: #e65100;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* 에러 메시지 스타일 */
+        .error-message {
+            color: #f44336;
+            font-size: 12px;
+            margin-top: 4px;
+            min-height: 18px;
+            display: block;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .section {
+                padding: 16px;
+                margin-bottom: 16px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .time-options {
+                grid-template-columns: 1fr;
+            }
+
+            .attendance-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gifticon-form {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .gifticon-form .attendance-item:nth-child(4) {
+                grid-column: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <button class="back-button" onclick="goBack()">← 뒤로가기</button>
+        <h1>📋 출석체크 시스템</h1>
+        <div class="subtitle">오전 9시 & 오후 2시 출석 현황 제출</div>
+    </div>
+
+    <div class="container">
+        <!-- 시간대 선택 -->
+        <div class="section">
+            <h2>⏰ 출석체크 시간대 선택</h2>
+            <div class="time-selector">
+                <div class="time-options">
+                    <div class="time-option" data-time="morning" onclick="selectTime('morning')">
+                        <h3>🌅 오전 출석체크</h3>
+                        <p>오전 9시 기준<br>교육 시작 전 출석 현황</p>
+                    </div>
+                    <div class="time-option" data-time="afternoon" onclick="selectTime('afternoon')">
+                        <h3>🌞 오후 출석체크</h3>
+                        <p>오후 2시 기준<br>점심 후 출석 현황</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 출석 현황 폼 -->
+        <div class="section">
+            <h2>📊 출석 현황 입력</h2>
+            <div class="attendance-form">
+                <div class="form-section">
+                    <h4>👥 출석 인원 현황</h4>
+                    <div class="attendance-grid">
+                        <div class="attendance-item">
+                            <label class="form-label">총 인원</label>
+                            <input type="number" class="form-input" id="totalCount" placeholder="12" min="0" oninput="validateAttendanceNumbers()">
+                        </div>
+                        <div class="attendance-item">
+                            <label class="form-label">출석</label>
+                            <input type="number" class="form-input" id="presentCount" placeholder="11" min="0" oninput="validateAttendanceNumbers()">
+                        </div>
+                        <div class="attendance-item">
+                            <label class="form-label">지각</label>
+                            <input type="number" class="form-input" id="lateCount" placeholder="1" min="0" value="0" oninput="validateAttendanceNumbers()">
+                        </div>
+                        <div class="attendance-item">
+                            <label class="form-label">결석</label>
+                            <input type="number" class="form-input" id="absentCount" placeholder="0" min="0" value="0" oninput="validateAttendanceNumbers()">
+                        </div>
+                        <div class="attendance-item">
+                            <label class="form-label">조퇴</label>
+                            <input type="number" class="form-input" id="earlyLeaveCount" placeholder="0" min="0" value="0" oninput="validateAttendanceNumbers()">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section special-notes-section">
+                    <h4>📝 특이사항</h4>
+                    <textarea class="special-notes-textarea" id="specialNotes" placeholder="지각/결석/조퇴 사유, 컨디션 난조자, 기타 특이사항 등을 자세히 기록해주세요.&#10;&#10;예시:&#10;- 홍길동: 교통체증으로 인한 지각 (15분)&#10;- 김철수: 몸살 기운으로 컨디션 난조&#10;- 이영희: 급한 업무로 인한 조퇴 (16:30)" maxlength="500" oninput="updateCharacterCount()"></textarea>
+                    <div class="character-count" id="notesCharCount">0 / 500자</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 기프티콘 지급 현황 -->
+        <div class="section">
+            <h2>🎁 기프티콘 지급 현황</h2>
+            <div class="gifticon-section">
+                <div class="gifticon-title">🎉 참여 독려 기프티콘 지급</div>
+                
+                <div class="info-box">
+                    <div class="info-title">💡 기프티콘 지급 가이드</div>
+                    <ul style="margin-left: 16px; margin-top: 8px;">
+                        <li>적극적 참여, 우수한 발표, 팀워크 향상 등에 대한 격려</li>
+                        <li>매일 기록할 필요는 없으며, 특별한 경우에만 지급</li>
+                        <li>수령자 정보는 기프티콘 발송을 위해 정확히 기입</li>
+                    </ul>
+                </div>
+
+                <div class="gifticon-list" id="gifticonList">
+                    <!-- 기프티콘 항목들이 동적으로 추가됩니다 -->
+                </div>
+
+                <button class="add-gifticon" onclick="addGifticonItem()">+ 기프티콘 지급 추가</button>
+            </div>
+        </div>
+
+        <!-- 제출 섹션 -->
+        <div class="section">
+            <h2>📤 출석체크 제출</h2>
+            <div class="submit-section">
+                <h3 style="margin-bottom: 16px; color: #2e7d32;">✅ 운영진에게 자동 제출</h3>
+                <p style="margin-bottom: 20px; color: #666;">
+                    제출하기 버튼을 누르면 출석 현황이 운영진에게 자동으로 제출됩니다.<br>
+                    제출 전 내용을 다시 한 번 확인해주세요.
+                </p>
+                
+                <button class="submit-button" onclick="submitAttendance()" id="submitBtn">
+                    📤 운영진에게 제출하기
+                </button>
+                
+                <div class="submit-status" id="submitStatus"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedTime = '';
+        let gifticonCount = 0;
+
+        // Apps Script 관리 클래스
+        class AppsScriptManager {
+            constructor() {
+                // 🔧 여기에 실제 Apps Script 웹앱 URL을 입력하세요
+                this.APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx_sWKPsECUK7VvG9-6p8HNw_7s2h3C_VLxlOn7_PlHaZiRvyJWVAYBrr8nfEPDpIXJTw/exec';
+                this.isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            }
+
+            getAppsScriptUrl() {
+                // 개발 환경에서는 로컬 스토리지 확인
+                if (this.isDevelopment) {
+                    const devUrl = localStorage.getItem('sk-mentor-apps-script-url');
+                    if (devUrl) return devUrl;
+                }
+                
+                // 실제 URL 사용
+                return this.APPS_SCRIPT_URL;
+            }
+
+            createSubmissionData(type, formData) {
+                const mentorInfo = JSON.parse(localStorage.getItem('sk-mentor-info') || '{}');
+                
+                const baseData = {
+                    type: type,
+                    mentorName: mentorInfo.name || localStorage.getItem('sk-mentor-name') || '미입력',
+                    teamNumber: mentorInfo.teamNumber || '',
+                    trainingCenter: mentorInfo.trainingCenter || '',
+                    submittedAt: new Date().toLocaleString('ko-KR')
+                };
+                
+                return { ...baseData, ...formData };
+            }
+
+            async submitData(data) {
+                const url = this.getAppsScriptUrl();
+                
+                if (!url) {
+                    throw new Error('Apps Script URL이 설정되지 않았습니다. 운영진에게 문의해주세요.');
+                }
+
+                console.log('📤 전송 데이터:', data);
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                return { success: true, message: '데이터가 성공적으로 전송되었습니다' };
+            }
+
+            saveOfflineData(data) {
+                const offlineData = JSON.parse(localStorage.getItem('sk-mentor-offline-submissions') || '[]');
+                offlineData.push({
+                    ...data,
+                    id: Date.now(),
+                    status: 'pending',
+                    savedAt: new Date().toISOString()
+                });
+                localStorage.setItem('sk-mentor-offline-submissions', JSON.stringify(offlineData));
+            }
+
+            saveSubmissionRecord(data) {
+                const submissions = JSON.parse(localStorage.getItem('sk-mentor-submissions') || '[]');
+                submissions.push({
+                    ...data,
+                    id: Date.now(),
+                    status: 'submitted'
+                });
+                localStorage.setItem('sk-mentor-submissions', JSON.stringify(submissions));
+            }
+        }
+
+        // 시간대 선택
+        function selectTime(time) {
+            selectedTime = time;
+            
+            // 모든 옵션 비선택
+            document.querySelectorAll('.time-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // 선택된 옵션 표시
+            document.querySelector(`[data-time="${time}"]`).classList.add('selected');
+            
+            // 폼 활성화
+            enableForm();
+        }
+
+        // 폼 활성화
+        function enableForm() {
+            const formInputs = document.querySelectorAll('.form-input, .special-notes-textarea');
+            formInputs.forEach(input => {
+                input.disabled = false;
+            });
+        }
+
+        // 출석 인원 유효성 검사
+        function validateAttendanceNumbers() {
+            const total = parseInt(document.getElementById('totalCount').value) || 0;
+            const present = parseInt(document.getElementById('presentCount').value) || 0;
+            const late = parseInt(document.getElementById('lateCount').value) || 0;
+            const absent = parseInt(document.getElementById('absentCount').value) || 0;
+            const earlyLeave = parseInt(document.getElementById('earlyLeaveCount').value) || 0;
+
+            const sum = present + late + absent + earlyLeave;
+            
+            // 색상 업데이트
+            const inputs = [
+                document.getElementById('totalCount'),
+                document.getElementById('presentCount'),
+                document.getElementById('lateCount'),
+                document.getElementById('absentCount'),
+                document.getElementById('earlyLeaveCount')
+            ];
+
+            inputs.forEach(input => {
+                input.classList.remove('error', 'valid');
+            });
+
+            if (total > 0 && sum === total) {
+                inputs.forEach(input => input.classList.add('valid'));
+            } else if (total > 0 && sum !== total) {
+                inputs.forEach(input => input.classList.add('error'));
+            }
+        }
+
+        // 특이사항 글자수 카운트
+        function updateCharacterCount() {
+            const textarea = document.getElementById('specialNotes');
+            const counter = document.getElementById('notesCharCount');
+            const length = textarea.value.length;
+            
+            counter.textContent = `${length} / 500자`;
+            
+            counter.classList.remove('warning', 'error');
+            if (length > 450) {
+                counter.classList.add('warning');
+            }
+            if (length > 500) {
+                counter.classList.add('error');
+            }
+        }
+
+        // 기프티콘 항목 추가
+        function addGifticonItem() {
+            gifticonCount++;
+            const gifticonList = document.getElementById('gifticonList');
+            
+            const gifticonItem = document.createElement('div');
+            gifticonItem.className = 'gifticon-item';
+            gifticonItem.id = `gifticon-${gifticonCount}`;
+            
+            gifticonItem.innerHTML = `
+                <div class="gifticon-header">
+                    <span class="gifticon-number">#${gifticonCount}</span>
+                    <button class="remove-gifticon" onclick="removeGifticonItem(${gifticonCount})">삭제</button>
+                </div>
+                <div class="gifticon-form">
+                    <div class="attendance-item">
+                        <label class="form-label">이름 <span style="color: red;">*</span></label>
+                        <input type="text" class="form-input" placeholder="홍길동" data-field="name" required oninput="validateGifticonField(this, 'name')">
+                        <div class="error-message" data-error="name"></div>
+                    </div>
+                    <div class="attendance-item">
+                        <label class="form-label">회사</label>
+                        <input type="text" class="form-input" placeholder="SK텔레콤" data-field="company">
+                    </div>
+                    <div class="attendance-item">
+                        <label class="form-label">핸드폰번호 <span style="color: red;">*</span></label>
+                        <input type="tel" class="form-input" placeholder="010-1234-5678" data-field="phone" required oninput="validateGifticonField(this, 'phone')">
+                        <div class="error-message" data-error="phone"></div>
+                    </div>
+                    <div class="attendance-item">
+                        <label class="form-label">지급 사유 <span style="color: red;">*</span></label>
+                        <input type="text" class="form-input" placeholder="적극적인 발표 참여, 우수한 팀워크 등" data-field="reason" required oninput="validateGifticonField(this, 'reason')">
+                        <div class="error-message" data-error="reason"></div>
+                    </div>
+                </div>
+            `;
+            
+            gifticonList.appendChild(gifticonItem);
+        }
+
+        // 기프티콘 항목 삭제
+        function removeGifticonItem(id) {
+            const item = document.getElementById(`gifticon-${id}`);
+            if (item) {
+                item.remove();
+            }
+        }
+
+        // 기프티콘 필드 유효성 검사
+        function validateGifticonField(input, type) {
+            const errorElement = input.parentElement.querySelector(`[data-error="${type}"]`);
+            let isValid = true;
+            let errorMessage = '';
+
+            input.classList.remove('error', 'valid');
+
+            if (input.value.trim()) {
+                switch (type) {
+                    case 'name':
+                        if (input.value.trim().length < 2) {
+                            isValid = false;
+                            errorMessage = '이름은 2글자 이상 입력해주세요.';
+                        }
+                        break;
+                    case 'phone':
+                        if (!validatePhoneNumber(input.value)) {
+                            isValid = false;
+                            errorMessage = '올바른 핸드폰번호 형식으로 입력해주세요. (예: 010-1234-5678)';
+                        }
+                        break;
+                    case 'reason':
+                        if (input.value.trim().length < 2) {
+                            isValid = false;
+                            errorMessage = '지급 사유를 자세히 입력해주세요.';
+                        }
+                        break;
+                }
+
+                if (isValid) {
+                    input.classList.add('valid');
+                } else {
+                    input.classList.add('error');
+                }
+            }
+
+            if (errorElement) {
+                errorElement.textContent = errorMessage;
+            }
+
+            return isValid;
+        }
+
+        // 전체 폼 유효성 검사
+        function validateAllForms() {
+            let isValid = true;
+
+            // 출석 인원 검사
+            const total = parseInt(document.getElementById('totalCount').value) || 0;
+            const present = parseInt(document.getElementById('presentCount').value) || 0;
+            const late = parseInt(document.getElementById('lateCount').value) || 0;
+            const absent = parseInt(document.getElementById('absentCount').value) || 0;
+            const earlyLeave = parseInt(document.getElementById('earlyLeaveCount').value) || 0;
+
+            if (!total || !present) {
+                isValid = false;
+            }
+
+            if (present + late + absent + earlyLeave !== total) {
+                isValid = false;
+            }
+
+            // 기프티콘 필드 검사
+            document.querySelectorAll('.gifticon-item').forEach(item => {
+                const nameInput = item.querySelector('[data-field="name"]');
+                const phoneInput = item.querySelector('[data-field="phone"]');
+                const reasonInput = item.querySelector('[data-field="reason"]');
+
+                if (nameInput.value.trim() || phoneInput.value.trim() || reasonInput.value.trim()) {
+                    if (!validateGifticonField(nameInput, 'name')) isValid = false;
+                    if (!validateGifticonField(phoneInput, 'phone')) isValid = false;
+                    if (!validateGifticonField(reasonInput, 'reason')) isValid = false;
+                }
+            });
+
+            return isValid;
+        }
+
+        // 유효성 검사 함수들
+        function validatePhoneNumber(phone) {
+            const phoneRegex = /^01[0-9]-\d{3,4}-\d{4}$/;
+            const phoneWithoutHyphen = /^01[0-9]\d{7,8}$/;
+            
+            return phoneRegex.test(phone) || phoneWithoutHyphen.test(phone.replace(/-/g, ''));
+        }
+
+        // 출석체크 제출
+        async function submitAttendance() {
+            const appsScript = new AppsScriptManager();
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // 시간대 선택 확인
+            if (!selectedTime) {
+                showSubmitStatus('error', '⚠️ 출석체크 시간대를 선택해주세요.');
+                return;
+            }
+
+            // 출석 데이터 수집
+            const attendanceData = {
+                timeSlot: selectedTime,
+                date: new Date().toLocaleDateString('ko-KR'),
+                totalCount: document.getElementById('totalCount').value,
+                presentCount: document.getElementById('presentCount').value,
+                lateCount: document.getElementById('lateCount').value || '0',
+                absentCount: document.getElementById('absentCount').value || '0',
+                earlyLeaveCount: document.getElementById('earlyLeaveCount').value || '0',
+                specialNotes: document.getElementById('specialNotes').value,
+            };
+
+            // 기프티콘 데이터 수집 및 유효성 검사
+            const gifticonData = [];
+            let hasValidGifticons = true;
+            
+            document.querySelectorAll('.gifticon-item').forEach((item, index) => {
+                const name = item.querySelector('[data-field="name"]')?.value.trim();
+                const company = item.querySelector('[data-field="company"]')?.value.trim();
+                const phone = item.querySelector('[data-field="phone"]')?.value.trim();
+                const reason = item.querySelector('[data-field="reason"]')?.value.trim();
+                
+                if (name || phone || reason) {
+                    if (!name || !phone || !reason) {
+                        hasValidGifticons = false;
+                        showSubmitStatus('error', '⚠️ 기프티콘 정보는 이름, 핸드폰번호, 지급사유를 모두 입력해주세요.');
+                        return;
+                    }
+                    
+                    if (!validatePhoneNumber(phone)) {
+                        hasValidGifticons = false;
+                        showSubmitStatus('error', '⚠️ 올바른 핸드폰번호 형식으로 입력해주세요.');
+                        return;
+                    }
+                    
+                    gifticonData.push({
+                        id: index + 1,
+                        name: name,
+                        company: company || '',
+                        phone: phone,
+                        reason: reason
+                    });
+                }
+            });
+
+            if (!hasValidGifticons) {
+                return;
+            }
+
+            // 최종 제출 데이터 생성 (멘토 정보 포함)
+            const submissionData = appsScript.createSubmissionData('attendance', {
+                attendance: attendanceData,
+                gifticons: gifticonData
+            });
+
+            // 필수 필드 검증
+            if (!attendanceData.totalCount || !attendanceData.presentCount) {
+                showSubmitStatus('error', '⚠️ 총 인원과 출석 인원은 필수 입력 항목입니다.');
+                return;
+            }
+
+            // 출석 인원 논리 검증
+            const total = parseInt(attendanceData.totalCount);
+            const present = parseInt(attendanceData.presentCount);
+            const late = parseInt(attendanceData.lateCount);
+            const absent = parseInt(attendanceData.absentCount);
+            const earlyLeave = parseInt(attendanceData.earlyLeaveCount);
+            
+            if (present + late + absent + earlyLeave !== total) {
+                showSubmitStatus('error', '⚠️ 출석+지각+결석+조퇴 인원의 합이 총 인원과 맞지 않습니다.');
+                return;
+            }
+
+            // 제출 시작
+            submitBtn.disabled = true;
+            showSubmitStatus('loading', '📤 제출 중입니다...');
+
+            try {
+                await appsScript.submitData(submissionData);
+                
+                showSubmitStatus('success', '✅ 출석체크가 성공적으로 제출되었습니다!');
+                clearForm();
+                
+                // 제출 기록 저장
+                appsScript.saveSubmissionRecord(submissionData);
+                
+            } catch (error) {
+                console.error('제출 오류:', error);
+                
+                // 오프라인 저장
+                appsScript.saveOfflineData(submissionData);
+                showSubmitStatus('error', '❌ 인터넷 연결을 확인해주세요. 오프라인으로 임시 저장되었습니다.');
+                
+            } finally {
+                submitBtn.disabled = false;
+            }
+        }
+
+        // 제출 상태 표시
+        function showSubmitStatus(type, message) {
+            const statusDiv = document.getElementById('submitStatus');
+            statusDiv.className = `submit-status ${type}`;
+            statusDiv.textContent = message;
+            statusDiv.style.display = 'block';
+            
+            if (type === 'success') {
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // 폼 초기화
+        function clearForm() {
+            // 시간대 선택 초기화
+            selectedTime = '';
+            document.querySelectorAll('.time-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+
+            // 출석 데이터 초기화
+            document.getElementById('totalCount').value = '';
+            document.getElementById('presentCount').value = '';
+            document.getElementById('lateCount').value = '0';
+            document.getElementById('absentCount').value = '0';
+            document.getElementById('earlyLeaveCount').value = '0';
+            document.getElementById('specialNotes').value = '';
+
+            // 기프티콘 항목 모두 제거
+            document.getElementById('gifticonList').innerHTML = '';
+            gifticonCount = 0;
+
+            // 글자수 카운터 초기화
+            updateCharacterCount();
+
+            // 폼 비활성화
+            const formInputs = document.querySelectorAll('.form-input, .special-notes-textarea');
+            formInputs.forEach(input => {
+                input.disabled = true;
+                input.classList.remove('error', 'valid');
+            });
+        }
+
+        // 뒤로가기
+        function goBack() {
+             if (document.referrer) {
+                 window.history.back();
+             } else {
+                 // 루트 기준으로 index.html 이동
+                 const baseUrl = window.location.origin + window.location.pathname.split('/guides')[0];
+                 window.location.href = baseUrl + '/index.html';
+             }
+        }
+
+        // 개발자용 설정 함수
+        function setAppsScriptUrl(url) {
+            localStorage.setItem('sk-mentor-apps-script-url', url);
+            console.log('🔧 Apps Script URL 설정됨:', url);
+        }
+
+        // 오프라인 데이터 동기화 (페이지 로드시 실행)
+        window.addEventListener('online', async function() {
+            console.log('🌐 인터넷 연결됨 - 오프라인 데이터 동기화 시도');
+            
+            const appsScript = new AppsScriptManager();
+            const offlineData = JSON.parse(localStorage.getItem('sk-mentor-offline-submissions') || '[]');
+            
+            if (offlineData.length > 0) {
+                try {
+                    let successCount = 0;
+                    
+                    for (const submission of offlineData) {
+                        try {
+                            await appsScript.submitData(submission);
+                            appsScript.saveSubmissionRecord(submission);
+                            successCount++;
+                        } catch (error) {
+                            console.error('동기화 실패:', error);
+                            break;
+                        }
+                    }
+                    
+                    if (successCount > 0) {
+                        // 성공한 데이터는 오프라인 저장소에서 제거
+                        const remainingData = offlineData.slice(successCount);
+                        localStorage.setItem('sk-mentor-offline-submissions', JSON.stringify(remainingData));
+                        
+                        if (document.getElementById('submitStatus')) {
+                            showSubmitStatus('success', `✅ 오프라인 중 저장된 ${successCount}건의 데이터가 동기화되었습니다!`);
+                        }
+                    }
+                } catch (error) {
+                    console.error('오프라인 데이터 동기화 실패:', error);
+                }
+            }
+        });
+
+        // 페이지 로드시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            // 폼 비활성화
+            const formInputs = document.querySelectorAll('.form-input, .special-notes-textarea');
+            formInputs.forEach(input => {
+                input.disabled = true;
+            });
+
+            // 글자수 카운터 초기화
+            updateCharacterCount();
+
+            // 기본값 설정
+            document.getElementById('lateCount').value = '0';
+            document.getElementById('absentCount').value = '0';
+            document.getElementById('earlyLeaveCount').value = '0';
+        });
+    </script>
+</body>
+</html>
