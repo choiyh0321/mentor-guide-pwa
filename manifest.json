@@ -1,61 +1,61 @@
 {
-  "name": "SK 멘토 가이드",
-  "short_name": "SK멘토",
-  "description": "2025년 1월 SK그룹 신입구성원과정 멘토를 위한 완전 가이드",
-  "version": "1.0.0",
+  "name": "슬기로운 멘토 생활 가이드",
+  "short_name": "멘토 가이드",
+  "description": "SK그룹 신입구성원과정 멘토를 위한 완전한 가이드",
   "start_url": "/",
   "display": "standalone",
+  "background_color": "#fafafa",
+  "theme_color": "#EA1917",
   "orientation": "portrait-primary",
-  "theme_color": "#EA4335",
-  "background_color": "#ffffff",
   "scope": "/",
   "lang": "ko",
-  "categories": ["education", "business", "productivity"],
+  "dir": "ltr",
+  "categories": ["education", "productivity", "utilities"],
   "icons": [
     {
-      "src": "assets/images/icon-72.png",
+      "src": "/icon-72.png",
       "sizes": "72x72",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "assets/images/icon-96.png", 
+      "src": "/icon-96.png",
       "sizes": "96x96",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "assets/images/icon-128.png",
-      "sizes": "128x128", 
+      "src": "/icon-128.png",
+      "sizes": "128x128",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "assets/images/icon-144.png",
+      "src": "/icon-144.png",
       "sizes": "144x144",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "assets/images/icon-152.png",
+      "src": "/icon-152.png",
       "sizes": "152x152",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "assets/images/icon-192.png",
+      "src": "/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "assets/images/icon-384.png",
+      "src": "/icon-384.png",
       "sizes": "384x384",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "assets/images/icon-512.png",
+      "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -63,74 +63,63 @@
   ],
   "screenshots": [
     {
-      "src": "assets/images/screenshot-mobile.png",
-      "sizes": "375x812",
+      "src": "/screenshot-mobile.png",
+      "sizes": "390x844",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "SK 멘토 가이드 메인 화면"
+      "label": "모바일 메인 화면"
     },
     {
-      "src": "assets/images/screenshot-tablet.png", 
-      "sizes": "768x1024",
+      "src": "/screenshot-desktop.png", 
+      "sizes": "1920x1080",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "SK 멘토 가이드 태블릿 화면"
+      "label": "데스크톱 메인 화면"
     }
   ],
   "shortcuts": [
     {
-      "name": "오늘의 일정",
-      "short_name": "일정",
-      "description": "오늘의 교육 일정 확인",
-      "url": "/#schedule",
+      "name": "출석체크",
+      "short_name": "출석체크",
+      "description": "빠른 출석체크 진행",
+      "url": "/guides/attendance.html",
       "icons": [
         {
-          "src": "assets/icons/schedule.png",
-          "sizes": "96x96"
-        }
-      ]
-    },
-    {
-      "name": "Vision Building",
-      "short_name": "비전빌딩", 
-      "description": "Vision Building 가이드",
-      "url": "/guides/vision-building.html",
-      "icons": [
-        {
-          "src": "assets/icons/vision.png",
-          "sizes": "96x96"
-        }
-      ]
-    },
-    {
-      "name": "기념관 Tour",
-      "short_name": "기념관",
-      "description": "기념관 투어 가이드", 
-      "url": "/guides/memorial-tour.html",
-      "icons": [
-        {
-          "src": "assets/icons/memorial.png",
-          "sizes": "96x96"
+          "src": "/shortcut-attendance.png",
+          "sizes": "96x96",
+          "type": "image/png"
         }
       ]
     },
     {
       "name": "1:1 면담",
       "short_name": "면담",
-      "description": "1:1 면담 가이드",
-      "url": "/guides/interview.html", 
+      "description": "면담 내용 제출",
+      "url": "/guides/interview.html",
       "icons": [
         {
-          "src": "assets/icons/interview.png",
-          "sizes": "96x96"
+          "src": "/shortcut-interview.png",
+          "sizes": "96x96", 
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "오늘의 일정",
+      "short_name": "일정",
+      "description": "오늘의 멘토 일정 확인",
+      "url": "/#schedule-section",
+      "icons": [
+        {
+          "src": "/shortcut-schedule.png",
+          "sizes": "96x96",
+          "type": "image/png"
         }
       ]
     }
   ],
   "related_applications": [],
   "prefer_related_applications": false,
-  "dir": "ltr",
-  "protocol_handlers": [],
   "edge_side_panel": {
     "preferred_width": 400
   }
