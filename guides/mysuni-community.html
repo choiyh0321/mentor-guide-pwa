@@ -3,86 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌐 mySUNI 커뮤니티 - SK 멘토 가이드</title>
-    <link rel="manifest" href="../manifest.json">
-    <meta name="theme-color" content="#EA4335">
-    <link rel="stylesheet" href="../assets/css/main.css">
+    <title>🌐 mySUNI 커뮤니티 가이드</title>
+    <meta name="theme-color" content="#EA1917">
     
+    <script>
+        function goBack() {
+            try {
+                if (window.history.length > 1) {
+                    window.history.back();
+                    return;
+                }
+            } catch (e) {
+                console.log('history.back() 실패:', e);
+            }
+
+            try {
+                const currentUrl = window.location.href;
+                const parentUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
+                if (parentUrl && parentUrl !== currentUrl) {
+                    window.location.href = parentUrl;
+                    return;
+                }
+            } catch (e) {
+                console.log('상위 폴더 이동 실패:', e);
+            }
+
+            try {
+                window.location.href = '../index.html';
+            } catch (e) {
+                console.log('index.html 이동 실패:', e);
+                window.open('../index.html', '_blank');
+            }
+        }
+
+        function openMentorCommunity(event) {
+            event.preventDefault();
+            
+            // mySUNI 멘토과정 커뮤니티 URL (실제 URL로 변경 필요)
+            const mentorCommunityUrl = 'https://mysuni.sk.com/community/mentor-process';
+            
+            // 새 탭에서 열기
+            window.open(mentorCommunityUrl, '_blank');
+            
+            // 사용자에게 안내 메시지 표시
+            showNotification('멘토과정 커뮤니티로 이동합니다. 새 탭에서 열립니다.');
+        }
+
+        function openTraineeCommunity(event) {
+            event.preventDefault();
+            
+            // mySUNI 신입구성원과정 커뮤니티 URL (실제 URL로 변경 필요)
+            const traineeCommunityUrl = 'https://mysuni.sk.com/community/new-employee-process';
+            
+            // 새 탭에서 열기
+            window.open(traineeCommunityUrl, '_blank');
+            
+            // 사용자에게 안내 메시지 표시
+            showNotification('신입구성원과정 커뮤니티로 이동합니다. 새 탭에서 열립니다.');
+        }
+
+        // 알림 메시지 표시 함수
+        function showNotification(message) {
+            // 기존 알림이 있으면 제거
+            const existingNotification = document.querySelector('.community-notification');
+            if (existingNotification) {
+                existingNotification.remove();
+            }
+
+            // 새 알림 생성
+            const notification = document.createElement('div');
+            notification.className = 'community-notification';
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #4CAF50;
+                color: white;
+                padding: 16px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                z-index: 1001;
+                font-size: 14px;
+                max-width: 300px;
+                line-height: 1.4;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // 애니메이션으로 표시
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // 3초 후 자동 제거
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 300);
+            }, 3000);
+        }
+    </script>
+
     <style>
-        .guide-container {
+        :root {
+            --sk-red: #EA1917;
+            --sk-orange: #FF6B35;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --info: #2196F3;
+            --purple: #9C27B0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--sk-orange) 0%, var(--sk-red) 100%);
+            color: white;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .subtitle {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            padding-bottom: 100px;
+            padding-bottom: 60px;
         }
 
-        .guide-header {
-            background: linear-gradient(135deg, #673AB7, #9C27B0);
-            color: white;
-            padding: 30px 20px;
-            border-radius: 16px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .guide-title {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .guide-subtitle {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-
-        .intro-section {
-            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
-            border: 2px solid #9c27b0;
-            border-radius: 16px;
+        .intro-card {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
             padding: 24px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
             text-align: center;
+            border-left: 4px solid var(--sk-red);
         }
 
         .intro-title {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
-            color: #6a1b9a;
+            color: var(--sk-red);
             margin-bottom: 12px;
         }
 
         .intro-text {
-            font-size: 16px;
-            line-height: 1.6;
-            color: #333;
+            color: #555;
+            line-height: 1.5;
         }
 
-        .community-section {
-            background: white;
-            border-radius: 16px;
+        .communities-section {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
             padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            border-left: 4px solid #9c27b0;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+            border-left: 4px solid var(--info);
         }
 
         .section-title {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
-            color: #9c27b0;
-            margin-bottom: 16px;
+            color: var(--info);
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
         .community-card {
-            background: #f8f9fa;
+            background: rgba(255,255,255,0.7);
             border: 2px solid #e0e0e0;
-            border-radius: 12px;
+            border-radius: 16px;
             padding: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             transition: all 0.3s ease;
             cursor: pointer;
             text-decoration: none;
@@ -91,8 +243,8 @@
         }
 
         .community-card:hover {
-            border-color: #9c27b0;
-            background: #f3e5f5;
+            border-color: var(--purple);
+            background: rgba(255,255,255,0.95);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(156, 39, 176, 0.2);
             text-decoration: none;
@@ -100,13 +252,11 @@
         }
 
         .community-card.mentor {
-            border-color: #673ab7;
-            background: linear-gradient(135deg, #ede7f6, #f3e5f5);
+            border-left: 4px solid #673ab7;
         }
 
         .community-card.trainee {
-            border-color: #3f51b5;
-            background: linear-gradient(135deg, #e8eaf6, #f3e5f5);
+            border-left: 4px solid #3f51b5;
         }
 
         .card-header {
@@ -121,7 +271,7 @@
         }
 
         .card-title {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             color: #333;
         }
@@ -143,28 +293,31 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 0;
-            font-size: 14px;
+            padding: 6px 0;
+            font-size: 13px;
             color: #333;
         }
 
         .feature-icon {
-            font-size: 16px;
-            color: #9c27b0;
+            font-size: 14px;
+            color: var(--sk-red);
         }
 
         .access-section {
-            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
-            border: 2px solid #2196f3;
-            border-radius: 16px;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
             padding: 24px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+            border-left: 4px solid var(--success);
         }
 
         .access-title {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
-            color: #1976d2;
+            color: var(--success);
             margin-bottom: 16px;
             display: flex;
             align-items: center;
@@ -180,16 +333,22 @@
             display: flex;
             align-items: flex-start;
             gap: 12px;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 8px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .access-step:hover {
+            transform: translateY(-1px);
+            background: rgba(255, 255, 255, 0.9);
         }
 
         .step-number {
-            background: #2196f3;
+            background: var(--success);
             color: white;
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -212,17 +371,20 @@
         }
 
         .tips-section {
-            background: linear-gradient(135deg, #fff3e0, #fffde7);
-            border: 2px solid #ff9800;
-            border-radius: 16px;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
             padding: 24px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+            border-left: 4px solid var(--warning);
         }
 
         .tips-title {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
-            color: #e65100;
+            color: var(--warning);
             margin-bottom: 16px;
             display: flex;
             align-items: center;
@@ -234,21 +396,38 @@
             align-items: flex-start;
             gap: 12px;
             margin-bottom: 12px;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.8);
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.7);
             border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .tip-item:hover {
+            transform: translateY(-1px);
+            background: rgba(255, 255, 255, 0.9);
         }
 
         .tip-icon {
             font-size: 16px;
             margin-top: 2px;
-            color: #ff9800;
+            color: var(--warning);
         }
 
         .tip-text {
             font-size: 14px;
             line-height: 1.5;
             color: #333;
+        }
+
+        .features-section {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+            border-left: 4px solid var(--sk-orange);
         }
 
         .quick-links {
@@ -259,7 +438,7 @@
         }
 
         .quick-link {
-            background: white;
+            background: rgba(255, 255, 255, 0.7);
             border: 2px solid #e0e0e0;
             border-radius: 12px;
             padding: 12px;
@@ -270,10 +449,12 @@
         }
 
         .quick-link:hover {
-            border-color: #9c27b0;
-            background: #f3e5f5;
+            border-color: var(--sk-orange);
+            background: rgba(255, 255, 255, 0.95);
             transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(156, 39, 176, 0.2);
+            box-shadow: 0 4px 16px rgba(255, 107, 53, 0.2);
+            text-decoration: none;
+            color: inherit;
         }
 
         .link-icon {
@@ -295,54 +476,36 @@
             line-height: 1.3;
         }
 
-        .back-button {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid #e0e0e0;
-            border-radius: 50%;
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 20px;
-            transition: all 0.3s ease;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-        }
-
-        .back-button:hover {
-            background: white;
-            transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        .troubleshoot-section {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+            border-left: 4px solid var(--sk-red);
         }
 
         /* 반응형 */
         @media (max-width: 768px) {
-            .guide-container {
+            .container {
                 padding: 16px;
-                padding-bottom: 100px;
+                padding-bottom: 60px;
             }
             
-            .guide-header {
-                padding: 20px 16px;
+            .title {
+                font-size: 20px;
             }
             
-            .guide-title {
-                font-size: 24px;
-            }
-            
-            .community-section {
+            .communities-section, .access-section, .tips-section, 
+            .features-section, .troubleshoot-section {
                 padding: 20px;
-                margin-bottom: 20px;
+                margin-bottom: 16px;
             }
             
             .community-card {
                 padding: 16px;
-                margin-bottom: 16px;
+                margin-bottom: 12px;
             }
             
             .quick-links {
@@ -370,17 +533,17 @@
     </style>
 </head>
 <body>
-    <button class="back-button" onclick="goBack()">←</button>
-
-    <div class="guide-container">
-        <!-- 헤더 -->
-        <div class="guide-header">
-            <div class="guide-title">🌐 mySUNI 커뮤니티</div>
-            <div class="guide-subtitle">온라인 학습 플랫폼 활용 가이드</div>
+    <div class="header">
+        <div class="header-content">
+            <button class="back-btn" onclick="goBack()">← 뒤로가기</button>
+            <div class="title">🌐 mySUNI 커뮤니티</div>
+            <div class="subtitle">온라인 학습 플랫폼 활용 가이드</div>
         </div>
+    </div>
 
+    <div class="container">
         <!-- 소개 -->
-        <div class="intro-section">
+        <div class="intro-card">
             <div class="intro-title">📚 SK 통합 학습 플랫폼</div>
             <div class="intro-text">
                 mySUNI는 SK 그룹의 통합 온라인 학습 플랫폼으로,<br>
@@ -389,7 +552,7 @@
         </div>
 
         <!-- 커뮤니티 유형 -->
-        <div class="community-section">
+        <div class="communities-section">
             <div class="section-title">
                 <span>👥</span>
                 커뮤니티 구분
@@ -538,8 +701,8 @@
         </div>
 
         <!-- 주요 기능 -->
-        <div class="community-section">
-            <div class="section-title">
+        <div class="features-section">
+            <div class="section-title" style="color: var(--sk-orange);">
                 <span>⚡</span>
                 주요 기능 소개
             </div>
@@ -584,35 +747,35 @@
         </div>
 
         <!-- 문제 해결 -->
-        <div class="tips-section" style="border-color: #f44336; background: linear-gradient(135deg, #ffebee, #fce4ec);">
-            <div class="tips-title" style="color: #c62828;">
+        <div class="troubleshoot-section">
+            <div class="tips-title" style="color: var(--sk-red);">
                 <span>🛠️</span>
                 문제 해결 가이드
             </div>
             
             <div class="tip-item">
-                <div class="tip-icon" style="color: #f44336;">❓</div>
+                <div class="tip-icon" style="color: var(--sk-red);">❓</div>
                 <div class="tip-text">
                     <strong>로그인 문제:</strong> SK 통합 계정 정보를 확인하거나 IT 지원팀에 문의하세요
                 </div>
             </div>
             
             <div class="tip-item">
-                <div class="tip-icon" style="color: #f44336;">🌐</div>
+                <div class="tip-icon" style="color: var(--sk-red);">🌐</div>
                 <div class="tip-text">
                     <strong>접속 오류:</strong> 브라우저 캐시를 삭제하거나 다른 브라우저로 시도해보세요
                 </div>
             </div>
             
             <div class="tip-item">
-                <div class="tip-icon" style="color: #f44336;">👤</div>
+                <div class="tip-icon" style="color: var(--sk-red);">👤</div>
                 <div class="tip-text">
                     <strong>권한 문제:</strong> 커뮤니티 가입 승인이 필요할 수 있으니 운영진에게 문의하세요
                 </div>
             </div>
             
             <div class="tip-item">
-                <div class="tip-icon" style="color: #f44336;">📱</div>
+                <div class="tip-icon" style="color: var(--sk-red);">📱</div>
                 <div class="tip-text">
                     <strong>모바일 이슈:</strong> 앱 업데이트를 확인하거나 모바일 웹 브라우저를 이용하세요
                 </div>
@@ -621,91 +784,9 @@
     </div>
 
     <script>
-        function goBack() {
-            if (document.referrer && document.referrer.includes(window.location.origin)) {
-                history.back();
-            } else {
-                window.location.href = '../index.html';
-            }
-        }
-
-        // 커뮤니티 링크 함수
-        function openMentorCommunity(event) {
-            event.preventDefault();
-            
-            // mySUNI 멘토과정 커뮤니티 URL (실제 URL로 변경 필요)
-            const mentorCommunityUrl = 'https://mysuni.sk.com/community/mentor-process';
-            
-            // 새 탭에서 열기
-            window.open(mentorCommunityUrl, '_blank');
-            
-            // 사용자에게 안내 메시지 표시
-            showNotification('멘토과정 커뮤니티로 이동합니다. 새 탭에서 열립니다.');
-        }
-
-        function openTraineeCommunity(event) {
-            event.preventDefault();
-            
-            // mySUNI 신입구성원과정 커뮤니티 URL (실제 URL로 변경 필요)
-            const traineeCommunityUrl = 'https://mysuni.sk.com/community/new-employee-process';
-            
-            // 새 탭에서 열기
-            window.open(traineeCommunityUrl, '_blank');
-            
-            // 사용자에게 안내 메시지 표시
-            showNotification('신입구성원과정 커뮤니티로 이동합니다. 새 탭에서 열립니다.');
-        }
-
-        // 알림 메시지 표시 함수
-        function showNotification(message) {
-            // 기존 알림이 있으면 제거
-            const existingNotification = document.querySelector('.community-notification');
-            if (existingNotification) {
-                existingNotification.remove();
-            }
-
-            // 새 알림 생성
-            const notification = document.createElement('div');
-            notification.className = 'community-notification';
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: #4CAF50;
-                color: white;
-                padding: 16px 20px;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-                z-index: 1001;
-                font-size: 14px;
-                max-width: 300px;
-                line-height: 1.4;
-                transform: translateX(100%);
-                transition: transform 0.3s ease;
-            `;
-            notification.textContent = message;
-            
-            document.body.appendChild(notification);
-            
-            // 애니메이션으로 표시
-            setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-            }, 100);
-            
-            // 3초 후 자동 제거
-            setTimeout(() => {
-                notification.style.transform = 'translateX(100%)';
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.remove();
-                    }
-                }, 300);
-            }, 3000);
-        }
-
         // 페이지 로드 시 애니메이션
         document.addEventListener('DOMContentLoaded', function() {
-            const sections = document.querySelectorAll('.community-section, .access-section, .tips-section');
+            const sections = document.querySelectorAll('.intro-card, .communities-section, .access-section, .tips-section, .features-section, .troubleshoot-section');
             sections.forEach((section, index) => {
                 section.style.opacity = '0';
                 section.style.transform = 'translateY(30px)';
