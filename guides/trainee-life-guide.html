@@ -8,63 +8,56 @@
     
     <script>
         function goBack() {
-            try {
-                if (window.history.length > 1) {
-                    window.history.back();
-                    return;
-                }
-            } catch (e) {
-                console.log('history.back() 실패:', e);
-            }
-
-            try {
-                const currentUrl = window.location.href;
-                const parentUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
-                if (parentUrl && parentUrl !== currentUrl) {
-                    window.location.href = parentUrl;
-                    return;
-                }
-            } catch (e) {
-                console.log('상위 폴더 이동 실패:', e);
-            }
-
-            try {
+            if (document.referrer && document.referrer !== window.location.href) {
+                history.back();
+            } else {
                 window.location.href = '../index.html';
-            } catch (e) {
-                console.log('index.html 이동 실패:', e);
-                window.open('../index.html', '_blank');
             }
         }
     </script>
 
     <style>
+        /* ===================================================================
+           SK 브랜드 컬러 변수 & 글래스모피즘 기본 스타일 (Daily Opening과 동일)
+           =================================================================== */
         :root {
             --sk-red: #EA1917;
             --sk-orange: #FF6B35;
+            --sk-red-light: #FF4444;
+            --sk-red-dark: #CC1515;
             --success: #4CAF50;
             --warning: #FF9800;
+            --error: #F44336;
             --info: #2196F3;
             --purple: #9C27B0;
+            --gray-50: #FAFAFA;
+            --gray-100: #F5F5F5;
+            --gray-600: #757575;
+            --gray-900: #212121;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
-            color: #333;
+            color: #202124;
             line-height: 1.6;
+            min-height: 100vh;
         }
 
+        /* ===================================================================
+           헤더 - Daily Opening 스타일 완전 동일
+           =================================================================== */
         .header {
             background: linear-gradient(135deg, var(--sk-orange) 0%, var(--sk-red) 100%);
             color: white;
             padding: 20px;
+            box-shadow: 0 10px 40px rgba(234, 25, 23, 0.2);
             position: relative;
             overflow: hidden;
         }
@@ -80,165 +73,171 @@
             pointer-events: none;
         }
 
-        .header-content {
-            position: relative;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .back-btn {
-            position: absolute;
-            left: 0;
-            top: 0;
-            background: rgba(255,255,255,0.2);
-            border: none;
+        .back-button {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
+            padding: 10px 16px;
+            border-radius: 12px;
             cursor: pointer;
-            z-index: 9999;
-        }
-
-        .emergency-btn {
-            position: absolute;
-            right: 0;
-            top: 0;
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            z-index: 9999;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 600;
+            margin-bottom: 16px;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 8px;
+            width: fit-content;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .emergency-btn {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: fit-content;
+            position: absolute;
+            right: 0;
+            top: 0;
         }
 
         .emergency-btn:hover {
-            background: rgba(255,255,255,0.3);
-            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateY(-2px);
         }
 
-        .title {
-            font-size: 24px;
+        .header h1 {
+            font-size: 28px;
             font-weight: 700;
-            margin-bottom: 4px;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .subtitle {
-            opacity: 0.9;
-            font-size: 14px;
+        .header .subtitle {
+            font-size: 16px;
+            opacity: 0.95;
+            font-weight: 400;
         }
 
+        /* ===================================================================
+           컨테이너 & 섹션 - Daily Opening 스타일 적용
+           =================================================================== */
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 24px 20px;
         }
 
-        .warning-banner {
-            background: rgba(255,255,255,0.9);
+        .section {
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 20px;
-            padding: 24px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            color: var(--sk-red);
+            font-size: 22px;
+            font-weight: 700;
             margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* ===================================================================
+           경고 배너
+           =================================================================== */
+        .warning-banner {
+            background: linear-gradient(135deg, rgba(244, 67, 54, 0.1), rgba(255, 87, 34, 0.1));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(244, 67, 54, 0.2);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(244, 67, 54, 0.1);
             text-align: center;
             border-left: 4px solid var(--sk-red);
         }
 
         .warning-title {
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 22px;
+            font-weight: 700;
             color: var(--sk-red);
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 12px;
         }
 
         .warning-text {
             font-size: 14px;
-            color: #666;
+            color: var(--gray-600);
             line-height: 1.5;
-            user-select: text;
+            font-weight: 500;
         }
 
-        .info-section {
-            background: rgba(255,255,255,0.9);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
-            border-left: 4px solid var(--warning);
-        }
-
-        .info-section.strict-rule {
-            border-left-color: var(--sk-red);
-        }
-
-        .info-section.health-section {
-            border-left-color: var(--success);
-        }
-
-        .section-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--warning);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .info-section.strict-rule .section-title {
-            color: var(--sk-red);
-        }
-
-        .info-section.health-section .section-title {
-            color: var(--success);
-        }
-
+        /* ===================================================================
+           규칙 아이템들
+           =================================================================== */
         .rule-item {
             display: flex;
             align-items: flex-start;
             gap: 12px;
             margin-bottom: 16px;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.7);
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
             border-radius: 12px;
+            border-left: 4px solid var(--sk-red);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
             transition: all 0.3s ease;
         }
 
         .rule-item:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 8px 25px rgba(234, 25, 23, 0.15);
         }
 
         .rule-item.critical {
-            background: linear-gradient(135deg, rgba(234, 25, 23, 0.1), rgba(255, 107, 53, 0.1));
-            border-left: 3px solid var(--sk-red);
+            border-left-color: var(--sk-red);
+            background: linear-gradient(135deg, rgba(234, 25, 23, 0.08), rgba(255, 107, 53, 0.08));
         }
 
         .rule-item.warning {
-            background: linear-gradient(135deg, rgba(255, 152, 0, 0.1), rgba(255, 193, 7, 0.1));
-            border-left: 3px solid var(--warning);
+            border-left-color: var(--warning);
+            background: linear-gradient(135deg, rgba(255, 152, 0, 0.08), rgba(255, 193, 7, 0.08));
         }
 
         .rule-item.info {
-            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(129, 199, 132, 0.1));
-            border-left: 3px solid var(--success);
+            border-left-color: var(--success);
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.08), rgba(129, 199, 132, 0.08));
         }
 
         .rule-icon {
@@ -252,23 +251,24 @@
         }
 
         .rule-title {
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 8px;
             color: #333;
-            user-select: text;
+            font-size: 16px;
         }
 
         .rule-description {
             font-size: 14px;
-            line-height: 1.6;
-            color: #666;
+            line-height: 1.5;
+            color: var(--gray-600);
             margin-bottom: 8px;
-            user-select: text;
+            font-weight: 500;
         }
 
         .rule-consequence {
-            background: rgba(234, 25, 23, 0.1);
-            border: 1px solid var(--sk-red);
+            background: linear-gradient(135deg, rgba(244, 67, 54, 0.1), rgba(255, 87, 34, 0.1));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(244, 67, 54, 0.3);
             border-radius: 8px;
             padding: 12px;
             margin-top: 8px;
@@ -278,17 +278,20 @@
         }
 
         .rule-note {
-            background: rgba(255, 152, 0, 0.1);
-            border: 1px solid var(--warning);
+            background: linear-gradient(135deg, rgba(255, 152, 0, 0.1), rgba(255, 183, 77, 0.1));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 152, 0, 0.3);
             border-radius: 8px;
             padding: 12px;
             margin-top: 8px;
             font-size: 13px;
             color: #e65100;
+            font-weight: 500;
         }
 
         .medicine-list {
-            background: rgba(76, 175, 80, 0.1);
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(129, 199, 132, 0.1));
+            backdrop-filter: blur(10px);
             border-radius: 8px;
             padding: 12px;
             margin-top: 8px;
@@ -303,50 +306,187 @@
             font-size: 14px;
             color: #2e7d32;
             margin-bottom: 4px;
+            font-weight: 500;
         }
 
+        /* ===================================================================
+           반응형 디자인 - Daily Opening과 동일
+           =================================================================== */
         @media (max-width: 768px) {
             .container {
-                padding: 16px;
+                padding: 12px 12px;
             }
-
-            .info-section {
-                padding: 20px;
-                margin-bottom: 16px;
+            
+            .section {
+                padding: 16px 16px;
+                margin-bottom: 12px;
+                border-radius: 12px;
             }
+            
+            .header {
+                padding: 16px 16px;
+            }
+            
+            .header h1 {
+                font-size: 22px;
+                margin-bottom: 4px;
+            }
+            
+            .header .subtitle {
+                font-size: 15px;
+            }
+            
+            .section h2 {
+                font-size: 19px;
+                margin-bottom: 12px;
+            }
+            
+            .warning-banner {
+                padding: 16px 16px;
+                margin-bottom: 12px;
+                border-radius: 12px;
+            }
+            
+            .warning-title {
+                font-size: 19px;
+                margin-bottom: 8px;
+            }
+            
+            .warning-text {
+                font-size: 14px;
+            }
+            
+            .rule-item {
+                padding: 12px 14px;
+                margin-bottom: 12px;
+                border-radius: 10px;
+            }
+            
+            .rule-title {
+                font-size: 15px;
+                margin-bottom: 6px;
+            }
+            
+            .rule-description {
+                font-size: 14px;
+            }
+            
+            .rule-consequence,
+            .rule-note {
+                padding: 10px 12px;
+                font-size: 13px;
+                border-radius: 6px;
+            }
+            
+            .medicine-list {
+                padding: 10px 12px;
+                border-radius: 6px;
+            }
+            
+            .back-button,
+            .emergency-btn {
+                padding: 8px 12px;
+                font-size: 13px;
+                margin-bottom: 12px;
+            }
+        }
 
-            .title {
+        @media (max-width: 480px) {
+            .container {
+                padding: 8px 10px;
+            }
+            
+            .header {
+                padding: 14px 12px;
+            }
+            
+            .header h1 {
                 font-size: 20px;
             }
-
-            .rule-item {
-                padding: 12px;
+            
+            .header .subtitle {
+                font-size: 14px;
             }
-
+            
+            .section {
+                padding: 12px 12px;
+                margin-bottom: 8px;
+            }
+            
+            .section h2 {
+                font-size: 17px;
+                margin-bottom: 10px;
+            }
+            
+            .warning-banner {
+                padding: 12px 12px;
+                margin-bottom: 8px;
+            }
+            
+            .warning-title {
+                font-size: 17px;
+            }
+            
+            .rule-item {
+                padding: 10px 12px;
+                margin-bottom: 10px;
+                gap: 8px;
+            }
+            
+            .rule-icon {
+                font-size: 18px;
+            }
+            
+            .rule-title {
+                font-size: 14px;
+            }
+            
             .rule-description {
                 font-size: 13px;
             }
-
+            
+            .back-button,
             .emergency-btn {
-                font-size: 11px;
-                padding: 6px 8px;
-                gap: 2px;
+                padding: 6px 10px;
+                font-size: 12px;
+                margin-bottom: 10px;
             }
+        }
+
+        /* ===================================================================
+           스크롤 스타일 - Daily Opening과 동일
+           =================================================================== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, var(--sk-red), var(--sk-red-light));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, var(--sk-red-dark), var(--sk-red));
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="header-content">
-            <button class="back-btn" onclick="goBack()">← 뒤로가기</button>
-            <div>
-                <div class="title">👥 신입구성원 생활 백서</div>
-                <div class="subtitle">교육기간 중 준수해야 할 규율 및 생활 가이드</div>
-            </div>
-            <button class="emergency-btn" onclick="window.location.href='emergency-contacts.html'">
-                🚨 응급연락처
-            </button>
-        </div>
+        <button class="back-button" onclick="goBack()">
+            <span>←</span>
+            <span>뒤로가기</span>
+        </button>
+        <h1>👥 신입구성원 생활 백서</h1>
+        <div class="subtitle">교육기간 중 준수해야 할 규율 및 생활 가이드</div>
+        <button class="emergency-btn" onclick="window.location.href='emergency-contacts.html'">
+            <span>🚨</span>
+            <span>응급연락처</span>
+        </button>
     </div>
 
     <div class="container">
@@ -363,11 +503,11 @@
         </div>
 
         <!-- 연수원 외출 금지 -->
-        <div class="info-section strict-rule">
-            <div class="section-title">
+        <div class="section">
+            <h2>
                 <span>🚫</span>
                 연수원 외출 규정
-            </div>
+            </h2>
             
             <div class="rule-item critical">
                 <div class="rule-icon">🔒</div>
@@ -394,11 +534,11 @@
         </div>
 
         <!-- 음주 금지 -->
-        <div class="info-section strict-rule">
-            <div class="section-title">
+        <div class="section">
+            <h2>
                 <span>🍺</span>
                 음주 금지 규정
-            </div>
+            </h2>
             
             <div class="rule-item critical">
                 <div class="rule-icon">🚫</div>
@@ -425,11 +565,11 @@
         </div>
 
         <!-- 성희롱 방지 -->
-        <div class="info-section strict-rule">
-            <div class="section-title">
+        <div class="section">
+            <h2>
                 <span>🛡️</span>
                 성희롱 방지
-            </div>
+            </h2>
             
             <div class="rule-item critical">
                 <div class="rule-icon">⚖️</div>
@@ -446,11 +586,11 @@
         </div>
 
         <!-- 개인 차량 이용 -->
-        <div class="info-section">
-            <div class="section-title">
+        <div class="section">
+            <h2>
                 <span>🚗</span>
                 교통 및 이동
-            </div>
+            </h2>
             
             <div class="rule-item warning">
                 <div class="rule-icon">🚫</div>
@@ -465,11 +605,11 @@
         </div>
 
         <!-- 기물 파손 -->
-        <div class="info-section">
-            <div class="section-title">
+        <div class="section">
+            <h2>
                 <span>🏢</span>
                 시설 이용
-            </div>
+            </h2>
             
             <div class="rule-item warning">
                 <div class="rule-icon">💰</div>
@@ -486,11 +626,11 @@
         </div>
 
         <!-- 건강 관리 -->
-        <div class="info-section health-section">
-            <div class="section-title">
+        <div class="section">
+            <h2>
                 <span>🏥</span>
                 건강 관리 및 응급상황
-            </div>
+            </h2>
             
             <div class="rule-item info">
                 <div class="rule-icon">🤒</div>
@@ -532,11 +672,11 @@
         </div>
 
         <!-- 멘토 역할 -->
-        <div class="info-section">
-            <div class="section-title">
+        <div class="section">
+            <h2>
                 <span>👨‍🏫</span>
                 멘토의 역할
-            </div>
+            </h2>
             
             <div class="rule-item info">
                 <div class="rule-icon">📢</div>
@@ -565,7 +705,7 @@
     <script>
         // 페이지 로드 시 애니메이션
         document.addEventListener('DOMContentLoaded', function() {
-            const sections = document.querySelectorAll('.info-section');
+            const sections = document.querySelectorAll('.section');
             sections.forEach((section, index) => {
                 section.style.opacity = '0';
                 section.style.transform = 'translateY(30px)';
@@ -576,6 +716,18 @@
                     section.style.transform = 'translateY(0)';
                 }, index * 150);
             });
+        });
+
+        // 뒤로가기 버튼을 위한 히스토리 관리
+        window.addEventListener('load', function() {
+            if (!document.referrer.includes('index.html')) {
+                history.pushState(null, null, window.location.href);
+            }
+        });
+
+        // 안드로이드 뒤로가기 처리
+        window.addEventListener('popstate', function() {
+            window.location.href = '../index.html';
         });
     </script>
 </body>
