@@ -8,63 +8,56 @@
     
     <script>
         function goBack() {
-            try {
-                if (window.history.length > 1) {
-                    window.history.back();
-                    return;
-                }
-            } catch (e) {
-                console.log('history.back() 실패:', e);
-            }
-
-            try {
-                const currentUrl = window.location.href;
-                const parentUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
-                if (parentUrl && parentUrl !== currentUrl) {
-                    window.location.href = parentUrl;
-                    return;
-                }
-            } catch (e) {
-                console.log('상위 폴더 이동 실패:', e);
-            }
-
-            try {
+            if (document.referrer && document.referrer !== window.location.href) {
+                history.back();
+            } else {
                 window.location.href = '../index.html';
-            } catch (e) {
-                console.log('index.html 이동 실패:', e);
-                window.open('../index.html', '_blank');
             }
         }
     </script>
 
     <style>
+        /* ===================================================================
+           SK 브랜드 컬러 변수 & 글래스모피즘 기본 스타일 (Daily Opening과 동일)
+           =================================================================== */
         :root {
             --sk-red: #EA1917;
             --sk-orange: #FF6B35;
+            --sk-red-light: #FF4444;
+            --sk-red-dark: #CC1515;
             --success: #4CAF50;
             --warning: #FF9800;
+            --error: #F44336;
             --info: #2196F3;
             --purple: #9C27B0;
+            --gray-50: #FAFAFA;
+            --gray-100: #F5F5F5;
+            --gray-600: #757575;
+            --gray-900: #212121;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
-            color: #333;
+            color: #202124;
             line-height: 1.6;
+            min-height: 100vh;
         }
 
+        /* ===================================================================
+           헤더 - Daily Opening 스타일 적용
+           =================================================================== */
         .header {
             background: linear-gradient(135deg, var(--sk-orange) 0%, var(--sk-red) 100%);
             color: white;
             padding: 20px;
+            box-shadow: 0 10px 40px rgba(234, 25, 23, 0.2);
             position: relative;
             overflow: hidden;
         }
@@ -80,122 +73,106 @@
             pointer-events: none;
         }
 
-        .header-content {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-        }
-
-        .back-btn {
-            position: absolute;
-            left: 0;
-            top: 0;
-            background: rgba(255,255,255,0.2);
-            border: none;
+        .back-button {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
+            padding: 10px 16px;
+            border-radius: 12px;
             cursor: pointer;
-            z-index: 9999;
-        }
-
-        .title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .subtitle {
-            opacity: 0.9;
             font-size: 14px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .info-section {
-            background: rgba(255,255,255,0.9);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
-            border-left: 4px solid var(--info);
-        }
-
-        .info-section.accommodation {
-            border-left-color: var(--purple);
-        }
-
-        .info-section.meeting {
-            border-left-color: var(--success);
-        }
-
-        .info-section.transport {
-            border-left-color: var(--warning);
-        }
-
-        .info-section.community {
-            border-left-color: var(--info);
-        }
-
-        .info-section.role {
-            border-left-color: var(--sk-red);
-        }
-
-        .info-section.classroom {
-            border-left-color: var(--purple);
-        }
-
-        .section-title {
-            font-size: 18px;
             font-weight: 600;
-            color: var(--info);
             margin-bottom: 16px;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 8px;
+            width: fit-content;
         }
 
-        .info-section.accommodation .section-title {
-            color: var(--purple);
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateY(-2px);
         }
 
-        .info-section.meeting .section-title {
-            color: var(--success);
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .info-section.transport .section-title {
-            color: var(--warning);
+        .header .subtitle {
+            font-size: 16px;
+            opacity: 0.95;
+            font-weight: 400;
         }
 
-        .info-section.role .section-title {
+        /* ===================================================================
+           컨테이너 & 섹션 - Daily Opening 스타일 적용
+           =================================================================== */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 24px 20px;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
             color: var(--sk-red);
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .info-section.classroom .section-title {
-            color: var(--purple);
+        .section h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: #333;
+            border-left: 4px solid var(--sk-red);
+            padding-left: 16px;
+            font-weight: 600;
         }
 
+        /* ===================================================================
+           정보 아이템 - 새로운 스타일
+           =================================================================== */
         .info-item {
             display: flex;
             align-items: flex-start;
             gap: 12px;
             margin-bottom: 16px;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.7);
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
             border-radius: 12px;
+            border-left: 4px solid var(--sk-red);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
             transition: all 0.3s ease;
         }
 
         .info-item:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 8px 25px rgba(234, 25, 23, 0.15);
         }
 
         .info-icon {
@@ -209,33 +186,66 @@
         }
 
         .info-title {
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 8px;
             color: #333;
-            user-select: text;
+            font-size: 16px;
         }
 
         .info-description {
             font-size: 14px;
-            line-height: 1.6;
-            color: #666;
-            user-select: text;
+            line-height: 1.5;
+            color: var(--gray-600);
+            font-weight: 500;
         }
 
         .info-highlight {
-            background: #fff3e0;
-            border: 1px solid #ff9800;
+            background: linear-gradient(135deg, rgba(255, 152, 0, 0.1), rgba(255, 183, 77, 0.1));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 152, 0, 0.3);
             border-radius: 8px;
             padding: 12px;
             margin-top: 8px;
             font-size: 13px;
             color: #e65100;
+            font-weight: 500;
         }
 
+        /* ===================================================================
+           색상별 섹션 테마 (멘토 생활 백서 고유)
+           =================================================================== */
+        .section.accommodation .info-item {
+            border-left-color: var(--purple);
+        }
+
+        .section.meeting .info-item {
+            border-left-color: var(--success);
+        }
+
+        .section.transport .info-item {
+            border-left-color: var(--warning);
+        }
+
+        .section.community .info-item {
+            border-left-color: var(--info);
+        }
+
+        .section.role .info-item {
+            border-left-color: var(--sk-red);
+        }
+
+        .section.classroom .info-item {
+            border-left-color: var(--purple);
+        }
+
+        /* ===================================================================
+           센터 선택기
+           =================================================================== */
         .center-selector {
             margin-top: 12px;
             padding: 12px;
-            background: rgba(255, 152, 0, 0.1);
+            background: linear-gradient(135deg, rgba(255, 152, 0, 0.1), rgba(255, 183, 77, 0.1));
+            backdrop-filter: blur(10px);
             border-radius: 8px;
             border: 1px solid rgba(255, 152, 0, 0.2);
         }
@@ -255,6 +265,9 @@
             font-size: 14px;
         }
 
+        /* ===================================================================
+           레이아웃 컨테이너 & 이미지
+           =================================================================== */
         .layout-container {
             margin-top: 16px;
         }
@@ -271,27 +284,29 @@
         }
 
         .layout-note {
-            background: #fff3e0;
-            border: 1px solid #ff9800;
+            background: linear-gradient(135deg, rgba(255, 152, 0, 0.1), rgba(255, 183, 77, 0.1));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 152, 0, 0.3);
             border-radius: 8px;
             padding: 12px;
             font-size: 13px;
             color: #e65100;
             text-align: center;
             margin-top: 12px;
+            font-weight: 500;
         }
 
-        .layout-display {
-            background: linear-gradient(135deg, #f3e5f5, #fce4ec);
-            border-left-color: var(--purple);
-        }
-
+        /* ===================================================================
+           퀵 팁 박스
+           =================================================================== */
         .quick-tip {
-            background: linear-gradient(135deg, #fff8e1, #f3e5ab);
-            border: 2px solid #ffa726;
-            border-radius: 12px;
-            padding: 16px;
-            margin: 16px 0;
+            background: linear-gradient(135deg, rgba(255, 152, 0, 0.1), rgba(255, 183, 77, 0.1));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 152, 0, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 20px rgba(255, 152, 0, 0.1);
             display: flex;
             align-items: flex-start;
             gap: 12px;
@@ -307,9 +322,13 @@
         }
 
         .quick-tip-title {
-            font-weight: 600;
+            font-weight: 700;
             color: #e65100;
-            margin-bottom: 4px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
         }
 
         .quick-tip-text {
@@ -317,68 +336,65 @@
             color: #333;
             line-height: 1.5;
             user-select: text;
+            font-weight: 500;
         }
 
         /* ===================================================================
-           모바일 최적화 - Daily Opening 스타일 적용
+           반응형 디자인 - Daily Opening 스타일 적용
            =================================================================== */
-           @media (max-width: 768px) {
-            /* 기본 컨테이너 */
+        @media (max-width: 768px) {
             .container {
-                padding: 12px 12px; /* 좌우 여백 확보 */
+                padding: 12px 12px;
             }
             
-            /* 헤더 */
+            .section {
+                padding: 16px 16px;
+                margin-bottom: 12px;
+                border-radius: 12px;
+            }
+            
             .header {
-                padding: 20px 16px; /* Daily Opening과 맞춤: 상하 20px */
+                padding: 16px 16px;
             }
             
-            .title {
-                font-size: 22px; /* 제목 크기 조정 */
+            .header h1 {
+                font-size: 22px;
                 margin-bottom: 4px;
             }
             
-            .subtitle {
-                font-size: 15px; /* 부제목 크기 조정 */
+            .header .subtitle {
+                font-size: 15px;
             }
             
-            /* 뒤로가기 버튼 */
-            .back-btn {
-                padding: 8px 12px;
-                font-size: 13px;
-            }
-            
-            /* 정보 섹션 */
-            .info-section {
-                padding: 16px 16px; /* 적당한 내부 여백 */
-                margin-bottom: 12px; /* 섹션 간 간격 줄임 */
-                border-radius: 12px; /* 둥근 모서리 축소 */
-            }
-            
-            .section-title {
-                font-size: 19px; /* 17px → 19px (Daily Opening과 동일) */
+            .section h2 {
+                font-size: 19px;
                 margin-bottom: 12px;
             }
             
-            /* 정보 아이템 */
+            .section h3 {
+                font-size: 17px;
+                margin-bottom: 10px;
+            }
+            
+            /* 정보 아이템 최적화 */
             .info-item {
-                padding: 12px 14px; /* 컴팩트하게 */
+                padding: 12px 14px;
                 margin-bottom: 12px;
                 border-radius: 10px;
                 gap: 10px;
             }
             
             .info-icon {
-                font-size: 18px; /* 아이콘 크기 축소 */
+                font-size: 18px;
             }
             
             .info-title {
-                font-size: 15px; /* 제목 크기 조정 */
+                font-size: 15px;
                 margin-bottom: 6px;
             }
             
             .info-description {
-                font-size: 14px; /* Daily Opening과 동일 */
+                font-size: 14px;
                 line-height: 1.5;
             }
             
@@ -418,7 +434,7 @@
             
             /* 퀵 팁 */
             .quick-tip {
-                padding: 12px 16px; /* 좌우 여백 늘림 */
+                padding: 12px 16px;
                 margin: 12px 0;
                 border-radius: 10px;
                 gap: 10px;
@@ -434,16 +450,12 @@
             }
             
             .quick-tip-text {
-                font-size: 14px; /* Daily Opening과 동일 */
+                font-size: 14px;
                 line-height: 1.4;
             }
         }
 
-        /* ===================================================================
-           초소형 모바일 최적화 - 480px 이하
-           =================================================================== */
         @media (max-width: 480px) {
-            /* 더 컴팩트한 레이아웃 */
             .container {
                 padding: 8px 10px;
             }
@@ -452,27 +464,28 @@
                 padding: 14px 12px;
             }
             
-            .title {
+            .header h1 {
                 font-size: 20px;
             }
             
-            .subtitle {
+            .header .subtitle {
                 font-size: 14px;
             }
             
-            .info-section {
+            .section {
                 padding: 12px 12px;
                 margin-bottom: 8px;
             }
             
-            .section-title {
-                font-size: 16px;
+            .section h2 {
+                font-size: 17px;
                 margin-bottom: 10px;
             }
             
-            .back-btn {
-                padding: 6px 10px;
-                font-size: 12px;
+            .back-button {
+                padding: 6px 12px;
+                font-size: 13px;
+                margin-bottom: 10px;
             }
             
             /* 정보 아이템 추가 최적화 */
@@ -516,81 +529,44 @@
         }
 
         /* ===================================================================
-           터치 친화적 요소 크기
+           스크롤 스타일 - Daily Opening과 동일
            =================================================================== */
-        @media (max-width: 768px) {
-            /* 버튼 최소 크기 확보 */
-            button, .btn {
-                min-height: 44px;
-                min-width: 44px;
-            }
-            
-            /* 터치 요소 패딩 증가 */
-            .info-item {
-                min-height: 60px; /* 터치하기 편한 크기 */
-            }
-            
-            /* 링크 터치 영역 확보 */
-            a {
-                padding: 4px 2px;
-                margin: -4px -2px;
-            }
-            
-            /* 셀렉트 박스 터치 최적화 */
-            select {
-                min-height: 44px;
-                font-size: 16px !important; /* iOS 줌 방지 */
-            }
+        ::-webkit-scrollbar {
+            width: 8px;
         }
 
-        /* ===================================================================
-           모바일 애니메이션 최적화
-           =================================================================== */
-        @media (max-width: 768px) {
-            /* 모바일에서 애니메이션 단순화 */
-            * {
-                transition-duration: 0.2s !important;
-            }
-            
-            /* hover 효과 제거 (터치 디바이스) */
-            @media (hover: none) {
-                .info-item:hover {
-                    transform: none !important;
-                    box-shadow: initial !important;
-                }
-            }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
         }
 
-        /* ===================================================================
-           스크롤바 모바일 최적화
-           =================================================================== */
-        @media (max-width: 768px) {
-            ::-webkit-scrollbar {
-                width: 4px; /* 더 얇게 */
-            }
-            
-            ::-webkit-scrollbar-thumb {
-                border-radius: 2px;
-            }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, var(--sk-red), var(--sk-red-light));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, var(--sk-red-dark), var(--sk-red));
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="header-content">
-            <button class="back-btn" onclick="goBack()">← 뒤로가기</button>
-            <div class="title">👨‍🏫 멘토 생활 백서</div>
-            <div class="subtitle">신입구성원과정 기간 중 멘토 생활 가이드</div>
-        </div>
+        <button class="back-button" onclick="goBack()">
+            <span>←</span>
+            <span>뒤로가기</span>
+        </button>
+        <h1>👨‍🏫 멘토 생활 백서</h1>
+        <div class="subtitle">신입구성원과정 기간 중 멘토 생활 가이드</div>
     </div>
 
     <div class="container">
         <!-- 숙소 지원 -->
-        <div class="info-section accommodation">
-            <div class="section-title">
+        <div class="section accommodation">
+            <h2>
                 <span>🏠</span>
                 숙소 지원 안내
-            </div>
+            </h2>
             
             <div class="info-item">
                 <div class="info-icon">🛏️</div>
@@ -620,11 +596,11 @@
         </div>
 
         <!-- 운영진과의 미팅 -->
-        <div class="info-section meeting">
-            <div class="section-title">
+        <div class="section meeting">
+            <h2>
                 <span>🤝</span>
                 운영진과의 미팅
-            </div>
+            </h2>
             
             <div class="info-item">
                 <div class="info-icon">⏰</div>
@@ -642,11 +618,11 @@
         </div>
 
         <!-- 교통 및 이동 -->
-        <div class="info-section transport">
-            <div class="section-title">
+        <div class="section transport">
+            <h2>
                 <span>🚌</span>
                 교통 및 이동 안내
-            </div>
+            </h2>
             
             <div class="info-item">
                 <div class="info-icon">📍</div>
@@ -675,11 +651,11 @@
         </div>
 
         <!-- mySUNI 커뮤니티 -->
-        <div class="info-section community">
-            <div class="section-title">
+        <div class="section community">
+            <h2>
                 <span>💻</span>
                 mySUNI 커뮤니티 활용
-            </div>
+            </h2>
             
             <div class="info-item">
                 <div class="info-icon">👨‍🏫</div>
@@ -705,11 +681,11 @@
         </div>
 
         <!-- 멘토 역할 및 업무 -->
-        <div class="info-section role">
-            <div class="section-title">
+        <div class="section role">
+            <h2>
                 <span>📋</span>
                 멘토 주요 역할
-            </div>
+            </h2>
             
             <div class="info-item">
                 <div class="info-icon">📊</div>
@@ -748,11 +724,11 @@
         </div>
 
         <!-- 분과장 관리 -->
-        <div class="info-section classroom">
-            <div class="section-title">
+        <div class="section classroom">
+            <h2>
                 <span>🏫</span>
                 분과장 운영 가이드
-            </div>
+            </h2>
             
             <div class="info-item">
                 <div class="info-icon">📐</div>
@@ -764,7 +740,7 @@
                 </div>
             </div>
             
-            <div class="info-item layout-display">
+            <div class="info-item">
                 <div class="info-content">
                     <div class="info-title">📐 기본 Layout 예시</div>
                     <div class="layout-container">
@@ -864,7 +840,7 @@
 
         // 페이지 로드 시 애니메이션
         document.addEventListener('DOMContentLoaded', function() {
-            const sections = document.querySelectorAll('.info-section');
+            const sections = document.querySelectorAll('.section');
             sections.forEach((section, index) => {
                 section.style.opacity = '0';
                 section.style.transform = 'translateY(30px)';
@@ -878,6 +854,19 @@
 
             // setup.html에서 설정된 연수원에 따라 교통 정보 로드
             loadTransportInfo();
+        });
+
+        // 뒤로가기 버튼을 위한 히스토리 관리
+        window.addEventListener('load', function() {
+            // 홈에서 온 것이 아니라면 히스토리 스택에 홈 추가
+            if (!document.referrer.includes('index.html')) {
+                history.pushState(null, null, window.location.href);
+            }
+        });
+
+        // 안드로이드 뒤로가기 처리
+        window.addEventListener('popstate', function() {
+            window.location.href = '../index.html';
         });
     </script>
 </body>
