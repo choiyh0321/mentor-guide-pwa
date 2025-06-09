@@ -1,5 +1,5 @@
 // 서비스 워커 버전
-const CACHE_NAME = 'sk-mentor-guide-v1.0.1';
+const CACHE_NAME = 'sk-mentor-guide-v1.0.2';
 const APP_PREFIX = 'sk-mentor-';
 
 // 캐시할 파일들
