@@ -201,6 +201,16 @@
             color: var(--gray-600);
             line-height: 1.5;
             font-weight: 500;
+            word-break: keep-all;
+            word-wrap: break-word;
+        }
+
+        .desktop-text {
+            display: block;
+        }
+
+        .mobile-text {
+            display: none;
         }
 
         /* ===================================================================
@@ -313,6 +323,14 @@
            반응형 디자인 - Daily Opening과 동일
            =================================================================== */
         @media (max-width: 768px) {
+            .desktop-text {
+                display: none;
+            }
+
+            .mobile-text {
+                display: block;
+            }
+            
             .container {
                 padding: 12px 12px;
             }
@@ -511,8 +529,11 @@
                 중요 안내사항
             </div>
             <div class="warning-text">
-                교육기간 중 안전과 질서 유지를 위해 반드시 준수해야 할 규칙들입니다.<br/>
-                위반 시 즉시 소속 회사에 통보되며 징계 조치될 수 있습니다.
+                <span class="desktop-text">교육기간 중 안전과 질서 유지를 위해 반드시 준수해야 할 규칙들입니다. 위반 시 즉시 소속 회사에 통보되며 징계 조치될 수 있습니다.</span>
+                <span class="mobile-text">교육기간 중 안전과 질서 유지를 위해<br/>
+                반드시 준수해야 할 규칙들입니다.<br/>
+                위반 시 즉시 소속 회사에 통보되며<br/>
+                징계 조치될 수 있습니다.</span>
             </div>
         </div>
 
