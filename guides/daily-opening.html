@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🌅 Daily Opening 가이드 - SK 멘토 가이드</title>
     <meta name="theme-color" content="#EA4335">
+    
+    <!-- 🔧 goBack 함수를 헤더 앞으로 이동 -->
+    <script>
+        function goBack() {
+            if (document.referrer && document.referrer !== window.location.href) {
+                history.back();
+            } else {
+                window.location.href = '../index.html';
+            }
+        }
+    </script>
+    
     <style>
         /* ===================================================================
            SK 브랜드 컬러 변수 & 글래스모피즘 기본 스타일
@@ -39,12 +51,12 @@
         }
 
         /* ===================================================================
-           헤더 - SK 브랜드 그라데이션
+           헤더 - SK 브랜드 그라데이션 (패딩 수정: 32px → 20px)
            =================================================================== */
         .header {
             background: linear-gradient(135deg, var(--sk-orange) 0%, var(--sk-red) 100%);
             color: white;
-            padding: 32px 20px;
+            padding: 20px;
             box-shadow: 0 10px 40px rgba(234, 25, 23, 0.2);
             position: relative;
             overflow: hidden;
@@ -71,7 +83,7 @@
             cursor: pointer;
             font-size: 14px;
             font-weight: 600;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
@@ -472,64 +484,207 @@
         }
 
         /* ===================================================================
-           반응형 디자인
+           반응형 디자인 - 모바일 최적화
            =================================================================== */
         @media (max-width: 768px) {
             .container {
-                padding: 16px;
+                padding: 12px 8px; /* 16px → 12px/8px */
             }
             
             .section {
-                padding: 20px;
-                margin-bottom: 20px;
+                padding: 16px 12px; /* 20px → 16px/12px */
+                margin-bottom: 12px; /* 20px → 12px */
+                border-radius: 12px; /* 20px → 12px */
             }
             
             .header {
-                padding: 24px 16px;
+                padding: 16px 12px; /* 20px → 16px/12px */
             }
             
             .header h1 {
-                font-size: 24px;
+                font-size: 20px; /* 24px → 20px */
+                margin-bottom: 4px; /* 8px → 4px */
             }
             
+            .header .subtitle {
+                font-size: 14px; /* 16px → 14px */
+            }
+            
+            .section h2 {
+                font-size: 18px; /* 22px → 18px */
+                margin-bottom: 12px; /* 20px → 12px */
+            }
+            
+            .section h3 {
+                font-size: 16px; /* 18px → 16px */
+                margin-bottom: 10px; /* 16px → 10px */
+            }
+            
+            /* 체크리스트 최적화 */
+            .checklist {
+                padding: 12px; /* 20px → 12px */
+                border-radius: 10px; /* 16px → 10px */
+            }
+            
+            .checklist-item {
+                padding: 8px 10px; /* 12px 16px → 8px 10px */
+                margin-bottom: 8px; /* 12px → 8px */
+                border-radius: 8px; /* 12px → 8px */
+            }
+            
+            /* 일정 안내 최적화 */
+            .schedule-info {
+                padding: 16px; /* 24px → 16px */
+                margin-bottom: 12px; /* 20px → 12px */
+                border-radius: 12px; /* 16px → 12px */
+            }
+            
+            .schedule-dates {
+                font-size: 16px; /* 20px → 16px */
+                margin-bottom: 6px; /* 8px → 6px */
+            }
+            
+            .schedule-note {
+                font-size: 13px; /* 14px → 13px */
+            }
+            
+            /* 타임라인 최적화 */
             .timeline {
-                padding-left: 28px;
+                padding-left: 24px; /* 28px → 24px */
             }
             
             .timeline::before {
-                left: 10px;
+                left: 8px; /* 10px → 8px */
+            }
+            
+            .timeline-item {
+                padding: 12px; /* 20px → 12px */
+                margin-bottom: 16px; /* 28px → 16px */
+                border-radius: 10px; /* 16px → 10px */
             }
             
             .timeline-item::before {
-                left: -30px;
+                left: -26px; /* -30px → -26px */
+                width: 12px; /* 16px → 12px */
+                height: 12px; /* 16px → 12px */
             }
             
+            .time-badge {
+                font-size: 11px; /* 12px → 11px */
+                padding: 4px 8px; /* 6px 14px → 4px 8px */
+                margin-bottom: 8px; /* 12px → 8px */
+            }
+            
+            .activity-title {
+                font-size: 14px; /* 16px → 14px */
+                margin-bottom: 4px; /* 8px → 4px */
+            }
+            
+            .activity-description {
+                font-size: 12px; /* 14px → 12px */
+            }
+            
+            /* 단계별 리스트 최적화 */
             .step-list li {
-                padding-left: 40px;
+                padding-left: 32px; /* 40px → 32px */
+                margin-bottom: 10px; /* 16px → 10px */
+                font-size: 14px; /* 기본 → 14px */
             }
             
             .step-list li::before {
-                width: 28px;
-                height: 28px;
-                font-size: 12px;
+                width: 24px; /* 28px → 24px */
+                height: 24px; /* 28px → 24px */
+                font-size: 11px; /* 12px → 11px */
+            }
+            
+            .step-list ul {
+                margin-top: 8px; /* 12px → 8px */
+            }
+            
+            .step-list ul li {
+                padding-left: 16px; /* 20px → 16px */
+                margin-bottom: 6px; /* 8px → 6px */
+                font-size: 13px; /* 기본 → 13px */
+            }
+            
+            /* Tips 박스 최적화 */
+            .tip-box {
+                padding: 12px; /* 20px → 12px */
+                margin: 12px 0; /* 20px → 12px */
+                border-radius: 10px; /* 16px → 10px */
+            }
+            
+            .tip-title {
+                font-size: 14px; /* 16px → 14px */
+                margin-bottom: 8px; /* 12px → 8px */
+            }
+            
+            .tip-box li {
+                font-size: 13px; /* 기본 → 13px */
+                margin-bottom: 6px; /* 8px → 6px */
+            }
+            
+            /* Biz Manner 예시 최적화 */
+            .manner-examples {
+                padding: 12px; /* 16px → 12px */
+                margin: 12px 0; /* 20px → 12px */
+                border-radius: 10px; /* 16px → 10px */
+            }
+            
+            .manner-topic {
+                padding: 10px 12px; /* 16px 20px → 10px 12px */
+                margin-bottom: 10px; /* 16px → 10px */
+                border-radius: 8px; /* 12px → 8px */
+            }
+            
+            .manner-topic h5 {
+                font-size: 14px; /* 15px → 14px */
+                margin-bottom: 6px; /* 8px → 6px */
+            }
+            
+            .manner-topic p {
+                font-size: 12px; /* 14px → 12px */
+            }
+            
+            /* 응급상황 섹션 최적화 */
+            .emergency-section {
+                padding: 12px; /* 20px → 12px */
+                margin: 12px 0; /* 20px → 12px */
+                border-radius: 10px; /* 16px → 10px */
             }
         }
 
         @media (max-width: 480px) {
+            .container {
+                padding: 8px 6px; /* 더 작은 화면에서 추가 여백 줄이기 */
+            }
+            
+            .header {
+                padding: 14px 8px; /* 16px 12px → 14px 8px */
+            }
+            
             .header h1 {
-                font-size: 20px;
+                font-size: 18px; /* 20px → 18px */
+            }
+            
+            .header .subtitle {
+                font-size: 13px; /* 14px → 13px */
             }
             
             .section {
-                padding: 16px;
+                padding: 12px 8px; /* 16px 12px → 12px 8px */
+                margin-bottom: 8px; /* 12px → 8px */
             }
             
             .section h2 {
-                font-size: 18px;
+                font-size: 16px; /* 18px → 16px */
+                margin-bottom: 10px; /* 12px → 10px */
             }
             
-            .manner-examples {
-                padding: 16px;
+            .back-button {
+                padding: 6px 10px; /* 10px 16px → 6px 10px */
+                font-size: 12px; /* 14px → 12px */
+                margin-bottom: 10px; /* 16px → 10px */
             }
         }
 
@@ -760,13 +915,6 @@
     </div>
 
     <script>
-        function goBack() {
-            if (document.referrer && document.referrer !== window.location.href) {
-                history.back();
-            } else {
-                window.location.href = '../index.html';
-            }
-        }
         // 체크리스트 상태 저장 및 진행률 표시
         document.addEventListener('DOMContentLoaded', function() {
             const checkboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -862,3 +1010,6 @@
             }
             window.location.href = '../index.html';
         });
+    </script>
+</body>
+</html>
