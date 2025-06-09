@@ -3,6 +3,22 @@
  * @version 2.0.0
  */
 
+// 기존 서비스 워커 모두 삭제
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(registrations => {
+    registrations.forEach(registration => {
+      registration.unregister();
+    });
+  });
+  
+  // 캐시도 모두 삭제
+  caches.keys().then(names => {
+    names.forEach(name => {
+      caches.delete(name);
+    });
+  });
+}
+
 // =================================================================
 // Google Sheets 서비스 클래스
 // =================================================================
