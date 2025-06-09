@@ -221,31 +221,38 @@
 
         .attendance-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
             margin-bottom: 16px;
         }
 
         .attendance-item {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
+            min-width: 0; /* 그리드 오버플로우 방지 */
         }
 
         .form-label {
             font-weight: 600;
             color: #333;
-            font-size: 14px;
+            font-size: 13px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .form-input {
-            padding: 12px;
+            padding: 10px 8px;
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 14px;
             font-family: inherit;
             transition: all 0.3s ease;
             background: rgba(255,255,255,0.9);
+            width: 100%;
+            min-width: 0; /* 입력 필드 축소 허용 */
+            box-sizing: border-box;
         }
 
         .form-input:focus {
@@ -526,19 +533,27 @@
             }
 
             .attendance-grid {
-                grid-template-columns: 1fr;
-                gap: 12px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .attendance-item {
+                gap: 4px;
+            }
+
+            .form-label {
+                font-size: 12px;
             }
 
             .form-input {
-                font-size: 16px; /* iOS 줌 방지 */
-                padding: 14px 12px;
+                font-size: 15px; /* iOS 줌 방지 */
+                padding: 12px 8px;
             }
 
             .special-notes-textarea {
-                font-size: 16px; /* iOS 줌 방지 */
+                font-size: 15px; /* iOS 줌 방지 */
                 min-height: 100px;
-                padding: 14px 12px;
+                padding: 12px 8px;
             }
 
             .gifticon-form {
@@ -605,10 +620,54 @@
                 padding: 12px;
             }
 
+            .attendance-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            .attendance-item {
+                gap: 3px;
+            }
+
+            .form-label {
+                font-size: 11px;
+                line-height: 1.2;
+            }
+
+            .form-input {
+                font-size: 16px; /* iOS 줌 방지 */
+                padding: 10px 6px;
+                min-height: 40px;
+            }
+
             .gifticon-header {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 8px;
+            }
+
+            .form-section {
+                padding: 12px;
+            }
+
+            .attendance-form, .time-selector, .gifticon-section, .submit-section {
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .attendance-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .form-input {
+                padding: 12px 8px;
+                font-size: 16px;
+            }
+
+            .form-label {
+                font-size: 12px;
             }
         }
     </style>
