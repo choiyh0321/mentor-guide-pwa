@@ -10,14 +10,6 @@ if ('serviceWorker' in navigator) {
       registration.unregister();
     });
   });
-  
-  // 캐시도 모두 삭제
-  caches.keys().then(names => {
-    names.forEach(name => {
-      caches.delete(name);
-    });
-  });
-}
 
 // =================================================================
 // Google Sheets 서비스 클래스
