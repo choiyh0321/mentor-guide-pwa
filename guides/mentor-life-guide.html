@@ -319,44 +319,258 @@
             user-select: text;
         }
 
-        @media (max-width: 768px) {
+        /* ===================================================================
+           모바일 최적화 - Daily Opening 스타일 적용
+           =================================================================== */
+           @media (max-width: 768px) {
+            /* 기본 컨테이너 */
             .container {
-                padding: 16px;
+                padding: 12px 12px; /* 좌우 여백 확보 */
             }
-
-            .info-section {
-                padding: 20px;
-                margin-bottom: 16px;
+            
+            /* 헤더 */
+            .header {
+                padding: 20px 16px; /* Daily Opening과 맞춤: 상하 20px */
             }
-
+            
             .title {
-                font-size: 20px;
+                font-size: 22px; /* 제목 크기 조정 */
+                margin-bottom: 4px;
             }
-
-            .info-item {
-                padding: 12px;
+            
+            .subtitle {
+                font-size: 15px; /* 부제목 크기 조정 */
             }
-
-            .info-description {
+            
+            /* 뒤로가기 버튼 */
+            .back-btn {
+                padding: 8px 12px;
                 font-size: 13px;
             }
-
-            .layout-image {
-                max-width: 400px;
+            
+            /* 정보 섹션 */
+            .info-section {
+                padding: 16px 16px; /* 적당한 내부 여백 */
+                margin-bottom: 12px; /* 섹션 간 간격 줄임 */
+                border-radius: 12px; /* 둥근 모서리 축소 */
             }
-
-            .layout-note {
-                font-size: 12px;
-                padding: 10px;
+            
+            .section-title {
+                font-size: 19px; /* 17px → 19px (Daily Opening과 동일) */
+                margin-bottom: 12px;
             }
-
+            
+            /* 정보 아이템 */
+            .info-item {
+                padding: 12px 14px; /* 컴팩트하게 */
+                margin-bottom: 12px;
+                border-radius: 10px;
+                gap: 10px;
+            }
+            
+            .info-icon {
+                font-size: 18px; /* 아이콘 크기 축소 */
+            }
+            
+            .info-title {
+                font-size: 15px; /* 제목 크기 조정 */
+                margin-bottom: 6px;
+            }
+            
+            .info-description {
+                font-size: 14px; /* Daily Opening과 동일 */
+                line-height: 1.5;
+            }
+            
+            /* 하이라이트 박스 */
+            .info-highlight {
+                padding: 10px 12px;
+                margin-top: 6px;
+                border-radius: 6px;
+                font-size: 13px;
+            }
+            
+            /* 센터 선택기 */
             .center-selector {
-                padding: 10px;
+                padding: 10px 12px;
+                margin-top: 10px;
+                border-radius: 6px;
             }
-
+            
             .center-selector select {
                 width: 100%;
                 margin-top: 8px;
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+            
+            /* 레이아웃 관련 */
+            .layout-image {
+                max-width: 100%;
+                border-radius: 8px;
+            }
+            
+            .layout-note {
+                font-size: 12px;
+                padding: 10px 12px;
+                border-radius: 6px;
+            }
+            
+            /* 퀵 팁 */
+            .quick-tip {
+                padding: 12px 16px; /* 좌우 여백 늘림 */
+                margin: 12px 0;
+                border-radius: 10px;
+                gap: 10px;
+            }
+            
+            .quick-tip-icon {
+                font-size: 18px;
+            }
+            
+            .quick-tip-title {
+                font-size: 15px;
+                margin-bottom: 6px;
+            }
+            
+            .quick-tip-text {
+                font-size: 14px; /* Daily Opening과 동일 */
+                line-height: 1.4;
+            }
+        }
+
+        /* ===================================================================
+           초소형 모바일 최적화 - 480px 이하
+           =================================================================== */
+        @media (max-width: 480px) {
+            /* 더 컴팩트한 레이아웃 */
+            .container {
+                padding: 8px 10px;
+            }
+            
+            .header {
+                padding: 14px 12px;
+            }
+            
+            .title {
+                font-size: 20px;
+            }
+            
+            .subtitle {
+                font-size: 14px;
+            }
+            
+            .info-section {
+                padding: 12px 12px;
+                margin-bottom: 8px;
+            }
+            
+            .section-title {
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+            
+            .back-btn {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+            
+            /* 정보 아이템 추가 최적화 */
+            .info-item {
+                padding: 10px 12px;
+                margin-bottom: 10px;
+                gap: 8px;
+            }
+            
+            .info-icon {
+                font-size: 16px;
+            }
+            
+            .info-title {
+                font-size: 14px;
+            }
+            
+            .info-description {
+                font-size: 13px;
+            }
+            
+            /* 하이라이트 박스 추가 최적화 */
+            .info-highlight {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+            
+            /* 퀵 팁 추가 최적화 */
+            .quick-tip {
+                padding: 10px 12px;
+                gap: 8px;
+            }
+            
+            .quick-tip-title {
+                font-size: 14px;
+            }
+            
+            .quick-tip-text {
+                font-size: 13px;
+            }
+        }
+
+        /* ===================================================================
+           터치 친화적 요소 크기
+           =================================================================== */
+        @media (max-width: 768px) {
+            /* 버튼 최소 크기 확보 */
+            button, .btn {
+                min-height: 44px;
+                min-width: 44px;
+            }
+            
+            /* 터치 요소 패딩 증가 */
+            .info-item {
+                min-height: 60px; /* 터치하기 편한 크기 */
+            }
+            
+            /* 링크 터치 영역 확보 */
+            a {
+                padding: 4px 2px;
+                margin: -4px -2px;
+            }
+            
+            /* 셀렉트 박스 터치 최적화 */
+            select {
+                min-height: 44px;
+                font-size: 16px !important; /* iOS 줌 방지 */
+            }
+        }
+
+        /* ===================================================================
+           모바일 애니메이션 최적화
+           =================================================================== */
+        @media (max-width: 768px) {
+            /* 모바일에서 애니메이션 단순화 */
+            * {
+                transition-duration: 0.2s !important;
+            }
+            
+            /* hover 효과 제거 (터치 디바이스) */
+            @media (hover: none) {
+                .info-item:hover {
+                    transform: none !important;
+                    box-shadow: initial !important;
+                }
+            }
+        }
+
+        /* ===================================================================
+           스크롤바 모바일 최적화
+           =================================================================== */
+        @media (max-width: 768px) {
+            ::-webkit-scrollbar {
+                width: 4px; /* 더 얇게 */
+            }
+            
+            ::-webkit-scrollbar-thumb {
+                border-radius: 2px;
             }
         }
     </style>
