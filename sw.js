@@ -82,47 +82,33 @@ self.addEventListener('fetch', event => {
   }
 
   event.respondWith(
-    caches.match(request)
-      .then(response => {
-        // 캐시에 있으면 캐시에서 반환
-        if (response) {
-          console.log('[SW] 캐시에서 반환:', request.url);
-          return response;
-        }
-
-        // 캐시에 없으면 네트워크에서 가져오기
-        return fetch(request).then(response => {
-          // 유효한 응답이 아니면 그대로 반환
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
+  fetch(request)
+    .then(response => {
+      // 네트워크 성공시 캐시 업데이트
+      if (response && response.status === 200 && response.type === 'basic') {
+        const responseToCache = response.clone();
+        caches.open(CACHE_NAME).then(cache => {
+          if (shouldCache(request.url)) {
+            cache.put(request, responseToCache);
           }
-
-          // 응답을 복제하여 캐시에 저장
-          const responseToCache = response.clone();
-          
-          caches.open(CACHE_NAME)
-            .then(cache => {
-              // HTML, CSS, JS, 이미지만 캐시
-              if (shouldCache(request.url)) {
-                console.log('[SW] 새 파일 캐시:', request.url);
-                cache.put(request, responseToCache);
-              }
-            });
-
-          return response;
-        }).catch(error => {
-          console.error('[SW] 네트워크 요청 실패:', error);
-          
-          // 오프라인일 때 기본 페이지 반환
+        });
+      }
+      return response;
+    })
+    .catch(() => {
+      // 네트워크 실패시에만 캐시 사용
+      return caches.match(request)
+        .then(cachedResponse => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
           if (request.destination === 'document') {
             return caches.match('/index.html');
           }
-          
           throw error;
         });
-      })
-  );
-});
+    })
+);
 
 // 캐시할 파일인지 확인
 function shouldCache(url) {
