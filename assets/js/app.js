@@ -3,9 +3,39 @@
  * @version 2.0.0
  */
 
-// 이 코드는 그대로 유지 (이미 있을 것)
+// PWA 강제 활성화 코드 (맨 위에 추가)
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js');
+  // 기존 서비스 워커 모두 삭제 후 재설치
+  navigator.serviceWorker.getRegistrations().then(registrations => {
+    registrations.forEach(registration => {
+      registration.unregister();
+    });
+    
+    // 캐시도 모두 삭제
+    caches.keys().then(names => {
+      names.forEach(name => caches.delete(name));
+    });
+    
+    // 잠시 후 새로 설치
+    setTimeout(() => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(registration => {
+          console.log('✅ PWA 강제 재설치 완료');
+          
+          // 설치 이벤트 강제 트리거
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'activated') {
+                console.log('🚀 PWA 준비 완료 - 설치 가능');
+                // PWA 설치 프롬프트 강제 활성화
+                window.location.reload();
+              }
+            });
+          });
+        });
+    }, 1000);
+  });
 }
 
 // =================================================================
