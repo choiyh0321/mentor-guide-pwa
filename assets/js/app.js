@@ -3,13 +3,10 @@
  * @version 2.0.0
  */
 
-// 기존 서비스 워커 모두 삭제
+// 이 코드는 그대로 유지 (이미 있을 것)
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.getRegistrations().then(registrations => {
-    registrations.forEach(registration => {
-      registration.unregister();
-    });
-  });
+  navigator.serviceWorker.register('/sw.js');
+}
 
 // =================================================================
 // Google Sheets 서비스 클래스
