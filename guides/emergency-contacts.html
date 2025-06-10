@@ -8,31 +8,10 @@
     
     <script>
         function goBack() {
-            try {
-                if (window.history.length > 1) {
-                    window.history.back();
-                    return;
-                }
-            } catch (e) {
-                console.log('history.back() 실패:', e);
-            }
-
-            try {
-                const currentUrl = window.location.href;
-                const parentUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
-                if (parentUrl && parentUrl !== currentUrl) {
-                    window.location.href = parentUrl;
-                    return;
-                }
-            } catch (e) {
-                console.log('상위 폴더 이동 실패:', e);
-            }
-
-            try {
+            if (document.referrer && document.referrer !== window.location.href) {
+                history.back();
+            } else {
                 window.location.href = '../index.html';
-            } catch (e) {
-                console.log('index.html 이동 실패:', e);
-                window.open('../index.html', '_blank');
             }
         }
 
@@ -90,39 +69,60 @@
             }, 2000);
         }
 
-        // Setup에서 연수원 정보 가져오기
+        // Setup에서 연수원 정보 가져오기 (개선된 디버깅)
         function getTrainingCenterFromSetup() {
+            console.log('🔍 Setup 데이터 확인 시작...');
+            
             try {
-                // Setup 페이지에서 저장한 키와 맞춤
+                // 방법 1: 새로운 키 확인
                 const selectedCenter = localStorage.getItem('selectedCenter');
-                if (selectedCenter) {
-                    console.log('Setup에서 가져온 연수원:', selectedCenter);
+                console.log('📋 selectedCenter 값:', selectedCenter);
+                
+                if (selectedCenter && selectedCenter !== 'null' && selectedCenter !== '') {
+                    console.log('✅ selectedCenter에서 연수원 정보 발견:', selectedCenter);
                     return selectedCenter;
                 }
                 
-                // 기존 키도 확인 (호환성)
+                // 방법 2: 기존 setupData 확인
                 const setupData = localStorage.getItem('mentorSetup');
-                if (setupData) {
+                console.log('📋 mentorSetup 원본 데이터:', setupData);
+                
+                if (setupData && setupData !== 'null') {
                     const setup = JSON.parse(setupData);
-                    return setup.trainingCenter || 'icheon';
+                    console.log('📊 파싱된 setup 객체:', setup);
+                    console.log('🏢 setup.trainingCenter 값:', setup.trainingCenter);
+                    
+                    if (setup.trainingCenter) {
+                        console.log('✅ mentorSetup에서 연수원 정보 발견:', setup.trainingCenter);
+                        return setup.trainingCenter;
+                    }
                 }
+                
+                // 방법 3: 모든 localStorage 키 확인
+                console.log('🔍 모든 localStorage 키 확인:');
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    const value = localStorage.getItem(key);
+                    console.log(`  ${key}: ${value}`);
+                }
+                
             } catch (e) {
-                console.log('Setup 데이터 읽기 실패:', e);
+                console.error('❌ Setup 데이터 읽기 실패:', e);
             }
+            
+            console.log('⚠️ Setup에서 연수원 정보를 찾을 수 없음. 기본값(icheon) 사용');
             return 'icheon';
         }
 
-        // 구글 앱스 스크립트에서 데이터 가져오기
+        // 구글 시트 연결 테스트 (개선된 에러 처리)
         async function fetchContactsFromGoogleSheets() {
             const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyvkEufshC8wwQwMqO5nJsdhhUC6EvBqKkeXVR5YF5cQnnPLUG3oo5d0eObTVkjN55Y/exec';
             
             try {
-                console.log('🔄 구글 시트에서 TrainingCenters 데이터를 가져오는 중...');
+                console.log('🔄 구글 시트 연결 시도...');
+                console.log('📡 요청 URL:', APPS_SCRIPT_URL + '?action=getTrainingCenters');
                 
-                const urlWithParams = `${APPS_SCRIPT_URL}?action=getTrainingCenters`;
-                console.log('📡 요청 URL:', urlWithParams);
-                
-                const response = await fetch(urlWithParams, {
+                const response = await fetch(APPS_SCRIPT_URL + '?action=getTrainingCenters', {
                     method: 'GET',
                     mode: 'cors',
                     headers: {
@@ -131,37 +131,49 @@
                 });
                 
                 console.log('📊 응답 상태:', response.status, response.statusText);
+                console.log('📋 응답 헤더:', [...response.headers.entries()]);
                 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
                 
-                const data = await response.json();
-                console.log('✅ 구글 시트 데이터 수신 성공:', data);
+                const responseText = await response.text();
+                console.log('📄 원본 응답 텍스트:', responseText);
+                
+                const data = JSON.parse(responseText);
+                console.log('✅ 파싱된 JSON 데이터:', data);
                 
                 if (data.error) {
                     throw new Error(`앱스 스크립트 오류: ${data.error}`);
                 }
                 
                 return parseSheetData(data);
+                
             } catch (error) {
-                console.error('❌ 구글 시트 연결 실패:', error);
+                console.error('❌ 구글 시트 연결 실패 상세:', {
+                    name: error.name,
+                    message: error.message,
+                    stack: error.stack
+                });
                 return null;
             }
         }
 
         function parseSheetData(data) {
+            console.log('🔄 시트 데이터 파싱 시작...');
             const contacts = {};
             
             if (!Array.isArray(data)) {
-                console.error('데이터 형식이 올바르지 않습니다:', data);
+                console.error('❌ 데이터가 배열이 아님:', typeof data, data);
                 return null;
             }
             
-            console.log('파싱할 데이터:', data);
+            console.log(`📊 총 ${data.length}개 행 처리 예정`);
             
             data.forEach((row, index) => {
                 try {
+                    console.log(`🔍 행 ${index + 1} 처리 중:`, row);
+                    
                     const {
                         er_id,
                         center_name,
@@ -173,10 +185,10 @@
                         enabled
                     } = row;
                     
-                    console.log(`행 ${index}: er_id=${er_id}, enabled=${enabled}`);
+                    console.log(`  📋 er_id: ${er_id}, enabled: ${enabled}`);
                     
                     if (!er_id || enabled !== true) {
-                        console.log(`행 ${index} 스킵됨`);
+                        console.log(`  ⏭️ 행 ${index + 1} 스킵됨 (er_id: ${er_id}, enabled: ${enabled})`);
                         return;
                     }
                     
@@ -204,18 +216,21 @@
                         ]
                     };
                     
-                    console.log(`✅ ${er_id} 데이터 처리 완료:`, contacts[er_id]);
+                    console.log(`  ✅ ${er_id} 데이터 처리 완료`);
                 } catch (error) {
                     console.error(`❌ 행 ${index + 1} 처리 중 오류:`, error, row);
                 }
             });
             
-            console.log('최종 파싱된 데이터:', contacts);
+            console.log('📊 최종 파싱된 연수원 목록:', Object.keys(contacts));
+            console.log('📋 전체 contacts 객체:', contacts);
             return contacts;
         }
 
-        // 연수원별 병원 연락처 (하드코딩된 데이터)
+        // 하드코딩된 병원 데이터
         function getHospitalContacts(center_id) {
+            console.log('🏥 병원 연락처 조회:', center_id);
+            
             const hospitalData = {
                 'icheon': [
                     {
@@ -266,7 +281,10 @@
                     }
                 ]
             };
-            return hospitalData[center_id] || [];
+            
+            const result = hospitalData[center_id] || [];
+            console.log(`🏥 ${center_id}에 대한 병원 ${result.length}개 찾음`);
+            return result;
         }
 
         function getTrainingCenterName(center) {
@@ -278,122 +296,168 @@
             return names[center] || center;
         }
 
+        // 하드코딩된 기본 연락처 데이터
+        function getDefaultContacts(selectedCenter) {
+            console.log('📞 기본 연락처 데이터 사용:', selectedCenter);
+            
+            const defaultContacts = {
+                'icheon': [
+                    {
+                        icon: "👨‍💼",
+                        name: "운영진 대표 (최지윤 RF)",
+                        phone: "010-1234-5678",
+                        description: "교육 운영 총괄, 멘토 지원 담당"
+                    },
+                    {
+                        icon: "📋",
+                        name: "멘토 운영진 (최유현 RF)",
+                        phone: "010-2345-6789",
+                        description: "멘토 관련 업무, 교육 과정 지원"
+                    },
+                    {
+                        icon: "🏢",
+                        name: "중앙통제실",
+                        phone: "031-630-8914",
+                        description: "연수원 운영 총괄, 숙소 관련 문의, 24시간 상주"
+                    }
+                ],
+                'yongin': [
+                    {
+                        icon: "👨‍💼",
+                        name: "운영진 대표",
+                        phone: "031-329-9100",
+                        description: "교육 운영 총괄, 멘토 지원 담당"
+                    },
+                    {
+                        icon: "📋",
+                        name: "멘토 운영진",
+                        phone: "031-329-9110",
+                        description: "멘토 관련 업무, 교육 과정 지원"
+                    },
+                    {
+                        icon: "🏢",
+                        name: "중앙통제실",
+                        phone: "031-329-9120",
+                        description: "연수원 운영 총괄, 숙소 관련 문의, 시설 관리"
+                    }
+                ],
+                'incheon': [
+                    {
+                        icon: "👨‍💼",
+                        name: "운영진 대표",
+                        phone: "032-760-3000",
+                        description: "교육 운영 총괄, 멘토 지원 담당"
+                    },
+                    {
+                        icon: "📋",
+                        name: "멘토 운영진",
+                        phone: "032-760-3010",
+                        description: "멘토 관련 업무, 교육 과정 지원"
+                    },
+                    {
+                        icon: "🏢",
+                        name: "중앙통제실",
+                        phone: "032-760-3020",
+                        description: "연수원 운영 총괄, 숙소 관련 문의, 24시간 상주"
+                    }
+                ]
+            };
+            
+            return defaultContacts[selectedCenter] || defaultContacts['icheon'];
+        }
+
+        // 메인 업데이트 함수 (개선된 로직)
         async function updateEmergencyInfo() {
+            console.log('🚀 긴급 연락처 업데이트 시작');
+            
+            // 1. Setup에서 연수원 정보 가져오기
             const selectedCenter = getTrainingCenterFromSetup();
-            console.log('🎯 선택된 연수원:', selectedCenter);
+            console.log('🎯 최종 선택된 연수원:', selectedCenter);
             
-            // 구글 시트에서 메인 연락처 데이터 가져오기 시도
+            // 2. 구글 시트에서 데이터 가져오기 시도
+            console.log('📡 구글 시트 연결 시도...');
             const sheetData = await fetchContactsFromGoogleSheets();
-            let mainContacts;
             
+            let mainContacts;
+            let dataSource = '';
+            
+            // 3. 데이터 소스 결정
             if (sheetData && sheetData[selectedCenter]) {
+                // 구글 시트 데이터 사용
                 mainContacts = sheetData[selectedCenter].mainContacts;
-                console.log('✅ 구글 시트에서 메인 연락처 사용:', selectedCenter);
-                console.log('메인 연락처 데이터:', mainContacts);
+                dataSource = '구글 시트';
+                console.log('✅ 구글 시트에서 메인 연락처 사용');
                 showToast('✅ 최신 데이터로 업데이트되었습니다');
             } else {
-                console.log('⚠️ 구글 시트 연결 실패 또는 데이터 없음, 기본 데이터 사용');
-                console.log('사용 가능한 연수원:', sheetData ? Object.keys(sheetData) : 'none');
+                // 하드코딩된 기본 데이터 사용
+                mainContacts = getDefaultContacts(selectedCenter);
+                dataSource = '하드코딩된 기본 데이터';
+                console.log('⚠️ 구글 시트 연결 실패, 기본 데이터 사용');
                 
-                // 기본 데이터 (구글 시트 연결 실패 시 사용)
-                const defaultContacts = {
-                    'icheon': [
-                        {
-                            icon: "👨‍💼",
-                            name: "운영진 대표 (최지윤 RF)",
-                            phone: "010-1234-5678",
-                            description: "교육 운영 총괄, 멘토 지원 담당"
-                        },
-                        {
-                            icon: "📋",
-                            name: "멘토 운영진 (최유현 RF)",
-                            phone: "010-2345-6789",
-                            description: "멘토 관련 업무, 교육 과정 지원"
-                        },
-                        {
-                            icon: "🏢",
-                            name: "중앙통제실",
-                            phone: "031-630-8914",
-                            description: "연수원 운영 총괄, 숙소 관련 문의, 24시간 상주"
-                        }
-                    ],
-                    'yongin': [
-                        {
-                            icon: "👨‍💼",
-                            name: "운영진 대표",
-                            phone: "031-329-9100",
-                            description: "교육 운영 총괄, 멘토 지원 담당"
-                        },
-                        {
-                            icon: "📋",
-                            name: "멘토 운영진",
-                            phone: "031-329-9110",
-                            description: "멘토 관련 업무, 교육 과정 지원"
-                        },
-                        {
-                            icon: "🏢",
-                            name: "중앙통제실",
-                            phone: "031-329-9120",
-                            description: "연수원 운영 총괄, 숙소 관련 문의, 시설 관리"
-                        }
-                    ],
-                    'incheon': [
-                        {
-                            icon: "👨‍💼",
-                            name: "운영진 대표",
-                            phone: "032-760-3000",
-                            description: "교육 운영 총괄, 멘토 지원 담당"
-                        },
-                        {
-                            icon: "📋",
-                            name: "멘토 운영진",
-                            phone: "032-760-3010",
-                            description: "멘토 관련 업무, 교육 과정 지원"
-                        },
-                        {
-                            icon: "🏢",
-                            name: "중앙통제실",
-                            phone: "032-760-3020",
-                            description: "연수원 운영 총괄, 숙소 관련 문의, 24시간 상주"
-                        }
-                    ]
-                };
+                if (sheetData) {
+                    console.log('📊 구글 시트에서 받은 연수원 목록:', Object.keys(sheetData));
+                    console.log(`❌ '${selectedCenter}' 연수원 데이터가 구글 시트에 없음`);
+                } else {
+                    console.log('❌ 구글 시트 연결 자체가 실패함');
+                }
                 
-                mainContacts = defaultContacts[selectedCenter] || defaultContacts['icheon'];
                 showToast('⚠️ 기본 데이터를 사용합니다');
             }
+            
+            console.log(`📞 사용할 메인 연락처 데이터 (${dataSource}):`, mainContacts);
 
-            // 메인 연락처 업데이트
+            // 4. 메인 연락처 UI 업데이트
             const mainContactsContainer = document.getElementById('main-contacts');
-            mainContactsContainer.innerHTML = mainContacts.map(contact => `
-                <div class="contact-card main" onclick="callNumber('${contact.phone}')">
-                    <div class="contact-icon">${contact.icon}</div>
-                    <div class="contact-info">
-                        <div class="contact-name">${contact.name}</div>
-                        <div class="contact-phone">${contact.phone}</div>
-                        <div class="contact-description">${contact.description}</div>
+            if (mainContactsContainer) {
+                mainContactsContainer.innerHTML = mainContacts.map(contact => `
+                    <div class="contact-card main" onclick="callNumber('${contact.phone}')">
+                        <div class="contact-icon">${contact.icon}</div>
+                        <div class="contact-info">
+                            <div class="contact-name">${contact.name}</div>
+                            <div class="contact-phone">${contact.phone}</div>
+                            <div class="contact-description">${contact.description}</div>
+                        </div>
+                        <button class="call-button" onclick="event.stopPropagation(); callNumber('${contact.phone}')">📞</button>
                     </div>
-                    <button class="call-button" onclick="event.stopPropagation(); callNumber('${contact.phone}')">📞</button>
-                </div>
-            `).join('');
+                `).join('');
+                console.log('✅ 메인 연락처 UI 업데이트 완료');
+            }
 
-            // 병원 응급실 업데이트 (항상 하드코딩된 데이터 사용)
+            // 5. 병원 연락처 UI 업데이트 (항상 하드코딩된 데이터)
             const hospitalContainer = document.getElementById('hospital-contacts');
             const hospitalContacts = getHospitalContacts(selectedCenter);
-            hospitalContainer.innerHTML = hospitalContacts.map(hospital => `
-                <div class="contact-card" onclick="callNumber('${hospital.phone}')">
-                    <div class="contact-icon">${hospital.icon}</div>
-                    <div class="contact-info">
-                        <div class="contact-name">${hospital.name}</div>
-                        <div class="contact-phone">${hospital.phone}</div>
-                        <div class="contact-description">${hospital.description}</div>
+            
+            if (hospitalContainer) {
+                hospitalContainer.innerHTML = hospitalContacts.map(hospital => `
+                    <div class="contact-card" onclick="callNumber('${hospital.phone}')">
+                        <div class="contact-icon">${hospital.icon}</div>
+                        <div class="contact-info">
+                            <div class="contact-name">${hospital.name}</div>
+                            <div class="contact-phone">${hospital.phone}</div>
+                            <div class="contact-description">${hospital.description}</div>
+                        </div>
+                        <button class="call-button" onclick="event.stopPropagation(); callNumber('${hospital.phone}')">📞</button>
                     </div>
-                    <button class="call-button" onclick="event.stopPropagation(); callNumber('${hospital.phone}')">📞</button>
-                </div>
-            `).join('');
+                `).join('');
+                console.log('✅ 병원 연락처 UI 업데이트 완료');
+            }
 
-            // 연수원 이름 업데이트
-            document.getElementById('center-name').textContent = getTrainingCenterName(selectedCenter);
+            // 6. 연수원 이름 UI 업데이트
+            const centerNameElement = document.getElementById('center-name');
+            if (centerNameElement) {
+                centerNameElement.textContent = getTrainingCenterName(selectedCenter);
+                console.log('✅ 연수원 이름 UI 업데이트 완료');
+            }
+            
+            // 7. 최종 상태 로그
+            console.log('🎉 긴급 연락처 업데이트 완료');
+            console.log('📊 최종 상태:', {
+                selectedCenter,
+                dataSource,
+                mainContactsCount: mainContacts.length,
+                hospitalContactsCount: hospitalContacts.length,
+                centerName: getTrainingCenterName(selectedCenter)
+            });
         }
     </script>
 
@@ -401,10 +465,16 @@
         :root {
             --sk-red: #EA1917;
             --sk-orange: #FF6B35;
+            --sk-red-light: #FF4444;
+            --sk-red-dark: #CC1515;
             --success: #4CAF50;
             --warning: #FF9800;
+            --error: #F44336;
             --info: #2196F3;
-            --purple: #9C27B0;
+            --gray-50: #FAFAFA;
+            --gray-100: #F5F5F5;
+            --gray-600: #757575;
+            --gray-900: #212121;
         }
 
         * {
@@ -416,14 +486,17 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
-            color: #333;
+            color: #202124;
             line-height: 1.6;
+            min-height: 100vh;
         }
 
+        /* 헤더 - daily-opening과 동일한 스타일 */
         .header {
             background: linear-gradient(135deg, var(--sk-orange) 0%, var(--sk-red) 100%);
             color: white;
             padding: 20px;
+            box-shadow: 0 10px 40px rgba(234, 25, 23, 0.2);
             position: relative;
             overflow: hidden;
         }
@@ -436,39 +509,77 @@
             right: 0;
             bottom: 0;
             background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
         }
 
-        .header-content {
-            position: relative;
-            z-index: 10;
-        }
-
-        .back-btn {
-            background: rgba(255,255,255,0.2);
-            border: none;
+        .back-button {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin-bottom: 12px;
+            padding: 10px 16px;
+            border-radius: 12px;
             cursor: pointer;
-        }
-
-        .title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .subtitle {
-            opacity: 0.9;
             font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: fit-content;
         }
 
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header .subtitle {
+            font-size: 16px;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        /* 컨테이너 & 섹션 - daily-opening과 동일한 스타일 */
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 24px 20px;
             padding-bottom: 60px;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            color: var(--sk-red);
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .current-center-info {
@@ -477,7 +588,7 @@
             border: 1px solid rgba(255,255,255,0.2);
             border-radius: 20px;
             padding: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.06);
             border-left: 4px solid var(--info);
             text-align: center;
@@ -502,7 +613,7 @@
             border: 1px solid rgba(255,255,255,0.2);
             border-radius: 20px;
             padding: 16px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.06);
             border-left: 4px solid #F44336;
             text-align: center;
@@ -512,27 +623,6 @@
             font-size: 13px;
             color: #d32f2f;
             line-height: 1.4;
-        }
-
-        .emergency-section {
-            background: rgba(255,255,255,0.9);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
-            border-left: 4px solid var(--sk-red);
-        }
-
-        .section-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--sk-red);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .emergency-contacts {
@@ -625,19 +715,19 @@
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255,255,255,0.2);
             border-radius: 20px;
-            padding: 24px;
+            padding: 28px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.06);
             border-left: 4px solid var(--warning);
         }
 
         .procedure-title {
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 22px;
+            font-weight: 700;
             color: var(--warning);
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
         }
 
         .procedure-steps {
@@ -686,24 +776,39 @@
             margin-bottom: 4px;
         }
 
-        /* 반응형 */
+        /* 반응형 디자인 - daily-opening과 동일 */
         @media (max-width: 768px) {
             .container {
-                padding: 16px;
+                padding: 12px 12px;
                 padding-bottom: 60px;
             }
-
-            .title {
-                font-size: 20px;
+            
+            .section, .current-center-info, .emergency-notice, .emergency-procedure {
+                padding: 16px 16px;
+                margin-bottom: 12px;
+                border-radius: 12px;
             }
-
-            .emergency-section, .emergency-procedure {
-                padding: 16px;
+            
+            .header {
+                padding: 16px 16px;
+            }
+            
+            .header h1 {
+                font-size: 22px;
+                margin-bottom: 4px;
+            }
+            
+            .header .subtitle {
+                font-size: 15px;
+            }
+            
+            .section h2, .procedure-title {
+                font-size: 19px;
                 margin-bottom: 12px;
             }
 
             .contact-card {
-                padding: 10px;
+                padding: 10px 12px;
                 gap: 10px;
             }
 
@@ -732,16 +837,85 @@
             .emergency-contacts {
                 gap: 6px;
             }
+
+            .procedure-step {
+                padding: 10px 12px;
+            }
+
+            .step-number {
+                width: 24px;
+                height: 24px;
+                font-size: 12px;
+            }
+
+            .step-content {
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 8px 10px;
+                padding-bottom: 60px;
+            }
+            
+            .header {
+                padding: 14px 12px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .header .subtitle {
+                font-size: 14px;
+            }
+            
+            .section, .current-center-info, .emergency-notice, .emergency-procedure {
+                padding: 12px 12px;
+                margin-bottom: 8px;
+            }
+            
+            .section h2, .procedure-title {
+                font-size: 17px;
+                margin-bottom: 10px;
+            }
+            
+            .back-button {
+                padding: 6px 12px;
+                font-size: 13px;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* 스크롤 스타일 - daily-opening과 동일 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, var(--sk-red), var(--sk-red-light));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, var(--sk-red-dark), var(--sk-red));
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="header-content">
-            <button class="back-btn" onclick="goBack()">← 뒤로가기</button>
-            <div class="title">🚨 긴급 연락처</div>
-            <div class="subtitle">응급상황 발생 시 즉시 연락할 수 있는 연락처 모음</div>
-        </div>
+        <button class="back-button" onclick="goBack()">
+            <span>←</span>
+            <span>뒤로가기</span>
+        </button>
+        <h1>🚨 긴급 연락처</h1>
+        <div class="subtitle">응급상황 발생 시 즉시 연락할 수 있는 연락처 모음</div>
     </div>
 
     <div class="container">
@@ -759,24 +933,16 @@
         </div>
 
         <!-- 메인 연락처 (구글 시트 연동) -->
-        <div class="emergency-section">
-            <div class="section-title">
-                <span>📞</span>
-                주요 운영진 연락처
-            </div>
-
+        <div class="section">
+            <h2>📞 주요 운영진 연락처</h2>
             <div class="emergency-contacts" id="main-contacts">
                 <!-- 구글 시트에서 가져온 메인 연락처가 동적으로 로드됩니다 -->
             </div>
         </div>
 
         <!-- 병원 응급실 (하드코딩) -->
-        <div class="emergency-section">
-            <div class="section-title">
-                <span>🏥</span>
-                인근 응급기관 (병원/파출소/소방서)
-            </div>
-
+        <div class="section">
+            <h2>🏥 인근 응급기관 (병원/파출소/소방서)</h2>
             <div class="emergency-contacts" id="hospital-contacts">
                 <!-- 연수원별 병원 정보가 하드코딩된 데이터에서 로드됩니다 -->
             </div>
@@ -784,10 +950,7 @@
 
         <!-- 응급상황 대응 절차 -->
         <div class="emergency-procedure">
-            <div class="procedure-title">
-                <span>📋</span>
-                응급상황 대응 절차
-            </div>
+            <div class="procedure-title">📋 응급상황 대응 절차</div>
 
             <div class="procedure-steps">
                 <div class="procedure-step">
@@ -836,10 +999,11 @@
     <script>
         // 페이지 로드 시 초기화
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 페이지 로드 완료, 긴급 연락처 초기화 시작');
             updateEmergencyInfo();
 
             // 애니메이션
-            const sections = document.querySelectorAll('.current-center-info, .emergency-notice, .emergency-section, .emergency-procedure');
+            const sections = document.querySelectorAll('.current-center-info, .emergency-notice, .section, .emergency-procedure');
             sections.forEach((section, index) => {
                 section.style.opacity = '0';
                 section.style.transform = 'translateY(30px)';
