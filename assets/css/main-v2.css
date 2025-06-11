@@ -614,7 +614,7 @@ body {
     margin-bottom: 16px;
 }
 
-/* 일정 아이템 스타일 - 호버 효과 개선 */
+/* 일정 아이템 기본 스타일 */
 .schedule-item {
     display: flex;
     align-items: center;
@@ -628,28 +628,19 @@ body {
     transition: all 0.3s ease;
 }
 
-/* 멘토 진행/필수 참관 프로그램에만 호버 효과 적용 */
-.schedule-item.mentor:hover,
-.schedule-item.required:hover {
+/* 멘토 진행/필수 참관 프로그램만 호버 효과 적용 */
+.schedule-item:has(.badge-lead):hover,
+.schedule-item:has(.badge-required):hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(25, 118, 210, 0.2); /* 파란색 그림자 */
-    background: linear-gradient(135deg, #e3f2fd, #f8f9ff); /* 하늘색 배경 */
+    box-shadow: 0 8px 25px rgba(25, 118, 210, 0.2);
+    background: linear-gradient(135deg, #e3f2fd, #f8f9ff);
     border-left-color: #1976d2;
 }
 
-/* 휴식시간은 호버 효과 제거 */
-.schedule-item.lunch-break,
-.schedule-item.dinner-break {
+/* 점심/저녁시간 기본 스타일 (JavaScript에서 .lunch-break 클래스 추가) */
+.schedule-item.lunch-break {
     background: linear-gradient(135deg, #fff8e1, #f3e5ab);
     border-left-color: #ffa726;
-    /* 호버 효과 없음 */
-}
-
-.schedule-item.lunch-break:hover,
-.schedule-item.dinner-break:hover {
-    transform: none;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* 기본 그림자 유지 */
-    background: linear-gradient(135deg, #fff8e1, #f3e5ab); /* 기본 배경 유지 */
 }
 
 .schedule-time {
