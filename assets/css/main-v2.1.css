@@ -1,7 +1,7 @@
 /**
- * SK 멘토 가이드 - 메인 스타일시트 (프로토타입 스타일 적용)
- * @version 2.0.0
- * 글래스모피즘 + SK 브랜드 컬러 + 모던 애니메이션
+ * SK 멘토 가이드 - 메인 스타일시트 (모바일 최적화 개선)
+ * @version 2.1.0
+ * 글래스모피즘 + SK 브랜드 컬러 + 모던 애니메이션 + 모바일 최적화
  */
 
 /* ===================================================================
@@ -48,6 +48,7 @@ body {
     min-height: 100vh;
     padding: 20px;
     line-height: 1.6;
+    color: #202124;
 }
 
 .container {
@@ -57,15 +58,15 @@ body {
 }
 
 /* ===================================================================
-   헤더 - 모던 그라데이션
+   헤더 - 모던 그라데이션 (모바일 최적화)
    =================================================================== */
 .header {
     background: linear-gradient(135deg, var(--sk-orange) 0%, var(--sk-red) 100%);
     color: white;
     text-align: center;
-    padding: 40px 20px;
+    padding: 32px 20px; /* 40px → 32px 패딩 조정 */
     border-radius: 20px;
-    margin-bottom: 32px;
+    margin-bottom: 24px; /* 32px → 24px 마진 조정 */
     box-shadow: 0 10px 40px rgba(234, 25, 23, 0.2);
     position: relative;
     overflow: hidden;
@@ -97,7 +98,7 @@ body {
 }
 
 /* ===================================================================
-   섹션 - 글래스 효과
+   섹션 - 글래스 효과 (모바일 최적화)
    =================================================================== */
 .section {
     background: rgba(255, 255, 255, 0.9);
@@ -105,7 +106,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
     padding: 28px;
-    margin-bottom: 24px;
+    margin-bottom: 20px; /* 24px → 20px 마진 조정 */
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
 }
 
@@ -132,7 +133,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
     padding: 28px;
-    margin-bottom: 24px;
+    margin-bottom: 20px; /* 24px → 20px */
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
 }
 
@@ -269,14 +270,14 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
     padding: 28px;
-    margin-bottom: 24px;
+    margin-bottom: 20px; /* 24px → 20px */
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
 }
 
 .tasks-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 24px;
+    gap: 20px; /* 24px → 20px */
 }
 
 /* 태스크 카드 - 모던 스타일 */
@@ -406,6 +407,35 @@ body {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
+/* 출석체크 카드 전용 스타일 - 컴팩트 디자인 */
+.attendance-morning,
+.attendance-afternoon {
+    /* 기본 태스크 카드보다 작게 */
+}
+
+.attendance-morning .task-details,
+.attendance-afternoon .task-details {
+    margin-bottom: 12px; /* 20px → 12px */
+    font-size: 13px; /* 14px → 13px */
+}
+
+.attendance-morning .task-progress,
+.attendance-afternoon .task-progress {
+    margin: 8px 0; /* 16px 0 → 8px 0 */
+    height: 4px; /* 6px → 4px */
+}
+
+.attendance-morning .task-actions,
+.attendance-afternoon .task-actions {
+    gap: 8px; /* 12px → 8px */
+}
+
+.attendance-morning .task-button,
+.attendance-afternoon .task-button {
+    padding: 8px 14px; /* 12px 20px → 8px 14px */
+    font-size: 13px; /* 14px → 13px */
+}
+
 /* 면담 카드 전용 스타일 */
 .interview-card {
     grid-column: 1 / -1;
@@ -413,7 +443,7 @@ body {
 
 .interview-stats {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, 1fr); /* 1X4 그리드로 변경 */
     gap: 16px;
     margin: 16px 0;
 }
@@ -453,7 +483,7 @@ body {
     backdrop-filter: blur(10px);
     border-radius: 16px;
     padding: 20px;
-    margin-top: 24px;
+    margin-top: 20px; /* 24px → 20px */
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
@@ -497,7 +527,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
     padding: 28px;
-    margin-bottom: 24px;
+    margin-bottom: 20px; /* 24px → 20px */
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
 }
 
@@ -584,7 +614,7 @@ body {
     margin-bottom: 16px;
 }
 
-/* 일정 아이템 스타일 */
+/* 일정 아이템 스타일 - 호버 효과 개선 */
 .schedule-item {
     display: flex;
     align-items: center;
@@ -598,17 +628,13 @@ body {
     transition: all 0.3s ease;
 }
 
-.schedule-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-}
-
-.schedule-item.mentor-required,
-.schedule-item.mentor-lead {
+/* 멘토 진행/필수 참관 프로그램에만 호버 효과 적용 */
+.schedule-item.mentor {
     background: linear-gradient(135deg, #e3f2fd, #f8f9ff);
     border-left-color: #1976d2;
 }
 
+/* 휴식시간은 호버 효과 제거 */
 .schedule-item.lunch-break,
 .schedule-item.dinner-break {
     background: linear-gradient(135deg, #fff8e1, #f3e5ab);
@@ -890,7 +916,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
     padding: 28px;
-    margin-bottom: 24px;
+    margin-bottom: 20px; /* 24px → 20px */
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
 }
 
@@ -974,14 +1000,14 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
     padding: 28px;
-    margin-bottom: 24px;
+    margin-bottom: 20px; /* 24px → 20px */
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
 }
 
 .program-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 24px;
+    gap: 20px; /* 24px → 20px */
 }
 
 .program-card {
@@ -1037,7 +1063,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
     padding: 28px;
-    margin-bottom: 24px;
+    margin-bottom: 20px; /* 24px → 20px */
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
 }
 
@@ -1091,7 +1117,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
     padding: 28px;
-    margin-bottom: 24px;
+    margin-bottom: 20px; /* 24px → 20px */
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
 }
 
@@ -1140,7 +1166,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
     padding: 28px;
-    margin-bottom: 24px;
+    margin-bottom: 20px; /* 24px → 20px */
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
 }
 
@@ -1183,7 +1209,7 @@ body {
     background: linear-gradient(135deg, #E31837, #ff4569);
     color: white;
     padding: 16px 20px;
-    margin-bottom: 20px;
+    margin-bottom: 16px; /* 20px → 16px */
     border-radius: 16px;
     display: flex;
     align-items: center;
@@ -1571,7 +1597,7 @@ body {
 }
 
 .sidebar-section-title {
-    font-size: 16px;
+    font-size: 16px; /* 원래 크기 유지 */
     font-weight: 600;
     color: var(--gray-600);
     margin-bottom: 16px;
@@ -1614,7 +1640,7 @@ body {
 }
 
 .menu-icon {
-    font-size: 20px;
+    font-size: 20px; /* 원래 크기 유지 */
     width: 24px;
     text-align: center;
 }
@@ -1624,13 +1650,17 @@ body {
 }
 
 .menu-title {
-    font-weight: 600;
+    font-weight: 700; /* 600 → 700으로 강화 */
     margin-bottom: 2px;
+    font-size: 15px; /* 원래 크기 유지 */
+    font-family: -apple-system, BlinkMacSystemFont, 'Malgun Gothic', '맑은 고딕', sans-serif; /* 한글 폰트 우선 */
 }
 
 .menu-desc {
-    font-size: 12px;
+    font-size: 13px; /* 12px → 13px로 증가 */
     opacity: 0.7;
+    font-weight: 400;
+    font-family: -apple-system, BlinkMacSystemFont, 'Malgun Gothic', '맑은 고딕', sans-serif; /* 한글 폰트 우선 */
 }
 
 .menu-arrow {
@@ -1723,11 +1753,11 @@ body {
 }
 
 /* ===================================================================
-   반응형 디자인
+   반응형 디자인 - 모바일 최적화 강화
    =================================================================== */
 @media (max-width: 768px) {
     body {
-        padding: 10px;
+        padding: 12px; /* 10px → 12px 여백 증가 */
     }
     
     .container {
@@ -1735,30 +1765,139 @@ body {
     }
     
     .header {
-        padding: 30px 20px;
+        padding: 20px 16px; /* 30px 20px → 20px 16px */
+        margin-bottom: 16px; /* 24px → 16px */
+        border-radius: 16px; /* 20px → 16px */
     }
     
     .header h1 {
-        font-size: 24px;
+        font-size: 22px; /* 24px → 22px */
+    }
+    
+    .subtitle {
+        font-size: 15px; /* 16px → 15px */
     }
     
     .section {
-        padding: 20px;
-        margin-bottom: 20px;
+        padding: 16px; /* 20px → 16px */
+        margin-bottom: 16px; /* 20px → 16px */
+        border-radius: 16px; /* 20px → 16px */
+    }
+    
+    .section h2 {
+        font-size: 18px; /* 22px → 18px */
+        margin-bottom: 12px; /* 16px → 12px */
+    }
+    
+    .section-description {
+        font-size: 14px; /* 15px → 14px */
+        margin-bottom: 16px; /* 24px → 16px */
     }
     
     .tasks-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
+        grid-template-columns: 1fr 1fr; /* 출석체크 카드를 나란히 배치 */
+        gap: 12px; /* 16px → 12px */
+    }
+    
+    .task-card {
+        padding: 16px; /* 24px → 16px */
+        border-radius: 12px; /* 16px → 12px */
+    }
+    
+    /* 출석체크 카드 모바일 최적화 */
+    .attendance-morning,
+    .attendance-afternoon {
+        padding: 12px; /* 16px → 12px */
+    }
+    
+    .attendance-morning .task-title,
+    .attendance-afternoon .task-title {
+        font-size: 14px; /* 16px → 14px */
+    }
+    
+    .attendance-morning .task-details,
+    .attendance-afternoon .task-details {
+        font-size: 12px; /* 13px → 12px */
+        margin-bottom: 8px; /* 12px → 8px */
+    }
+    
+    .attendance-morning .task-button,
+    .attendance-afternoon .task-button {
+        padding: 6px 10px; /* 8px 14px → 6px 10px */
+        font-size: 12px; /* 13px → 12px */
+        width: 100%;
+        text-align: center;
+    }
+    
+    /* 면담 카드는 전체 너비 유지 */
+    .interview-card {
+        grid-column: 1 / -1;
+        padding: 16px;
+    }
+    
+    .task-title {
+        font-size: 16px; /* 17px → 16px */
+    }
+    
+    .task-details {
+        font-size: 13px; /* 14px → 13px */
+        margin-bottom: 16px; /* 20px → 16px */
+    }
+    
+    .task-actions {
+        gap: 8px; /* 12px → 8px */
+    }
+    
+    .task-button,
+    .btn-primary,
+    .btn-secondary {
+        padding: 10px 16px; /* 12px 20px → 10px 16px */
+        font-size: 13px; /* 14px → 13px */
+        border-radius: 8px; /* 10px → 8px */
     }
     
     .daily-summary {
         grid-template-columns: 1fr;
+        gap: 12px; /* 16px → 12px */
+        margin-top: 16px; /* 20px → 16px */
+        padding: 16px; /* 20px → 16px */
+    }
+    
+    .summary-item {
+        padding: 10px; /* 12px → 10px */
+    }
+    
+    .summary-title {
+        font-size: 14px; /* 기본값 → 14px */
+    }
+    
+    .summary-status {
+        font-size: 13px; /* 14px → 13px */
     }
     
     .guidelines-grid {
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: 12px; /* 16px → 12px */
+    }
+    
+    .guidelines-column {
+        padding: 16px; /* 20px → 16px */
+        border-radius: 12px; /* 16px → 12px */
+    }
+    
+    .guidelines-column h3 {
+        font-size: 16px; /* 18px → 16px */
+        margin-bottom: 12px; /* 16px → 12px */
+    }
+    
+    .guideline-item {
+        padding: 10px; /* 12px → 10px */
+        margin-bottom: 8px; /* 12px → 8px */
+        border-radius: 6px; /* 8px → 6px */
+    }
+    
+    .guideline-text {
+        font-size: 13px; /* 14px → 13px */
     }
     
     .guidelines-content.expanded {
@@ -1768,12 +1907,58 @@ body {
     
     .schedule-header {
         flex-direction: column;
-        gap: 12px;
+        gap: 8px; /* 12px → 8px */
         align-items: stretch;
     }
     
     .schedule-actions {
         justify-content: center;
+        gap: 6px; /* 8px → 6px */
+    }
+    
+    .btn-refresh-schedule,
+    .btn-full-schedule {
+        padding: 6px 12px; /* 8px 16px → 6px 12px */
+        font-size: 13px; /* 14px → 13px */
+        border-radius: 6px; /* 8px → 6px */
+    }
+    
+    .schedule-today {
+        padding: 16px; /* 20px → 16px */
+        border-radius: 10px; /* 12px → 10px */
+    }
+    
+    .today-date {
+        font-size: 16px; /* 18px → 16px */
+        margin-bottom: 12px; /* 16px → 12px */
+    }
+    
+    .schedule-item {
+        padding: 12px; /* 16px → 12px */
+        gap: 12px; /* 16px → 12px */
+        margin-bottom: 8px; /* 12px → 8px */
+        border-radius: 10px; /* 12px → 10px */
+    }
+    
+    .schedule-time {
+        font-size: 13px; /* 14px → 13px */
+        padding: 6px 10px; /* 8px 12px → 6px 10px */
+        min-width: 50px; /* 60px → 50px */
+        border-radius: 6px; /* 8px → 6px */
+    }
+    
+    .schedule-title {
+        font-size: 15px; /* 16px → 15px */
+    }
+    
+    .schedule-location {
+        font-size: 13px; /* 14px → 13px */
+    }
+    
+    .schedule-badge {
+        padding: 4px 8px; /* 6px 12px → 4px 8px */
+        font-size: 11px; /* 12px → 11px */
+        border-radius: 16px; /* 20px → 16px */
     }
     
     .modal-content {
@@ -1783,25 +1968,164 @@ body {
     
     .modal-filters {
         flex-direction: column;
+        gap: 8px; /* 12px → 8px */
+        padding: 12px 16px; /* 16px 24px → 12px 16px */
+    }
+    
+    .modal-filters select {
+        padding: 6px 10px; /* 8px 12px → 6px 10px */
+        font-size: 14px;
+        border-radius: 4px; /* 6px → 4px */
+    }
+    
+    .timetable-container {
+        padding: 16px; /* 24px → 16px */
+    }
+    
+    .week-section {
+        margin-bottom: 20px; /* 32px → 20px */
+    }
+    
+    .week-title {
+        margin-bottom: 12px; /* 20px → 12px */
+        padding: 8px; /* 12px → 8px */
+        border-radius: 6px; /* 8px → 6px */
+    }
+    
+    .week-title h3 {
+        font-size: 14px; /* 16px → 14px */
+    }
+    
+    .day-schedule {
+        padding: 12px; /* 16px → 12px */
+        margin-bottom: 12px; /* 16px → 12px */
+        border-radius: 6px; /* 8px → 6px */
+    }
+    
+    .day-header {
+        font-size: 14px; /* 16px → 14px */
+        margin-bottom: 8px; /* 12px → 8px */
+        padding-bottom: 6px; /* 8px → 6px */
+    }
+    
+    .timeline-item {
+        padding: 6px; /* 8px → 6px */
+        gap: 8px; /* 12px → 8px */
+        font-size: 13px; /* 14px → 13px */
+        border-radius: 4px; /* 6px → 4px */
+    }
+    
+    .timeline-item .time {
+        min-width: 50px; /* 60px → 50px */
+        font-size: 13px;
+    }
+    
+    .timeline-item .title {
+        font-size: 13px;
+    }
+    
+    .timeline-item .location {
+        font-size: 11px; /* 12px → 11px */
     }
     
     .schedule-legend {
         flex-direction: column;
-        gap: 8px;
+        gap: 4px; /* 8px → 4px */
+    }
+    
+    .legend-item {
+        font-size: 11px; /* 12px → 11px */
+    }
+    
+    .data-info {
+        font-size: 10px; /* 11px → 10px */
     }
     
     .program-grid {
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: 12px; /* 16px → 12px */
+    }
+    
+    .program-card {
+        padding: 16px; /* 24px → 16px */
+        border-radius: 12px; /* 16px → 12px */
+    }
+    
+    .program-card h3 {
+        font-size: 16px; /* 18px → 16px */
+    }
+    
+    .program-card p {
+        font-size: 13px; /* 14px → 13px */
+    }
+    
+    .program-card-header {
+        gap: 12px; /* 16px → 12px */
+        margin-bottom: 12px; /* 16px → 12px */
+    }
+    
+    .program-icon {
+        font-size: 24px; /* 28px → 24px */
     }
     
     .quick-actions {
         grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+        gap: 12px; /* 16px → 12px */
+    }
+    
+    .quick-action {
+        padding: 16px; /* 20px → 16px */
+        border-radius: 10px; /* 12px → 10px */
+    }
+    
+    .quick-action-icon {
+        font-size: 28px; /* 32px → 28px */
+        margin-bottom: 8px; /* 12px → 8px */
+    }
+    
+    .quick-action-title {
+        font-size: 14px;
+        margin-bottom: 6px; /* 8px → 6px */
+    }
+    
+    .quick-action-desc {
+        font-size: 13px; /* 14px → 13px */
+    }
+    
+    .principle-item {
+        padding: 12px; /* 16px → 12px */
+        gap: 12px; /* 16px → 12px */
+        margin-bottom: 8px; /* 12px → 8px */
+        border-radius: 10px; /* 12px → 10px */
+    }
+    
+    .principle-number {
+        width: 32px; /* 40px → 32px */
+        height: 32px; /* 40px → 32px */
+        font-size: 16px; /* 18px → 16px */
+    }
+    
+    .principle-text {
+        font-size: 14px;
     }
     
     .contact-grid {
         grid-template-columns: 1fr;
+        gap: 12px; /* 16px → 12px */
+    }
+    
+    .contact-item {
+        padding: 12px; /* 16px → 12px */
+        gap: 12px; /* 16px → 12px */
+        border-radius: 10px; /* 12px → 10px */
+    }
+    
+    .contact-icon {
+        font-size: 28px; /* 32px → 28px */
+    }
+    
+    .contact-info h4 {
+        font-size: 14px;
     }
     
     .sidebar {
@@ -1809,26 +2133,214 @@ body {
         right: -100%;
     }
     
+    .sidebar-header {
+        padding: 16px; /* 24px 20px → 16px */
+    }
+    
+    .sidebar-title {
+        font-size: 18px; /* 20px → 18px */
+    }
+    
+    .sidebar-subtitle {
+        font-size: 13px; /* 14px → 13px */
+    }
+    
+    .sidebar-content {
+        padding: 16px; /* 20px → 16px */
+    }
+    
+    .sidebar-section {
+        margin-bottom: 24px; /* 32px → 24px */
+    }
+    
+    .sidebar-section-title {
+        font-size: 15px; /* 16px → 15px */
+        margin-bottom: 12px; /* 16px → 12px */
+    }
+    
+    .sidebar-menu-item {
+        padding: 10px 12px; /* 12px 16px → 10px 12px */
+        gap: 12px; /* 16px → 12px */
+        border-radius: 10px; /* 12px → 10px */
+    }
+    
+    .menu-icon {
+        font-size: 18px; /* 20px → 18px */
+    }
+    
+    .menu-title {
+        font-size: 14px;
+    }
+    
+    .menu-desc {
+        font-size: 11px; /* 12px → 11px */
+    }
+    
     .nav-label {
-        font-size: 10px;
+        font-size: 10px; /* 11px → 10px */
     }
     
     .nav-icon {
-        font-size: 22px;
+        font-size: 22px; /* 24px → 22px */
+    }
+    
+    .nav-item {
+        padding: 6px 8px; /* 8px 12px → 6px 8px */
+        min-width: 50px; /* 60px → 50px */
     }
     
     .program-buttons {
         flex-direction: column;
-        gap: 8px;
+        gap: 8px; /* 12px → 8px */
     }
     
     .btn-guide,
     .btn-checklist {
         width: 100%;
+        padding: 10px 16px; /* 12px 20px → 10px 16px */
+        font-size: 14px;
+        border-radius: 6px; /* 8px → 6px */
     }
     
     .mentor-programs-container {
         flex-direction: column;
+        gap: 12px; /* 16px → 12px */
+    }
+    
+    .mentor-program-card {
+        padding: 16px; /* 24px → 16px */
+        border-radius: 12px; /* 16px → 12px */
+    }
+    
+    .program-title {
+        font-size: 20px; /* 24px → 20px */
+        margin-bottom: 8px; /* 12px → 8px */
+    }
+    
+    .program-time-location {
+        font-size: 14px; /* 16px → 14px */
+        margin-bottom: 16px; /* 20px → 16px */
+    }
+    
+    .notification-permission-banner {
+        padding: 12px 16px; /* 16px 20px → 12px 16px */
+        margin-bottom: 12px; /* 16px → 12px */
+        gap: 12px; /* 16px → 12px */
+        border-radius: 12px; /* 16px → 12px */
+    }
+    
+    .permission-icon {
+        font-size: 28px; /* 32px → 28px */
+    }
+    
+    .permission-title {
+        font-size: 15px; /* 16px → 15px */
+    }
+    
+    .permission-text {
+        font-size: 13px; /* 14px → 13px */
+    }
+    
+    .permission-actions {
+        flex-direction: column;
+        gap: 6px; /* 8px → 6px */
+    }
+    
+    .permission-btn {
+        padding: 6px 12px; /* 8px 16px → 6px 12px */
+        font-size: 13px; /* 14px → 13px */
+        border-radius: 6px; /* 8px → 6px */
+    }
+    
+    .my-page-modal {
+        padding: 12px; /* 20px → 12px */
+    }
+    
+    .my-page-modal .modal-content {
+        padding: 16px; /* 24px → 16px */
+        border-radius: 16px; /* 20px → 16px */
+    }
+    
+    .modal-title {
+        font-size: 18px; /* 20px → 18px */
+    }
+    
+    .modal-subtitle {
+        font-size: 13px; /* 14px → 13px */
+        margin-bottom: 16px; /* 24px → 16px */
+    }
+    
+    .my-info-grid {
+        gap: 12px; /* 16px → 12px */
+        margin-bottom: 16px; /* 24px → 16px */
+    }
+    
+    .info-item {
+        padding: 12px; /* 16px → 12px */
+        gap: 10px; /* 12px → 10px */
+        border-radius: 10px; /* 12px → 10px */
+    }
+    
+    .info-icon {
+        font-size: 20px; /* 24px → 20px */
+    }
+    
+    .info-label {
+        font-size: 11px; /* 12px → 11px */
+    }
+    
+    .info-value {
+        font-size: 14px;
+    }
+    
+    .modal-actions {
+        gap: 8px; /* 12px → 8px */
+    }
+    
+    .modal-btn {
+        padding: 12px; /* 14px → 12px */
+        border-radius: 10px; /* 12px → 10px */
+        font-size: 14px;
+    }
+    
+    .notifications {
+        top: 12px; /* 20px → 12px */
+        right: 12px; /* 20px → 12px */
+        max-width: 280px; /* 350px → 280px */
+    }
+    
+    .notification {
+        padding: 12px; /* 16px → 12px */
+        margin-bottom: 8px; /* 12px → 8px */
+        border-radius: 10px; /* 12px → 10px */
+    }
+    
+    .notification-title {
+        font-size: 14px;
+    }
+    
+    .notification-text {
+        font-size: 13px; /* 14px → 13px */
+    }
+    
+    /* 면담 통계 최적화 */
+    .interview-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px; /* 16px → 8px */
+        margin: 12px 0; /* 16px 0 → 12px 0 */
+    }
+    
+    .stat-item {
+        padding: 12px 8px; /* 16px 12px → 12px 8px */
+        border-radius: 10px; /* 12px → 10px */
+    }
+    
+    .stat-number {
+        font-size: 18px; /* 20px → 18px */
+    }
+    
+    .stat-label {
+        font-size: 11px; /* 12px → 11px */
     }
 }
 
@@ -1843,34 +2355,395 @@ body {
     }
 }
 
+/* 더 작은 모바일 화면 최적화 */
 @media (max-width: 480px) {
+    body {
+        padding: 8px; /* 12px → 8px */
+    }
+    
+    .header {
+        padding: 16px 12px; /* 20px 16px → 16px 12px */
+        margin-bottom: 12px; /* 16px → 12px */
+        border-radius: 12px; /* 16px → 12px */
+    }
+    
     .header h1 {
-        font-size: 20px;
+        font-size: 18px; /* 22px → 18px */
+    }
+    
+    .subtitle {
+        font-size: 13px; /* 15px → 13px */
     }
     
     .section {
-        padding: 16px;
+        padding: 12px; /* 16px → 12px */
+        margin-bottom: 12px; /* 16px → 12px */
+        border-radius: 12px; /* 16px → 12px */
+    }
+    
+    .section h2 {
+        font-size: 16px; /* 18px → 16px */
+        margin-bottom: 10px; /* 12px → 10px */
+    }
+    
+    .section-description {
+        font-size: 13px; /* 14px → 13px */
+        margin-bottom: 12px; /* 16px → 12px */
+    }
+    
+    .tasks-grid {
+        grid-template-columns: 1fr; /* 480px 이하에서는 세로 배치 */
+        gap: 8px;
     }
     
     .task-card {
-        padding: 16px;
+        padding: 12px; /* 16px → 12px */
+        border-radius: 10px; /* 12px → 10px */
     }
     
-    .interview-stats {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
+    /* 출석체크 카드 최소 크기 최적화 */
+    .attendance-morning,
+    .attendance-afternoon {
+        padding: 10px; /* 12px → 10px */
+    }
+    
+    .attendance-morning .task-title,
+    .attendance-afternoon .task-title {
+        font-size: 13px; /* 14px → 13px */
+    }
+    
+    .attendance-morning .task-details,
+    .attendance-afternoon .task-details {
+        font-size: 11px; /* 12px → 11px */
+        margin-bottom: 6px; /* 8px → 6px */
+        line-height: 1.3;
+    }
+    
+    .attendance-morning .task-progress,
+    .attendance-afternoon .task-progress {
+        margin: 4px 0; /* 8px 0 → 4px 0 */
+        height: 3px; /* 4px → 3px */
+    }
+    
+    .attendance-morning .task-button,
+    .attendance-afternoon .task-button {
+        padding: 5px 8px; /* 6px 10px → 5px 8px */
+        font-size: 11px; /* 12px → 11px */
+        width: 100%;
+        text-align: center;
+        border-radius: 4px;
+    }
+    
+    .attendance-morning .task-status,
+    .attendance-afternoon .task-status {
+        padding: 3px 8px; /* 기본값보다 작게 */
+        font-size: 10px;
+    }
+    
+    .task-title {
+        font-size: 15px; /* 16px → 15px */
+    }
+    
+    .task-details {
+        font-size: 12px; /* 13px → 12px */
+        margin-bottom: 12px; /* 16px → 12px */
+    }
+    
+    .task-button,
+    .btn-primary,
+    .btn-secondary {
+        padding: 8px 12px; /* 10px 16px → 8px 12px */
+        font-size: 12px; /* 13px → 12px */
+        border-radius: 6px; /* 8px → 6px */
+    }
+    
+    .daily-summary {
+        padding: 12px; /* 16px → 12px */
+        margin-top: 12px; /* 16px → 12px */
+        gap: 8px; /* 12px → 8px */
+        border-radius: 12px; /* 16px → 12px */
+    }
+    
+    .summary-item {
+        padding: 8px; /* 10px → 8px */
+        border-radius: 6px; /* 8px → 6px */
+    }
+    
+    .summary-icon {
+        font-size: 20px; /* 24px → 20px */
+    }
+    
+    .summary-title {
+        font-size: 13px; /* 14px → 13px */
+    }
+    
+    .summary-status {
+        font-size: 12px; /* 13px → 12px */
     }
     
     .quick-actions {
         grid-template-columns: 1fr;
+        gap: 8px; /* 12px → 8px */
     }
     
-    .modal-actions {
-        flex-direction: column;
+    .quick-action {
+        padding: 12px; /* 16px → 12px */
+        border-radius: 8px; /* 10px → 8px */
     }
     
-    .permission-actions {
-        flex-direction: column;
-        gap: 6px;
+    .quick-action-icon {
+        font-size: 24px; /* 28px → 24px */
+        margin-bottom: 6px; /* 8px → 6px */
+    }
+    
+    .quick-action-title {
+        font-size: 13px; /* 14px → 13px */
+        margin-bottom: 4px; /* 6px → 4px */
+    }
+    
+    .quick-action-desc {
+        font-size: 12px; /* 13px → 12px */
+    }
+    
+    .principle-item {
+        padding: 10px; /* 12px → 10px */
+        gap: 10px; /* 12px → 10px */
+        margin-bottom: 6px; /* 8px → 6px */
+        border-radius: 8px; /* 10px → 8px */
+    }
+    
+    .principle-number {
+        width: 28px; /* 32px → 28px */
+        height: 28px; /* 32px → 28px */
+        font-size: 14px; /* 16px → 14px */
+    }
+    
+    .principle-text {
+        font-size: 13px; /* 14px → 13px */
+    }
+    
+    .program-card {
+        padding: 12px; /* 16px → 12px */
+        border-radius: 10px; /* 12px → 10px */
+    }
+    
+    .program-card h3 {
+        font-size: 15px; /* 16px → 15px */
+    }
+    
+    .program-card p {
+        font-size: 12px; /* 13px → 12px */
+    }
+    
+    .program-card-header {
+        gap: 10px; /* 12px → 10px */
+        margin-bottom: 10px; /* 12px → 10px */
+    }
+    
+    .program-icon {
+        font-size: 20px; /* 24px → 20px */
+    }
+    
+    .mentor-program-card {
+        padding: 12px; /* 16px → 12px */
+        border-radius: 10px; /* 12px → 10px */
+    }
+    
+    .program-title {
+        font-size: 18px; /* 20px → 18px */
+        margin-bottom: 6px; /* 8px → 6px */
+    }
+    
+    .program-time-location {
+        font-size: 13px; /* 14px → 13px */
+        margin-bottom: 12px; /* 16px → 12px */
+    }
+    
+    .btn-guide,
+    .btn-checklist {
+        padding: 8px 12px; /* 10px 16px → 8px 12px */
+        font-size: 13px; /* 14px → 13px */
+        border-radius: 6px;
+    }
+    
+    .schedule-today {
+        padding: 12px; /* 16px → 12px */
+        border-radius: 8px; /* 10px → 8px */
+    }
+    
+    .today-date {
+        font-size: 15px; /* 16px → 15px */
+        margin-bottom: 10px; /* 12px → 10px */
+    }
+    
+    .schedule-item {
+        padding: 10px; /* 12px → 10px */
+        gap: 10px; /* 12px → 10px */
+        margin-bottom: 6px; /* 8px → 6px */
+        border-radius: 8px; /* 10px → 8px */
+    }
+    
+    .schedule-time {
+        font-size: 12px; /* 13px → 12px */
+        padding: 4px 8px; /* 6px 10px → 4px 8px */
+        min-width: 45px; /* 50px → 45px */
+        border-radius: 4px; /* 6px → 4px */
+    }
+    
+    .schedule-title {
+        font-size: 14px; /* 15px → 14px */
+    }
+    
+    .schedule-location {
+        font-size: 12px; /* 13px → 12px */
+    }
+    
+    .schedule-badge {
+        padding: 3px 6px; /* 4px 8px → 3px 6px */
+        font-size: 10px; /* 11px → 10px */
+        border-radius: 12px; /* 16px → 12px */
+    }
+    
+    .btn-refresh-schedule,
+    .btn-full-schedule {
+        padding: 5px 10px; /* 6px 12px → 5px 10px */
+        font-size: 12px; /* 13px → 12px */
+        border-radius: 4px; /* 6px → 4px */
+    }
+    
+    .notification-permission-banner {
+        padding: 10px 12px; /* 12px 16px → 10px 12px */
+        margin-bottom: 10px; /* 12px → 10px */
+        gap: 10px; /* 12px → 10px */
+        border-radius: 10px; /* 12px → 10px */
+    }
+    
+    .permission-icon {
+        font-size: 24px; /* 28px → 24px */
+    }
+    
+    .permission-title {
+        font-size: 14px; /* 15px → 14px */
+    }
+    
+    .permission-text {
+        font-size: 12px; /* 13px → 12px */
+    }
+    
+    .permission-btn {
+        padding: 5px 10px; /* 6px 12px → 5px 10px */
+        font-size: 12px; /* 13px → 12px */
+        border-radius: 4px; /* 6px → 4px */
+    }
+    
+    .nav-item {
+        padding: 4px 6px; /* 6px 8px → 4px 6px */
+        min-width: 45px; /* 50px → 45px */
+    }
+    
+    .nav-icon {
+        font-size: 20px; /* 22px → 20px */
+        margin-bottom: 2px; /* 4px → 2px */
+    }
+    
+    .nav-label {
+        font-size: 9px; /* 10px → 9px */
+    }
+    
+    .nav-badge {
+        top: 2px; /* 4px → 2px */
+        right: 6px; /* 8px → 6px */
+        font-size: 9px; /* 10px → 9px */
+        padding: 1px 4px; /* 2px 6px → 1px 4px */
+        min-width: 14px; /* 16px → 14px */
+    }
+    
+    .interview-stats {
+        grid-template-columns: repeat(4, 1fr); /* 1X4 그리드 유지 */
+        gap: 6px; /* 8px → 6px */
+        margin: 10px 0; /* 12px 0 → 10px 0 */
+    }
+    
+    .stat-item {
+        padding: 8px 4px; /* 10px 6px → 8px 4px */
+        border-radius: 8px; /* 10px → 8px */
+    }
+    
+    .stat-number {
+        font-size: 14px; /* 16px → 14px */
+        margin-bottom: 2px; /* 2px 유지 */
+    }
+    
+    .stat-label {
+        font-size: 9px; /* 10px → 9px */
+        line-height: 1.2;
+    }
+}
+
+/* ===================================================================
+   스크롤 스타일 - 모바일 최적화
+   =================================================================== */
+::-webkit-scrollbar {
+    width: 6px; /* 8px → 6px */
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px; /* 4px → 3px */
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, var(--sk-red), var(--sk-red-light));
+    border-radius: 3px; /* 4px → 3px */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, var(--sk-red-dark), var(--sk-red));
+}
+
+/* ===================================================================
+   추가 모바일 터치 최적화
+   =================================================================== */
+@media (max-width: 768px) {
+    /* 터치 타겟 크기 최소 44px 보장 */
+    .task-button,
+    .btn-primary,
+    .btn-secondary,
+    .quick-action,
+    .nav-item,
+    .sidebar-menu-item {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* 호버 효과를 터치에서는 제거 */
+    @media (hover: none) and (pointer: coarse) {
+        .task-card:hover,
+        .program-card:hover,
+        .quick-action:hover,
+        .principle-item:hover,
+        .schedule-item:hover {
+            transform: none;
+            box-shadow: initial;
+        }
+        
+        .task-button:hover,
+        .btn-primary:hover,
+        .btn-secondary:hover {
+            transform: none;
+            box-shadow: initial;
+        }
+    }
+    
+    /* 포커스 스타일 강화 */
+    .task-button:focus,
+    .btn-primary:focus,
+    .btn-secondary:focus,
+    .quick-action:focus,
+    .nav-item:focus {
+        outline: 2px solid var(--sk-red);
+        outline-offset: 2px;
     }
 }
