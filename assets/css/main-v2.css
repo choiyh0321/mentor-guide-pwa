@@ -407,6 +407,35 @@ body {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
+/* 출석체크 카드 전용 스타일 - 컴팩트 디자인 */
+.attendance-morning,
+.attendance-afternoon {
+    /* 기본 태스크 카드보다 작게 */
+}
+
+.attendance-morning .task-details,
+.attendance-afternoon .task-details {
+    margin-bottom: 12px; /* 20px → 12px */
+    font-size: 13px; /* 14px → 13px */
+}
+
+.attendance-morning .task-progress,
+.attendance-afternoon .task-progress {
+    margin: 8px 0; /* 16px 0 → 8px 0 */
+    height: 4px; /* 6px → 4px */
+}
+
+.attendance-morning .task-actions,
+.attendance-afternoon .task-actions {
+    gap: 8px; /* 12px → 8px */
+}
+
+.attendance-morning .task-button,
+.attendance-afternoon .task-button {
+    padding: 8px 14px; /* 12px 20px → 8px 14px */
+    font-size: 13px; /* 14px → 13px */
+}
+
 /* 면담 카드 전용 스타일 */
 .interview-card {
     grid-column: 1 / -1;
@@ -1760,13 +1789,44 @@ body {
     }
     
     .tasks-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr; /* 출석체크 카드를 나란히 배치 */
         gap: 12px; /* 16px → 12px */
     }
     
     .task-card {
         padding: 16px; /* 24px → 16px */
         border-radius: 12px; /* 16px → 12px */
+    }
+    
+    /* 출석체크 카드 모바일 최적화 */
+    .attendance-morning,
+    .attendance-afternoon {
+        padding: 12px; /* 16px → 12px */
+    }
+    
+    .attendance-morning .task-title,
+    .attendance-afternoon .task-title {
+        font-size: 14px; /* 16px → 14px */
+    }
+    
+    .attendance-morning .task-details,
+    .attendance-afternoon .task-details {
+        font-size: 12px; /* 13px → 12px */
+        margin-bottom: 8px; /* 12px → 8px */
+    }
+    
+    .attendance-morning .task-button,
+    .attendance-afternoon .task-button {
+        padding: 6px 10px; /* 8px 14px → 6px 10px */
+        font-size: 12px; /* 13px → 12px */
+        width: 100%;
+        text-align: center;
+    }
+    
+    /* 면담 카드는 전체 너비 유지 */
+    .interview-card {
+        grid-column: 1 / -1;
+        padding: 16px;
     }
     
     .task-title {
@@ -2325,9 +2385,53 @@ body {
         margin-bottom: 12px; /* 16px → 12px */
     }
     
+    .tasks-grid {
+        grid-template-columns: 1fr; /* 480px 이하에서는 세로 배치 */
+        gap: 8px;
+    }
+    
     .task-card {
         padding: 12px; /* 16px → 12px */
         border-radius: 10px; /* 12px → 10px */
+    }
+    
+    /* 출석체크 카드 최소 크기 최적화 */
+    .attendance-morning,
+    .attendance-afternoon {
+        padding: 10px; /* 12px → 10px */
+    }
+    
+    .attendance-morning .task-title,
+    .attendance-afternoon .task-title {
+        font-size: 13px; /* 14px → 13px */
+    }
+    
+    .attendance-morning .task-details,
+    .attendance-afternoon .task-details {
+        font-size: 11px; /* 12px → 11px */
+        margin-bottom: 6px; /* 8px → 6px */
+        line-height: 1.3;
+    }
+    
+    .attendance-morning .task-progress,
+    .attendance-afternoon .task-progress {
+        margin: 4px 0; /* 8px 0 → 4px 0 */
+        height: 3px; /* 4px → 3px */
+    }
+    
+    .attendance-morning .task-button,
+    .attendance-afternoon .task-button {
+        padding: 5px 8px; /* 6px 10px → 5px 8px */
+        font-size: 11px; /* 12px → 11px */
+        width: 100%;
+        text-align: center;
+        border-radius: 4px;
+    }
+    
+    .attendance-morning .task-status,
+    .attendance-afternoon .task-status {
+        padding: 3px 8px; /* 기본값보다 작게 */
+        font-size: 10px;
     }
     
     .task-title {
