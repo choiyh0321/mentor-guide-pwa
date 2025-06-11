@@ -226,6 +226,10 @@ class ScheduleManager {
     if (isBreakTime) {
       scheduleItem.classList.add('lunch-break');
     }
+
+    if (role.includes('진행') || role.includes('주도') || role.includes('필수')) {
+      scheduleItem.classList.add('mentor-program');
+    }
     
     // 기존 디자인과 동일한 구조
     scheduleItem.innerHTML = `
