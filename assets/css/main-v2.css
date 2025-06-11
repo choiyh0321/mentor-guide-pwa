@@ -443,7 +443,7 @@ body {
 
 .interview-stats {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, 1fr); /* 1X4 그리드로 변경 */
     gap: 16px;
     margin: 16px 0;
 }
@@ -614,7 +614,7 @@ body {
     margin-bottom: 16px;
 }
 
-/* 일정 아이템 스타일 */
+/* 일정 아이템 스타일 - 호버 효과 개선 */
 .schedule-item {
     display: flex;
     align-items: center;
@@ -628,15 +628,28 @@ body {
     transition: all 0.3s ease;
 }
 
-.schedule-item:hover {
+/* 멘토 진행/필수 참관 프로그램에만 호버 효과 적용 */
+.schedule-item.mentor:hover,
+.schedule-item.required:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 25px rgba(25, 118, 210, 0.2); /* 파란색 그림자 */
+    background: linear-gradient(135deg, #e3f2fd, #f8f9ff); /* 하늘색 배경 */
+    border-left-color: #1976d2;
 }
 
+/* 휴식시간은 호버 효과 제거 */
 .schedule-item.lunch-break,
 .schedule-item.dinner-break {
     background: linear-gradient(135deg, #fff8e1, #f3e5ab);
     border-left-color: #ffa726;
+    /* 호버 효과 없음 */
+}
+
+.schedule-item.lunch-break:hover,
+.schedule-item.dinner-break:hover {
+    transform: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* 기본 그림자 유지 */
+    background: linear-gradient(135deg, #fff8e1, #f3e5ab); /* 기본 배경 유지 */
 }
 
 .schedule-time {
@@ -1595,7 +1608,7 @@ body {
 }
 
 .sidebar-section-title {
-    font-size: 16px;
+    font-size: 16px; /* 원래 크기 유지 */
     font-weight: 600;
     color: var(--gray-600);
     margin-bottom: 16px;
@@ -1638,7 +1651,7 @@ body {
 }
 
 .menu-icon {
-    font-size: 20px;
+    font-size: 20px; /* 원래 크기 유지 */
     width: 24px;
     text-align: center;
 }
@@ -1648,13 +1661,17 @@ body {
 }
 
 .menu-title {
-    font-weight: 600;
+    font-weight: 700; /* 600 → 700으로 강화 */
     margin-bottom: 2px;
+    font-size: 15px; /* 원래 크기 유지 */
+    font-family: -apple-system, BlinkMacSystemFont, 'Malgun Gothic', '맑은 고딕', sans-serif; /* 한글 폰트 우선 */
 }
 
 .menu-desc {
-    font-size: 12px;
+    font-size: 13px; /* 12px → 13px로 증가 */
     opacity: 0.7;
+    font-weight: 400;
+    font-family: -apple-system, BlinkMacSystemFont, 'Malgun Gothic', '맑은 고딕', sans-serif; /* 한글 폰트 우선 */
 }
 
 .menu-arrow {
@@ -2653,23 +2670,24 @@ body {
     }
     
     .interview-stats {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(4, 1fr); /* 1X4 그리드 유지 */
         gap: 6px; /* 8px → 6px */
         margin: 10px 0; /* 12px 0 → 10px 0 */
     }
     
     .stat-item {
-        padding: 10px 6px; /* 12px 8px → 10px 6px */
+        padding: 8px 4px; /* 10px 6px → 8px 4px */
         border-radius: 8px; /* 10px → 8px */
     }
     
     .stat-number {
-        font-size: 16px; /* 18px → 16px */
-        margin-bottom: 2px; /* 4px → 2px */
+        font-size: 14px; /* 16px → 14px */
+        margin-bottom: 2px; /* 2px 유지 */
     }
     
     .stat-label {
-        font-size: 10px; /* 11px → 10px */
+        font-size: 9px; /* 10px → 9px */
+        line-height: 1.2;
     }
 }
 
