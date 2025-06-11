@@ -227,6 +227,8 @@ class ScheduleManager {
       scheduleItem.classList.add('lunch-break');
     }
 
+    const role = mentorRole?.toLowerCase() || '';
+
     if (role.includes('진행') || role.includes('주도') || role.includes('필수')) {
       scheduleItem.classList.add('mentor-program');
     }
