@@ -628,8 +628,8 @@ body {
     transition: all 0.3s ease;
 }
 
-/* 멘토 진행/필수 참관 프로그램에만 호버 효과 적용 */
-.schedule-item.mentor {
+/* 멘토 진행/필수 참관 프로그램에만 효과 적용 */
+.schedule-item.mentor-program{
     background: linear-gradient(135deg, #e3f2fd, #f8f9ff);
     border-left-color: #1976d2;
 }
