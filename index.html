@@ -2042,6 +2042,21 @@
 
         // 모바일 푸시 알림 관련 함수들
         function requestMobilePushPermission() {
+            console.log('🔔 현재 알림 권한 상태:', Notification.permission);
+            
+            // 이미 차단된 상태라면
+            if (Notification.permission === 'denied') {
+                alert('알림이 차단되어 있습니다.\n\n삼성 인터넷 → 주소창 자물쇠 아이콘 → 권한 → 알림 허용으로 변경해주세요.');
+                return;
+            }
+            
+            // 이미 허용된 상태라면
+            if (Notification.permission === 'granted') {
+                alert('알림이 이미 활성화되어 있습니다!');
+                return;
+            }
+            
+            // 권한 요청
             if (mobilePushManager) {
                 mobilePushManager.requestPermission();
             }
