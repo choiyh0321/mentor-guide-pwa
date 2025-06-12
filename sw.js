@@ -341,3 +341,210 @@ if (!self.firebase) {
     );
   });
 }
+
+// sw.js 파일에 PWA 푸시 알림 전용 코드 추가
+
+// 기존 sw.js 코드 끝에 이 부분을 추가하세요
+
+// =================================================================
+// PWA 전용 푸시 알림 처리 (삼성 인터넷 호환)
+// =================================================================
+
+// PWA 환경 감지
+const isPWA = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
+const isSamsungInternet = /SamsungBrowser/i.test(navigator.userAgent);
+
+console.log('[SW] PWA 환경:', isPWA, '삼성 인터넷:', isSamsungInternet);
+
+// 푸시 메시지 처리 (Firebase 없이 직접 처리)
+self.addEventListener('push', event => {
+  console.log('[SW] 푸시 메시지 수신:', event);
+  
+  if (!event.data) {
+    console.log('[SW] 푸시 데이터 없음');
+    return;
+  }
+
+  try {
+    const data = event.data.json();
+    
+    const notificationTitle = data.title || 'SK 멘토 가이드';
+    const notificationOptions = {
+      body: data.body || '새로운 알림이 있습니다.',
+      icon: '/assets/images/icon-192.png',
+      badge: '/assets/images/icon-192.png',
+      tag: 'sk-mentor-notification',
+      requireInteraction: true,
+      vibrate: [200, 100, 200],
+      data: {
+        url: data.url || '/',
+        timestamp: Date.now()
+      },
+      actions: [
+        {
+          action: 'open',
+          title: '확인하기'
+        },
+        {
+          action: 'close', 
+          title: '닫기'
+        }
+      ]
+    };
+
+    event.waitUntil(
+      self.registration.showNotification(notificationTitle, notificationOptions)
+    );
+    
+  } catch (error) {
+    console.error('[SW] 푸시 데이터 파싱 실패:', error);
+    
+    // 파싱 실패시 기본 알림
+    event.waitUntil(
+      self.registration.showNotification('SK 멘토 가이드', {
+        body: '새로운 알림이 있습니다.',
+        icon: '/assets/images/icon-192.png',
+        tag: 'sk-mentor-notification'
+      })
+    );
+  }
+});
+
+// 알림 클릭 처리 (PWA 전용)
+self.addEventListener('notificationclick', event => {
+  console.log('[SW] PWA 알림 클릭:', event);
+  
+  event.notification.close();
+
+  if (event.action === 'close') {
+    return;
+  }
+
+  const urlToOpen = event.notification.data?.url || '/';
+  
+  event.waitUntil(
+    clients.matchAll({
+      type: 'window',
+      includeUncontrolled: true
+    }).then(clientList => {
+      // PWA 창이 이미 열려있으면 포커스
+      for (let i = 0; i < clientList.length; i++) {
+        const client = clientList[i];
+        if (client.url.includes(self.location.origin) && 'focus' in client) {
+          // 특정 URL로 이동
+          if (urlToOpen !== '/') {
+            client.postMessage({
+              type: 'NAVIGATE_TO',
+              url: urlToOpen
+            });
+          }
+          return client.focus();
+        }
+      }
+      
+      // 열린 창이 없으면 새 창 열기
+      if (clients.openWindow) {
+        return clients.openWindow(urlToOpen);
+      }
+    })
+  );
+});
+
+// PWA 전용 메시지 처리
+self.addEventListener('message', event => {
+  console.log('[SW] 메시지 수신:', event.data);
+  
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+  
+  // PWA에서 수동 알림 전송 요청
+  if (event.data && event.data.type === 'SEND_NOTIFICATION') {
+    const { title, body, url } = event.data;
+    
+    self.registration.showNotification(title, {
+      body: body,
+      icon: '/assets/images/icon-192.png',
+      badge: '/assets/images/icon-192.png',
+      tag: 'manual-notification',
+      requireInteraction: true,
+      vibrate: [200, 100, 200],
+      data: { url: url || '/' }
+    });
+  }
+  
+  // PWA 알림 권한 확인
+  if (event.data && event.data.type === 'CHECK_NOTIFICATION_PERMISSION') {
+    event.ports[0].postMessage({
+      permission: Notification.permission,
+      isPWA: isPWA
+    });
+  }
+});
+
+// PWA 설치 감지
+self.addEventListener('appinstalled', event => {
+  console.log('[SW] PWA 설치 완료');
+  
+  // 설치 완료 알림
+  setTimeout(() => {
+    self.registration.showNotification('🎯 SK 멘토 가이드 설치 완료', {
+      body: '이제 앱에서 푸시 알림을 받을 수 있습니다!',
+      icon: '/assets/images/icon-192.png',
+      tag: 'install-complete',
+      requireInteraction: false
+    });
+  }, 2000);
+});
+
+// 정기 알림 스케줄링 (PWA 전용)
+function schedulePWANotifications() {
+  console.log('[SW] PWA 정기 알림 스케줄링 시작');
+  
+  // 매분마다 시간 체크
+  setInterval(() => {
+    const now = new Date();
+    const hour = now.getHours();
+    const minute = now.getMinutes();
+    
+    // 오전 8:50 알림
+    if (hour === 8 && minute === 50) {
+      self.registration.showNotification('🌅 오전 출석체크 알림', {
+        body: '10분 후 오전 9시 출석체크가 시작됩니다.',
+        icon: '/assets/images/icon-192.png',
+        tag: 'attendance-morning',
+        requireInteraction: true,
+        data: { url: '/guides/attendance.html' }
+      });
+    }
+    
+    // 오후 1:50 알림
+    if (hour === 13 && minute === 50) {
+      self.registration.showNotification('🌞 오후 출석체크 알림', {
+        body: '10분 후 오후 2시 출석체크가 시작됩니다.',
+        icon: '/assets/images/icon-192.png',
+        tag: 'attendance-afternoon',
+        requireInteraction: true,
+        data: { url: '/guides/attendance.html' }
+      });
+    }
+    
+    // 저녁 6시 마무리 알림
+    if (hour === 18 && minute === 0) {
+      self.registration.showNotification('🌆 하루 마무리', {
+        body: '오늘 하루 멘토링 업무를 확인해보세요.',
+        icon: '/assets/images/icon-192.png',
+        tag: 'daily-summary',
+        requireInteraction: false,
+        data: { url: '/' }
+      });
+    }
+  }, 60000); // 1분마다
+}
+
+// PWA 환경에서만 정기 알림 시작
+if (isPWA || self.registration) {
+  schedulePWANotifications();
+}
+
+console.log('[SW] PWA 푸시 알림 시스템 로드 완료');
