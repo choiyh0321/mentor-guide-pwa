@@ -8,7 +8,7 @@
     <meta name="theme-color" content="#EA4335">
     
     <!-- CSS 파일 링크 -->
-    <link rel="stylesheet" href="assets/css/main-v2.1.css">  
+    <link rel="stylesheet" href="assets/css/main.css">  
 </head>
 
 <body>
@@ -1675,7 +1675,7 @@
                         <p><strong>앱 이름:</strong> SK 신입구성원 멘토 가이드</p>
                         <p><strong>버전:</strong> 1.0.0</p>
                         <p><strong>업데이트:</strong> 2025.06.09</p>
-                        <p><strong>개발:</strong> SK아카데미 최유현 RF</p>
+                        <p><strong>개발:</strong> SK아카데미</p>
                     </div>
                     <button onclick="this.parentElement.parentElement.remove()" 
                             style="
@@ -1698,6 +1698,21 @@
 
         // 모바일 푸시 알림 관련 함수들
         function requestMobilePushPermission() {
+            console.log('🔔 현재 알림 권한 상태:', Notification.permission);
+            
+            // 이미 차단된 상태라면
+            if (Notification.permission === 'denied') {
+                alert('알림이 차단되어 있습니다.\n\n삼성 인터넷 → 주소창 자물쇠 아이콘 → 권한 → 알림 허용으로 변경해주세요.');
+                return;
+            }
+            
+            // 이미 허용된 상태라면
+            if (Notification.permission === 'granted') {
+                alert('알림이 이미 활성화되어 있습니다!');
+                return;
+            }
+            
+            // 권한 요청
             if (mobilePushManager) {
                 mobilePushManager.requestPermission();
             }
@@ -1870,8 +1885,8 @@
 <!-- 🔄 기존 사이드바를 이것으로 전체 교체 -->
 <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
-        <div class="sidebar-title">🎯 멘토 가이드 모음</div>
-        <div class="sidebar-subtitle">멘토를 위한 A to Z</div>
+        <div class="sidebar-title">🎯 멘토 가이드</div>
+        <div class="sidebar-subtitle">완전한 가이드 모음</div>
         <button class="sidebar-close" onclick="closeSidebar()">×</button>
     </div>
     
@@ -1900,7 +1915,7 @@
                 <div class="menu-arrow">→</div>
             </a>
                         
-            <a href="guides/interview.html" class="sidebar-menu-item">
+            <a href="guides/interview.html" class="sidebar-menu-item featured">
                 <div class="menu-icon">💬</div>
                 <div class="menu-text">
                     <div class="menu-title">1:1 면담</div>
@@ -1915,7 +1930,7 @@
         <!-- 가이드 모음 -->
         <div class="sidebar-section">
             <div class="sidebar-section-title">
-                📚 유용한 가이드
+                📚 가이드 모음
             </div>
             
             <a href="guides/memorial-tour.html" class="sidebar-menu-item">
