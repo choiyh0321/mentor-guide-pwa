@@ -1164,6 +1164,14 @@
     <script>
         // 페이지 로드시 초기화
         document.addEventListener('DOMContentLoaded', function() {
+            // 멘토 정보 확인 (이 부분을 추가!)
+            const mentorInfo = localStorage.getItem('sk-mentor-info');
+            
+            if (!mentorInfo) {
+                alert('멘토 정보를 먼저 설정해주세요.');
+                window.location.href = '../index.html';
+                return;
+            }
             console.log('1:1 면담 가이드 로드 완료');
             
             // 기본 탭 활성화 - 준비 탭부터 시작
