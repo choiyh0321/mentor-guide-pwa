@@ -2240,6 +2240,27 @@
             const sideMenu = document.getElementById("side-menu");
             if (sideMenu) sideMenu.classList.remove("open");
         }
+
+        // 멘토 정보 체크하고 페이지 이동하는 함수
+        function checkMentorInfoAndGo(url) {
+            const mentorInfo = localStorage.getItem('sk-mentor-info');
+            
+            if (!mentorInfo) {
+                alert('멘토 정보를 먼저 설정해주세요.');
+                // 사이드바가 열려있으면 닫기
+                if (typeof closeSidebar === 'function') {
+                    closeSidebar();
+                }
+                // 멘토 설정 모달 열기
+                if (mentorTeamManager) {
+                    mentorTeamManager.showMentorSetupForm();
+                }
+                return;
+            }
+            
+            // 멘토 정보가 있으면 페이지 이동
+            window.location.href = url;
+        }
     </script>
 
 
