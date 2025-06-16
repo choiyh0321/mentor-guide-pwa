@@ -2,7 +2,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="format-detection" content="telephone=no">
     <title>🏛️ 기념관 투어 가이드</title>
     <meta name="theme-color" content="#EA1917">
     
@@ -38,6 +41,9 @@
             color: #202124;
             line-height: 1.6;
             min-height: 100vh;
+            /* Pull-to-refresh 비활성화 */
+            overscroll-behavior-y: contain;
+            -webkit-overflow-scrolling: touch;
         }
 
         /* ===================================================================
@@ -1208,6 +1214,29 @@
         // 페이지 로드 시 초기화
         document.addEventListener('DOMContentLoaded', function() {
             console.log('기념관 투어 가이드 로드 완료');
+            
+            // Pull-to-refresh 비활성화
+            document.body.addEventListener('touchstart', function(e) {
+                if (e.touches.length !== 1) return;
+                
+                const touch = e.touches[0];
+                const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                
+                // 페이지 최상단에서 아래로 스와이프하는 경우 방지
+                if (scrollTop === 0 && touch.clientY > 50) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+            
+            document.body.addEventListener('touchmove', function(e) {
+                const touch = e.touches[0];
+                const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                
+                // 페이지 최상단에서 아래로 당기는 동작 방지
+                if (scrollTop === 0 && touch.clientY > 50) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
             
             // 초기 설정
             showFloor(0);
