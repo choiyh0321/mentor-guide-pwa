@@ -7,127 +7,136 @@
     <meta name="theme-color" content="#EA1917">
     
     <script>
-        let currentStep = 0;
-        const totalSteps = 12;
+        // 전역 함수들을 먼저 정의
+        let isGuideMode = true;
+        let currentFloor = 0;
+        const floors = ['1층', '2층', 'B1층'];
 
-        function switchView(mode) {
-            console.log('switchView 호출:', mode);
-            const overviewMode = document.getElementById('overviewMode');
+        function goBack() {
+            if (document.referrer && document.referrer !== window.location.href) {
+                history.back();
+            } else {
+                window.location.href = '../index.html';
+            }
+        }
+
+        function switchMode(mode) {
+            const guideMode = document.getElementById('guideMode');
             const tourMode = document.getElementById('tourMode');
             const toggleBtns = document.querySelectorAll('.toggle-btn');
             
-            if (mode === 'overview') {
-                if (overviewMode) overviewMode.style.display = 'block';
+            if (mode === 'guide') {
+                isGuideMode = true;
+                if (guideMode) guideMode.style.display = 'block';
                 if (tourMode) tourMode.style.display = 'none';
                 toggleBtns.forEach(btn => btn.classList.remove('active'));
                 if (toggleBtns[0]) toggleBtns[0].classList.add('active');
             } else if (mode === 'tour') {
-                if (overviewMode) overviewMode.style.display = 'none';
+                isGuideMode = false;
+                if (guideMode) guideMode.style.display = 'none';
                 if (tourMode) tourMode.style.display = 'block';
                 toggleBtns.forEach(btn => btn.classList.remove('active'));
                 if (toggleBtns[1]) toggleBtns[1].classList.add('active');
-                setTimeout(updateNavigation, 100);
             }
         }
 
-        function nextStep() {
-            if (currentStep < totalSteps - 1) {
-                currentStep++;
-                scrollToStep(currentStep);
-                updateNavigation();
-            } else {
-                if (confirm('기념관 투어 가이드를 완료하시겠습니까?')) {
-                    alert('🎉 기념관 투어 완료! 수고하셨습니다.');
-                }
-            }
-        }
-
-        function previousStep() {
-            if (currentStep > 0) {
-                currentStep--;
-                scrollToStep(currentStep);
-                updateNavigation();
-            }
-        }
-
-        function scrollToStep(step) {
-            const container = document.getElementById('stepCards');
-            if (container) {
-                container.scrollTo({
-                    left: step * container.clientWidth,
-                    behavior: 'smooth'
-                });
-            }
-        }
-
-        function updateNavigation() {
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const stepIndicator = document.getElementById('stepIndicator');
+        function showFloor(floorIndex) {
+            currentFloor = floorIndex;
+            const floorContents = document.querySelectorAll('.floor-content');
+            const floorButtons = document.querySelectorAll('.floor-btn');
             
-            if (prevBtn) prevBtn.disabled = currentStep === 0;
-            if (nextBtn) nextBtn.textContent = currentStep === totalSteps - 1 ? '완료' : '다음';
-            if (stepIndicator) stepIndicator.textContent = `${currentStep + 1}/${totalSteps}`;
+            floorContents.forEach((content, index) => {
+                content.style.display = index === floorIndex ? 'block' : 'none';
+            });
+            
+            floorButtons.forEach((btn, index) => {
+                btn.classList.toggle('active', index === floorIndex);
+            });
+            
+            // 첫 번째 전시관 자동 선택
+            const firstBtn = floorContents[floorIndex]?.querySelector('.exhibition-btn');
+            if (firstBtn) {
+                const exhibitionId = firstBtn.getAttribute('onclick').match(/'([^']+)'/)[1];
+                showExhibition(exhibitionId);
+            }
+            
+            updateCurrentLocation();
         }
 
-        function goBack() {
-            try {
-                if (window.history.length > 1) {
-                    window.history.back();
-                    return;
-                }
-            } catch (e) {
-                console.log('history.back() 실패:', e);
+        function showExhibition(exhibitionId) {
+            const exhibitions = document.querySelectorAll('.exhibition-detail');
+            const buttons = document.querySelectorAll('.exhibition-btn');
+            
+            exhibitions.forEach(ex => ex.style.display = 'none');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            const targetExhibition = document.getElementById(exhibitionId);
+            const targetButton = document.querySelector(`[onclick="showExhibition('${exhibitionId}')"]`);
+            
+            if (targetExhibition) {
+                targetExhibition.style.display = 'block';
+                targetExhibition.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
+            if (targetButton) targetButton.classList.add('active');
+            
+            updateCurrentLocation();
+        }
 
-            try {
-                const currentUrl = window.location.href;
-                const parentUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
-                if (parentUrl && parentUrl !== currentUrl) {
-                    window.location.href = parentUrl;
-                    return;
-                }
-            } catch (e) {
-                console.log('상위 폴더 이동 실패:', e);
-            }
-
-            try {
-                window.location.href = '../index.html';
-            } catch (e) {
-                console.log('index.html 이동 실패:', e);
-                window.open('../index.html', '_blank');
+        // 현재 위치 업데이트
+        function updateCurrentLocation() {
+            const currentLocationElement = document.getElementById('currentLocation');
+            if (currentLocationElement) {
+                const floorName = floors[currentFloor];
+                const activeExhibition = document.querySelector('.exhibition-btn.active');
+                const exhibitionName = activeExhibition ? activeExhibition.textContent.trim() : '';
+                
+                currentLocationElement.textContent = `${floorName} - ${exhibitionName}`;
             }
         }
     </script>
 
     <style>
+        /* ===================================================================
+           SK 브랜드 컬러 변수 & 글래스모피즘 기본 스타일 (Daily Opening과 동일)
+           =================================================================== */
         :root {
             --sk-red: #EA1917;
             --sk-orange: #FF6B35;
+            --sk-red-light: #FF4444;
+            --sk-red-dark: #CC1515;
             --success: #4CAF50;
             --warning: #FF9800;
+            --error: #F44336;
             --info: #2196F3;
             --purple: #9C27B0;
+            --gray-50: #FAFAFA;
+            --gray-100: #F5F5F5;
+            --gray-600: #757575;
+            --gray-900: #212121;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
-            color: #333;
+            color: #202124;
             line-height: 1.6;
+            min-height: 100vh;
         }
 
+        /* ===================================================================
+           헤더 - Daily Opening 스타일 적용
+           =================================================================== */
         .header {
             background: linear-gradient(135deg, var(--sk-orange) 0%, var(--sk-red) 100%);
             color: white;
             padding: 20px;
+            box-shadow: 0 10px 40px rgba(234, 25, 23, 0.2);
             position: relative;
             overflow: hidden;
         }
@@ -143,34 +152,45 @@
             pointer-events: none;
         }
 
-        .header-content {
-            position: relative;
-            z-index: 10;
-        }
-
-        .back-btn {
-            background: rgba(255,255,255,0.2);
-            border: none;
+        .back-button {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin-bottom: 12px;
+            padding: 10px 16px;
+            border-radius: 12px;
             cursor: pointer;
-            z-index: 9999;
-            position: relative;
-        }
-
-        .title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .subtitle {
-            opacity: 0.9;
             font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: fit-content;
         }
 
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header .subtitle {
+            font-size: 16px;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        /* ===================================================================
+           모드 토글 - Vision Building 스타일 적용
+           =================================================================== */
         .view-toggle {
             position: fixed;
             top: 20px;
@@ -201,339 +221,347 @@
             color: white;
         }
 
-        .overview-mode {
-            display: block;
+        /* ===================================================================
+           컨테이너 & 섹션 - Daily Opening 스타일 적용
+           =================================================================== */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 24px 20px;
         }
 
+        .section {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            color: var(--sk-red);
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: #333;
+            border-left: 4px solid var(--sk-red);
+            padding-left: 16px;
+            font-weight: 600;
+        }
+
+        /* ===================================================================
+           투어 개요 카드 - Daily Opening schedule-info 스타일 적용
+           =================================================================== */
+        .tour-overview {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(129, 199, 132, 0.1));
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(76, 175, 80, 0.1);
+        }
+
+        .tour-overview::before {
+            content: "🏛️";
+            position: absolute;
+            top: -12px;
+            right: 24px;
+            font-size: 28px;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .tour-time {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1b5e20;
+            margin-bottom: 8px;
+        }
+
+        .tour-note {
+            color: var(--success);
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        /* ===================================================================
+           가이드 정보 아이템 - Mentor Life Guide 스타일 적용
+           =================================================================== */
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border-left: 4px solid var(--sk-red);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: all 0.3s ease;
+        }
+
+        .info-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(234, 25, 23, 0.15);
+        }
+
+        .info-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .info-content {
+            flex: 1;
+        }
+
+        .info-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .info-description {
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        .info-highlight {
+            background: linear-gradient(135deg, rgba(255, 152, 0, 0.1), rgba(255, 183, 77, 0.1));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 152, 0, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 8px;
+            font-size: 13px;
+            color: #e65100;
+            font-weight: 500;
+        }
+
+        /* ===================================================================
+           투어 모드 스타일 - 고정 헤더 문제 해결
+           =================================================================== */
         .tour-mode {
             display: none;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .overview-card {
-            background: rgba(255,255,255,0.9);
+        .tour-header {
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 20px;
-            padding: 24px;
+            padding: 20px 28px;
             margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            position: sticky;
+            top: 20px;
+            z-index: 50;
         }
 
-        .card-header {
+        .floor-navigation {
             display: flex;
-            align-items: center;
             gap: 12px;
             margin-bottom: 16px;
+            flex-wrap: wrap;
         }
 
-        .card-icon {
-            font-size: 32px;
-        }
-
-        .card-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--sk-red);
-        }
-
-        .purpose-section {
-            background: linear-gradient(135deg, rgba(234,25,23,0.05), rgba(255,107,53,0.05));
-            border-left: 4px solid var(--sk-red);
-            padding: 16px;
-            border-radius: 12px;
-            margin: 16px 0;
-        }
-
-        .purpose-title {
-            font-weight: 600;
-            color: var(--sk-red);
-            margin-bottom: 8px;
-        }
-
-        .purpose-text {
-            color: #555;
-            line-height: 1.5;
-        }
-
-        .timeline-overview {
-            display: grid;
-            gap: 12px;
-            margin: 16px 0;
-        }
-
-        .timeline-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 12px 16px;
-            background: rgba(255,255,255,0.7);
-            border-radius: 12px;
-            border-left: 4px solid var(--info);
-        }
-
-        .floor-badge {
-            background: var(--info);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-            min-width: 40px;
-            text-align: center;
-        }
-
-        .floor-badge.floor1 { background: var(--sk-red); }
-        .floor-badge.floor2 { background: var(--sk-orange); }
-        .floor-badge.floorB1 { background: var(--purple); }
-
-        .floor-name {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .floor-purpose {
-            font-size: 13px;
-            color: #666;
-            margin-top: 2px;
-        }
-
-        .schedule-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 8px;
-            margin: 16px 0;
-            padding: 16px;
-            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
-            border-radius: 12px;
-        }
-
-        .schedule-item {
-            text-align: center;
-            padding: 8px;
-            background: white;
-            border-radius: 8px;
-            font-size: 12px;
-        }
-
-        .schedule-item .time {
-            font-weight: 600;
-            color: var(--sk-red);
-            margin-bottom: 4px;
-        }
-
-        .schedule-item .group {
-            color: #666;
-        }
-
-        .start-button {
-            background: linear-gradient(135deg, var(--sk-red), var(--sk-orange));
-            color: white;
-            border: none;
-            padding: 16px 32px;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 600;
-            width: 100%;
-            cursor: pointer;
-            margin-top: 20px;
-            box-shadow: 0 4px 20px rgba(234,25,23,0.3);
-        }
-
-        .tour-container {
-            height: calc(100vh - 200px);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .step-cards {
-            display: flex;
-            height: 100%;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .step-cards::-webkit-scrollbar {
-            display: none;
-        }
-
-        .step-card {
-            min-width: 100%;
-            padding: 20px;
-            scroll-snap-align: start;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .tour-card {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 24px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-        }
-
-        .step-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .step-icon {
-            font-size: 48px;
-            margin-bottom: 8px;
-        }
-
-        .step-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--sk-red);
-            margin-bottom: 4px;
-        }
-
-        .step-subtitle {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 8px;
-        }
-
-        .step-time {
-            background: var(--info);
-            color: white;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            display: inline-block;
-        }
-
-        .step-content {
-            flex: 1;
-            overflow-y: auto;
-            padding-bottom: 20px;
-        }
-
-        .context-section {
-            background: linear-gradient(135deg, rgba(156,39,176,0.08), rgba(186,104,200,0.08));
-            border: 1px solid rgba(156,39,176,0.2);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 20px;
-        }
-
-        .context-title {
-            font-weight: 600;
-            color: var(--purple);
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .context-text {
-            font-size: 14px;
-            color: #555;
-            line-height: 1.5;
-            user-select: text;
-        }
-
-        .story-section {
-            background: rgba(255,255,255,0.7);
-            border-radius: 16px;
-            padding: 20px;
-            margin: 16px 0;
-            border-left: 4px solid var(--sk-red);
-        }
-
-        .story-title {
-            font-weight: 600;
-            color: var(--sk-red);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .story-text {
-            color: #333;
-            line-height: 1.6;
-            user-select: text;
-        }
-
-        .story-text strong {
-            color: var(--sk-red);
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, rgba(234,25,23,0.1), rgba(255,107,53,0.1));
-            border: 1px solid var(--sk-orange);
-            border-radius: 12px;
-            padding: 16px;
-            margin: 16px 0;
-        }
-
-        .highlight-title {
-            font-weight: 600;
-            color: #e65100;
-            margin-bottom: 8px;
-        }
-
-        .highlight-text {
-            font-size: 14px;
-            color: #333;
-            line-height: 1.5;
-        }
-
-        .nav-controls {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(20px);
-            padding: 12px 20px;
-            border-radius: 25px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-
-        .nav-btn {
-            background: rgba(234,25,23,0.1);
-            border: none;
+        .floor-btn {
+            background: rgba(234, 25, 23, 0.1);
+            border: 1px solid rgba(234, 25, 23, 0.3);
             color: var(--sk-red);
             padding: 8px 16px;
             border-radius: 20px;
             font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
         }
 
-        .nav-btn:disabled {
-            opacity: 0.3;
-        }
-
-        .nav-btn.primary {
+        .floor-btn.active {
             background: var(--sk-red);
             color: white;
+            border-color: var(--sk-red);
         }
 
-        .step-indicator {
+        .tour-progress {
+            background: linear-gradient(135deg, rgba(33, 150, 243, 0.1), rgba(100, 181, 246, 0.1));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(33, 150, 243, 0.3);
+            border-radius: 12px;
+            padding: 12px 16px;
             font-size: 14px;
+            color: var(--info);
             font-weight: 600;
-            color: #666;
         }
 
+        .floor-content {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+        }
+
+        .exhibition-grid {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .exhibition-btn {
+            background: rgba(156, 39, 176, 0.1);
+            border: 1px solid rgba(156, 39, 176, 0.3);
+            color: #9c27b0;
+            padding: 16px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .exhibition-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(156, 39, 176, 0.15);
+        }
+
+        .exhibition-btn.active {
+            background: rgba(156, 39, 176, 0.15);
+            border-color: #9c27b0;
+        }
+
+        .exhibition-detail {
+            display: none;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 20px;
+            border-left: 4px solid #9c27b0;
+            box-shadow: 0 4px 20px rgba(156, 39, 176, 0.1);
+        }
+
+        .exhibition-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #9c27b0;
+            margin-bottom: 16px;
+        }
+
+        .exhibition-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .exhibition-content h4 {
+            font-weight: 700;
+            color: #9c27b0;
+            margin: 16px 0 8px 0;
+            font-size: 16px;
+        }
+
+        .exhibition-content p {
+            margin-bottom: 12px;
+        }
+
+        /* ===================================================================
+           팁 박스 - Daily Opening 스타일 적용
+           =================================================================== */
+        .tip-box {
+            background: linear-gradient(135deg, rgba(255, 152, 0, 0.1), rgba(255, 183, 77, 0.1));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 152, 0, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 20px rgba(255, 152, 0, 0.1);
+        }
+
+        .tip-title {
+            font-weight: 700;
+            color: #e65100;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+        }
+
+        .tip-box ul {
+            margin-left: 20px;
+        }
+
+        .tip-box li {
+            margin-bottom: 8px;
+            color: #bf360c;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        /* ===================================================================
+           반응형 디자인 - Daily Opening 스타일 적용
+           =================================================================== */
         @media (max-width: 768px) {
             .container {
-                padding: 16px;
+                padding: 12px 12px;
+            }
+            
+            .section {
+                padding: 16px 16px;
+                margin-bottom: 12px;
+                border-radius: 12px;
+            }
+            
+            .header {
+                padding: 16px 16px;
+            }
+            
+            .header h1 {
+                font-size: 22px;
+                margin-bottom: 4px;
+            }
+            
+            .header .subtitle {
+                font-size: 15px;
+            }
+            
+            .section h2 {
+                font-size: 19px;
+                margin-bottom: 12px;
+            }
+            
+            .section h3 {
+                font-size: 17px;
+                margin-bottom: 10px;
             }
             
             .view-toggle {
@@ -545,990 +573,699 @@
                 padding: 6px 12px;
                 font-size: 11px;
             }
-
-            .schedule-grid {
-                grid-template-columns: repeat(3, 1fr);
+            
+            /* 투어 모드 최적화 */
+            .tour-header {
+                padding: 12px 16px;
+                margin-bottom: 12px;
+                border-radius: 12px;
+                top: 10px;
             }
+            
+            .floor-navigation {
+                gap: 8px;
+                margin-bottom: 12px;
+            }
+            
+            .floor-btn {
+                padding: 6px 12px;
+                font-size: 13px;
+                border-radius: 16px;
+            }
+            
+            .tour-progress {
+                padding: 8px 12px;
+                font-size: 13px;
+                border-radius: 8px;
+            }
+            
+            .floor-content {
+                padding: 16px 16px;
+                margin-bottom: 12px;
+                border-radius: 12px;
+            }
+            
+            .exhibition-grid {
+                gap: 12px;
+                margin-bottom: 16px;
+            }
+            
+            .exhibition-btn {
+                padding: 12px 14px;
+                border-radius: 10px;
+                font-size: 14px;
+            }
+            
+            .exhibition-detail {
+                padding: 16px 16px;
+                margin-top: 12px;
+                border-radius: 10px;
+            }
+            
+            .exhibition-title {
+                font-size: 17px;
+                margin-bottom: 12px;
+            }
+            
+            .exhibition-content {
+                font-size: 14px;
+            }
+            
+            .exhibition-content h4 {
+                font-size: 15px;
+                margin: 12px 0 6px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 8px 10px;
+            }
+            
+            .header {
+                padding: 14px 12px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .header .subtitle {
+                font-size: 14px;
+            }
+            
+            .section {
+                padding: 12px 12px;
+                margin-bottom: 8px;
+            }
+            
+            .section h2 {
+                font-size: 17px;
+                margin-bottom: 10px;
+            }
+            
+            .back-button {
+                padding: 6px 12px;
+                font-size: 13px;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* ===================================================================
+           스크롤 스타일 - Daily Opening과 동일
+           =================================================================== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, var(--sk-red), var(--sk-red-light));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, var(--sk-red-dark), var(--sk-red));
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="header-content">
-            <button class="back-btn" onclick="goBack()">← 뒤로가기</button>
-            <div class="title">🏛️ 기념관 투어</div>
-            <div class="subtitle">SK 성장의 발자취를 따라</div>
-        </div>
+        <button class="back-button" onclick="goBack()">
+            <span>←</span>
+            <span>뒤로가기</span>
+        </button>
+        <h1>🏛️ 기념관 투어</h1>
+        <div class="subtitle">SK 성장의 발자취를 따라가는 특별한 여행</div>
     </div>
 
     <div class="view-toggle">
-        <button class="toggle-btn active" onclick="switchView('overview')">전체보기</button>
-        <button class="toggle-btn" onclick="switchView('tour')">투어모드</button>
+        <button class="toggle-btn active" onclick="switchMode('guide')">가이드</button>
+        <button class="toggle-btn" onclick="switchMode('tour')">투어모드</button>
     </div>
 
-    <!-- 오버뷰 모드 -->
-    <div id="overviewMode" class="overview-mode">
+    <!-- 가이드 모드 -->
+    <div id="guideMode" class="guide-mode">
         <div class="container">
-            <div class="overview-card">
-                <div class="card-header">
-                    <div class="card-icon">🎯</div>
-                    <div class="card-title">기념관 투어의 의미</div>
+            <!-- 투어 개요 -->
+            <div class="section">
+                <h2>🏛️ 기념관 투어 개요</h2>
+                
+                <div class="tour-overview">
+                    <div class="tour-time">45분간의 특별한 여행</div>
+                    <div class="tour-note">
+                        SK 창업회장과 선대회장의 발자취를 따라 1층→2층→B1층 순서로 진행됩니다.<br/>
+                        단순한 관람이 아닌 SK의 철학과 정신을 체험하는 시간입니다.
+                    </div>
                 </div>
                 
-                <div class="purpose-section">
-                    <div class="purpose-title">💡 교육적 목적</div>
-                    <div class="purpose-text">
-                        기념관 투어는 단순한 관람이 아닙니다. 신입구성원들이 SK의 창업정신과 
-                        성장 여정을 체험하며, 자신들이 이어갈 역사의 의미를 깨닫는 시간입니다. 
-                        창업회장님의 28세 도전부터 오늘날까지의 여정을 통해 
-                        패기와 도전정신을 내재화하는 것이 핵심입니다.
+                <div class="info-item">
+                    <div class="info-icon">📍</div>
+                    <div class="info-content">
+                        <div class="info-title">투어 장소</div>
+                        <div class="info-description">인재관 1층 분과장 → SK 기념관</div>
+                        <div class="info-highlight">
+                            💡 분과별 상세 시간표에 따라 45분씩 교대로 진행됩니다
+                        </div>
                     </div>
-                </div>
-
-                <div class="purpose-section">
-                    <div class="purpose-title">🎪 멘토의 역할</div>
-                    <div class="purpose-text">
-                        단순한 안내자가 아닌 스토리텔러가 되어주세요. 각 층의 전시물과 이야기들을 
-                        생생하게 전달하여 신입구성원들이 감동과 자긍심을 느낄 수 있도록 해주세요. 
-                        특히 창업정신과 혁신의 순간들을 강조해주시기 바랍니다.
-                    </div>
-                </div>
-            </div>
-
-            <div class="overview-card">
-                <div class="card-header">
-                    <div class="card-icon">🏛️</div>
-                    <div class="card-title">층별 투어 가이드</div>
                 </div>
                 
-                <div class="timeline-overview">
-                    <div class="timeline-item">
-                        <div class="floor-badge floor1">1층</div>
-                        <div>
-                            <div class="floor-name">창업의 계기</div>
-                            <div class="floor-purpose">최종건 창업회장의 28세 도전과 창업정신</div>
-                        </div>
-                    </div>
-                    
-                    <div class="timeline-item">
-                        <div class="floor-badge floor2">2층</div>
-                        <div>
-                            <div class="floor-name">성장과 발전</div>
-                            <div class="floor-purpose">형제경영 시작과 첫 수출의 기적</div>
-                        </div>
-                    </div>
-                    
-                    <div class="timeline-item">
-                        <div class="floor-badge floorB1">B1층</div>
-                        <div>
-                            <div class="floor-name">혁신과 미래</div>
-                            <div class="floor-purpose">수직계열화 완성과 정보통신 도약</div>
+                <div class="info-item">
+                    <div class="info-icon">🎯</div>
+                    <div class="info-content">
+                        <div class="info-title">교육적 목적</div>
+                        <div class="info-description">
+                            SK의 창업 정신과 혁신의 역사를 체험하며, 신입구성원으로서의 자긍심과 소속감을 높이는 시간입니다
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="overview-card">
-                <div class="card-header">
-                    <div class="card-icon">⏰</div>
-                    <div class="card-title">분과별 시간표 (45분)</div>
+            <!-- 멘토 역할 -->
+            <div class="section">
+                <h2>👨‍🏫 멘토 역할</h2>
+                
+                <div class="info-item">
+                    <div class="info-icon">🗣️</div>
+                    <div class="info-content">
+                        <div class="info-title">스토리텔러 역할</div>
+                        <div class="info-description">
+                            단순한 안내가 아닌 SK의 역사와 철학을 생생하게 전달하는 스토리텔러가 되어주세요
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="schedule-grid">
-                    <div class="schedule-item">
-                        <div class="time">14:00~14:15</div>
-                        <div class="group">1분과</div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="time">14:15~14:30</div>
-                        <div class="group">2분과</div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="time">14:30~14:45</div>
-                        <div class="group">3분과</div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="time">14:45~15:00</div>
-                        <div class="group">4분과</div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="time">15:00~15:15</div>
-                        <div class="group">5분과</div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="time">15:15~15:30</div>
-                        <div class="group">6분과</div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="time">15:30~15:45</div>
-                        <div class="group">7분과</div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="time">15:45~16:00</div>
-                        <div class="group">8분과</div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="time">16:00~16:15</div>
-                        <div class="group">9분과</div>
+                <div class="info-item">
+                    <div class="info-icon">💡</div>
+                    <div class="info-content">
+                        <div class="info-title">몰입감 조성</div>
+                        <div class="info-description">
+                            신입구성원들이 SK의 역사 속 주인공이 된 것처럼 느낄 수 있도록 감정을 이입시켜 주세요
+                        </div>
                     </div>
                 </div>
-
-                <div class="highlight-box">
-                    <div class="highlight-title">⚠️ 시간 관리 포인트</div>
-                    <div class="highlight-text">
-                        각 분과는 정확히 45분간 투어를 진행합니다. 다음 분과의 원활한 진행을 위해 
-                        시간을 엄수해 주시기 바라며, 투어 종료 후에는 인재관 1층 분과장에서 
-                        팀 프로젝트를 이어서 진행합니다.
+                
+                <div class="info-item">
+                    <div class="info-icon">🤝</div>
+                    <div class="info-content">
+                        <div class="info-title">상호작용 유도</div>
+                        <div class="info-description">
+                            일방적인 설명보다는 질문과 대화를 통해 신입구성원들의 참여를 이끌어내세요
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <button class="start-button" onclick="switchView('tour')">
-                🚀 투어 모드로 시작하기
-            </button>
+            <!-- 진행 Tips -->
+            <div class="section">
+                <h2>💡 투어 진행 Tips</h2>
+                
+                <div class="tip-box">
+                    <div class="tip-title">🎪 멘토과정 스킬 활용</div>
+                    <ul>
+                        <li>캔미팅 가이드와 FT Skill을 적극 활용해보세요</li>
+                        <li>질문 기법(STAR, MDFP, GROW)을 사용하여 참여도를 높이세요</li>
+                        <li>신입구성원들의 반응을 관찰하며 진행 속도를 조절하세요</li>
+                    </ul>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-icon">⏰</div>
+                    <div class="info-content">
+                        <div class="info-title">시간 관리</div>
+                        <div class="info-description">
+                            분과별 투어 시간을 철저히 준수하여 다음 분과가 원활히 진행될 수 있도록 해주세요
+                        </div>
+                        <div class="info-highlight">
+                            📝 투어 후 분과장에서 조별 결과지 작성 및 제출까지 완료
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 주의사항 -->
+            <div class="section">
+                <h2>⚠️ 주의사항</h2>
+                
+                <div class="info-item">
+                    <div class="info-icon">🚫</div>
+                    <div class="info-content">
+                        <div class="info-title">전시물 보호</div>
+                        <div class="info-description">
+                            금고 및 기타 전시물들은 실제 사용한 것으로 조심스럽게 다뤄야 합니다<br/>
+                            창업회장님과 선대회장님이 사용하시던 차량은 파손 위험으로 직접 승차 불가
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-icon">📱</div>
+                    <div class="info-content">
+                        <div class="info-title">체험 활동 안내</div>
+                        <div class="info-description">
+                            QR코드 스캔, 터치스크린 조작 등은 신입구성원들이 직접 체험할 수 있도록 안내<br/>
+                            단, 복잡한 조작은 멘토가 시연 후 안내
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- 투어 모드 -->
     <div id="tourMode" class="tour-mode">
-        <div class="tour-container">
-            <div class="step-cards" id="stepCards">
-                
-                <!-- 1단계: 투어 시작 -->
-                <div class="step-card">
-                    <div class="tour-card">
-                        <div class="step-header">
-                            <div class="step-icon">🚀</div>
-                            <div class="step-title">투어 시작</div>
-                            <div class="step-subtitle">기념관으로 이동 및 준비</div>
-                            <div class="step-time">13:15 이천→용인 이동 후</div>
-                        </div>
-                        
-                        <div class="step-content">
-                            <div class="context-section">
-                                <div class="context-title">
-                                    <span>💡</span>
-                                    투어 전 준비사항
-                                </div>
-                                <div class="context-text">
-                                    기념관 도착 후 분과원들과 함께 1층 로비에 집합합니다. 
-                                    투어는 1층 → 2층 → B1층 순서로 진행되며, 각 층마다 
-                                    SK의 역사적 순간들을 체험하게 됩니다.
-                                </div>
-                            </div>
-
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>📋</span>
-                                    멘토 체크리스트
-                                </div>
-                                <div class="story-text">
-                                    <strong>• 분과원 전원 집합 확인</strong><br>
-                                    • 투어 순서 및 주의사항 안내<br>
-                                    • 기념관 예절 및 매너 당부<br>
-                                    • 45분 투어 시간 안내<br>
-                                    • 사진 촬영 가능 구역 설명
-                                </div>
-                            </div>
-
-                            <div class="highlight-box">
-                                <div class="highlight-title">🎯 투어의 핵심 메시지</div>
-                                <div class="highlight-text">
-                                    오늘 우리가 보게 될 것은 단순한 과거가 아닙니다. 
-                                    28세 청년 최종건 회장님의 패기로 시작된 SK가 
-                                    어떻게 오늘날의 글로벌 기업이 되었는지, 
-                                    그리고 여러분이 그 역사의 주인공이 된다는 것의 의미를 
-                                    함께 느껴보시기 바랍니다.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <div class="container">
+            <div class="tour-header">
+                <div class="floor-navigation">
+                    <button class="floor-btn active" onclick="showFloor(0)">1층</button>
+                    <button class="floor-btn" onclick="showFloor(1)">2층</button>
+                    <button class="floor-btn" onclick="showFloor(2)">B1층</button>
                 </div>
-
-                <!-- 2단계: 1층 - 창업의 시작 -->
-                <div class="step-card">
-                    <div class="tour-card">
-                        <div class="step-header">
-                            <div class="step-icon">🏭</div>
-                            <div class="step-title">1층 - 창업의 계기</div>
-                            <div class="step-subtitle">1953년, 28세 청년의 도전</div>
-                            <div class="step-time">투어 시작 (15분)</div>
-                        </div>
-                        
-                        <div class="step-content">
-                            <div class="context-section">
-                                <div class="context-title">
-                                    <span>🎭</span>
-                                    1층 스토리텔링 포인트
-                                </div>
-                                <div class="context-text">
-                                    1층은 창업당시의 공장을 재현한 공간입니다. 
-                                    직기를 수리하는 젊은 청년이 바로 최종건 창업회장님이시며, 
-                                    여기서 SK의 모든 이야기가 시작됩니다.
-                                </div>
-                            </div>
-
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>👨‍💼</span>
-                                    최종건 창업회장의 배경
-                                </div>
-                                <div class="story-text">
-                                    최종건 창업회장님은 지금의 과학기술대, 이전 서울산업대, 
-                                    그 전신인 <strong>경성직업학교 기계과</strong>를 나오셨습니다. 
-                                    고향 수원에서 바로 집 앞에 일제시대 당시 조선에서는 
-                                    조선과 일본이 합작으로 만든 <strong>가장 큰 직물공장</strong>이 있었는데, 
-                                    그곳에 입사하셔서 기술과 리더십이 인정받아 빨리 승진하셨습니다.<br><br>
-                                    
-                                    해방 때에는 <strong>생산부장</strong>으로써 실질적인 경영활동에 참여하셨고, 
-                                    실제 경영을 하시다 보니 자기 사업에 대한 꿈이 생겼습니다.
-                                </div>
-                            </div>
-
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>⚡</span>
-                                    운명을 바꾼 결단
-                                </div>
-                                <div class="story-text">
-                                    공장을 나와 전국을 돌며 사업을 구상하시던 중에 <strong>한국전쟁</strong>이 일어나게 됩니다. 
-                                    전쟁 후 고향에 돌아와보니 대부분 전쟁으로 폐허가 되어있었고, 
-                                    직물공장은 파괴되고, 함께 일했던 동료들, 고향사람들은 모두 길거리에 나앉아 
-                                    굶어 죽게 생긴 것을 보고 머리속에 품고 있던 사업구상을 지워버리고 다짐하십니다:<br><br>
-                                    
-                                    <strong>"안되겠다. 내가 저 직물공장을 인수해서 사람들 다시 불러모아 먹고 살게 해야겠다"</strong>
-                                </div>
-                            </div>
-
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>💪</span>
-                                    28세 청년의 패기
-                                </div>
-                                <div class="story-text">
-                                    그러나 인수자금을 빌리려 했던 부모님께서 결사반대 하십니다. 
-                                    당시 나이가 고작 <strong>28세</strong>에 불과했기에 부모 입장에서는 터무니없다는 생각을 하신 것입니다.<br><br>
-                                    
-                                    그러나 최종건 회장은 그 뜻을 굽히지 않고 강하게 설득합니다:<br>
-                                    <strong>"아버지 제가 이 공장을 우리나라에서 가장 큰 직물기업 만들어서 고향사람들 다 먹고 살게 하겠다. 나 밖에 이 공장을 인수할 사람이 없다!"</strong><br><br>
-                                    
-                                    라면서 끝내 공장을 인수하였습니다.
-                                </div>
-                            </div>
-
-                            <div class="highlight-box">
-                                <div class="highlight-title">🏗️ 맨손으로 시작한 재건</div>
-                                <div class="highlight-text">
-                                    공장을 재건할 자금이 부족해서 함께 일했던 동료들 다 불러 모아서 
-                                    벽돌, 못 하나하나 주워서 다시 쌓아 올리고, 
-                                    부서진 직기 부품들 긁어 모아 손수 조립해 가며 
-                                    <strong>1953년 10월 15대의 직기</strong>로 SK는 시작되었습니다.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="tour-progress">
+                    📍 현재 위치: <span id="currentLocation">1층 - 기념관 안내</span>
                 </div>
-
-                <!-- 3단계: 2층으로 이동 -->
-                <div class="step-card">
-                    <div class="tour-card">
-                        <div class="step-header">
-                            <div class="step-icon">🏢</div>
-                            <div class="step-title">2층으로 이동</div>
-                            <div class="step-subtitle">성장기의 발자취</div>
-                            <div class="step-time">계단 이용 (2분)</div>
-                        </div>
-                        
-                        <div class="step-content">
-                            <div class="context-section">
-                                <div class="context-title">
-                                    <span>🚶</span>
-                                    이동 중 안내사항
-                                </div>
-                                <div class="context-text">
-                                    계단은 옛건물의 난간 형태를 그대로 복원한 것으로 
-                                    1958년 당시의 건물 양식을 볼 수 있습니다. 
-                                    몸이 불편할 경우 엘리베이터 이용이 가능합니다.
-                                </div>
-                            </div>
-
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>📈</span>
-                                    2층에서 보게 될 내용
-                                </div>
-                                <div class="story-text">
-                                    2층에서는 1953년부터 1973년까지 <strong>20년간의 성장 스토리</strong>를 보게 됩니다:<br><br>
-                                    
-                                    • 따뜻하고 배려있는 경영철학<br>
-                                    • 형제경영의 시작<br>
-                                    • 국내 최초 직물수출의 기적<br>
-                                    • 아버지와의 약속 실현
-                                </div>
-                            </div>
-
-                            <div class="highlight-box">
-                                <div class="highlight-title">🎯 2층 관람 포인트</div>
-                                <div class="highlight-text">
-                                    2층 중앙의 공장 전경 조형대에서 영상을 먼저 감상한 후, 
-                                    시계방향으로 돌며 창업회장님의 경영철학과 성과를 순서대로 관람합니다. 
-                                    마지막에는 1970년 서울 집무실 재현 공간에서 직접 체험이 가능합니다.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 4단계: 2층 - 따뜻한 경영철학 -->
-                <div class="step-card">
-                    <div class="tour-card">
-                        <div class="step-header">
-                            <div class="step-icon">❤️</div>
-                            <div class="step-title">2층 - 따뜻한 경영철학</div>
-                            <div class="step-subtitle">사람 중심의 경영</div>
-                            <div class="step-time">2층 전시관 (10분)</div>
-                        </div>
-                        
-                        <div class="step-content">
-                            <div class="context-section">
-                                <div class="context-title">
-                                    <span>🎬</span>
-                                    영상 감상 후 스토리텔링
-                                </div>
-                                <div class="context-text">
-                                    2층 중앙의 공장 전경 조형대 앞에서 
-                                    "그룹의 태동~성장기" 영상을 먼저 감상합니다. 
-                                    창업당시 동료들과 함께 공장을 재건하는 모습이 담긴 디오라마도 함께 보실 수 있습니다.
-                                </div>
-                            </div>
-
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>👥</span>
-                                    직원모집도 남다르게 (1955년)
-                                </div>
-                                <div class="story-text">
-                                    1953년 창업이후 1년 뒤 신규직원 100명을 모집합니다. 
-                                    선발기준을 첫째, <strong>예쁘고 멋진 거 필요 없고 일을 잘할 것 같이 생긴 사람</strong>, 
-                                    둘째, 공장 혹은 직물관련 근무 경험이 있는 사람, 이렇게 선발하기로 약속했는데, 
-                                    당일에 천명이 몰려오는 것을 보고 최종건 회장은 갑자기 선발기준을 바꾸십니다.<br><br>
-                                    
-                                    <strong>"식구들이 많은 순으로 뽑아라"</strong><br><br>
-                                    
-                                    당시 선발을 담당했던 직원분들(원로)이 엄청 힘들었다고 합니다.
-                                </div>
-                            </div>
-
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>🏃‍♂️</span>
-                                    창립 3주년부터 시작된 사원 운동회 (1956년)
-                                </div>
-                                <div class="story-text">
-                                    창립 3주년부터 매년 운동회를 열었는데, 저희 운동회는 지역사회에 유명했습니다. 
-                                    단순 직원들만의 운동회 혹은 가족 초청이 아니라 
-                                    <strong>지역주민 전체를 초청해</strong> 군용트럭 15,16대에 태우고 
-                                    여주 신륵사까지 가서 대운동회와 잔치를 열었다고 합니다.<br><br>
-                                    
-                                    이것이 바로 오늘날 SK의 <strong>사회적 가치(Social Value)</strong> 정신의 출발점입니다.
-                                </div>
-                            </div>
-
-                            <div class="highlight-box">
-                                <div class="highlight-title">💡 멘토 강조 포인트</div>
-                                <div class="highlight-text">
-                                    이 시대부터 이미 SK는 "이익보다 사람"을 우선시하는 
-                                    경영철학을 실천하고 있었습니다. 
-                                    여러분이 앞으로 일하게 될 SK의 DNA가 
-                                    어디서 시작되었는지 기억해 주세요.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 5단계: 2층 - 형제경영의 시작 -->
-                <div class="step-card">
-                    <div class="tour-card">
-                        <div class="step-header">
-                            <div class="step-icon">👥</div>
-                            <div class="step-title">2층 - 형제경영의 시작</div>
-                            <div class="step-subtitle">최종현 선대회장의 합류</div>
-                            <div class="step-time">2층 전시관 (5분)</div>
-                        </div>
-                        
-                        <div class="step-content">
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>🤝</span>
-                                    최종건 창업회장과 최종현 선대회장의 동행 (1962년)
-                                </div>
-                                <div class="story-text">
-                                    최종현회장이 미국 유학길을 마치시고 경영에 합류하십니다. 
-                                    원래 학구적이셔서 계속 학업의 길로 가고 싶어하셨지만 
-                                    형님이신 최종건 회장이 설득했습니다:<br><br>
-                                    
-                                    <strong>"회사는 커져가는데 믿고 맡길 수 있는 파트너가 필요하다. 
-                                    네가 와서 나를 도와줬음 좋겠다"</strong><br><br>
-                                    
-                                    이렇게 1962년부터 <strong>형제경영</strong>이 시작된 것입니다.
-                                </div>
-                            </div>
-
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>🏆</span>
-                                    아버지와의 약속을 지킨 최종건 회장 (1972년)
-                                </div>
-                                <div class="story-text">
-                                    남북적십자회담 북측대표 일행이 우리 공장을 방문했습니다. 
-                                    1953년 공장을 인수할 때 아버지와 한 약속:<br>
-                                    <strong>"내가 반드시 우리나라에서 제일 큰 직물기업 만들겠다. 믿어달라"</strong><br><br>
-                                    
-                                    이 약속을 이미 이루었는데, 이때는 제일 큰 섬유기업집단으로 이미 대기업이 된 상태였고, 
-                                    우리 공장은 <strong>모든 외빈들의 참관장소</strong>였다고 합니다.
-                                </div>
-                            </div>
-
-                            <div class="highlight-box">
-                                <div class="highlight-title">🌟 SK 정신의 핵심</div>
-                                <div class="highlight-text">
-                                    약속을 지키는 것, 신뢰를 바탕으로 한 파트너십, 
-                                    그리고 불가능해 보이는 목표에 대한 도전 - 
-                                    이것이 바로 SK의 핵심 가치입니다.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 6단계: 2층 - 최초 수출의 기적 -->
-                <div class="step-card">
-                    <div class="tour-card">
-                        <div class="step-header">
-                            <div class="step-icon">🚢</div>
-                            <div class="step-title">2층 - 최초 수출의 기적</div>
-                            <div class="step-subtitle">위기를 기회로 바꾼 혁신</div>
-                            <div class="step-time">유리패널 앞 (5분)</div>
-                        </div>
-                        
-                        <div class="step-content">
-                            <div class="context-section">
-                                <div class="context-title">
-                                    <span>📊</span>
-                                    유리패널 설명 포인트
-                                </div>
-                                <div class="context-text">
-                                    2층 뒤쪽 유리패널에는 국내 최초의 직물수출 스토리가 담겨있습니다. 
-                                    이는 단순한 사업 확장이 아니라, 
-                                    위기를 기회로 바꾼 혁신적 사고의 결과였습니다.
-                                </div>
-                            </div>
-
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>📉</span>
-                                    극심한 경제불황의 위기
-                                </div>
-                                <div class="story-text">
-                                    1950년대말 우리나라는 극심한 경제불황으로 공장들마다 월급을 못 줘서 
-                                    노사분규가 끊이지 않았습니다. 그런데 유독 <strong>선경만 조용</strong>한 것입니다.<br><br>
-                                    
-                                    상공부장관은 "그래도 제법 큰 공장인데, 여긴 왜 조용한 걸까?" 궁금해져서 
-                                    갑자기 공장을 방문합니다. 사장을 불러달라 하니 
-                                    <strong>작업복 차림의 최종건 회장</strong>이 나온 것입니다.
-                                </div>
-                            </div>
-
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>💡</span>
-                                    창업회장의 솔직한 고백
-                                </div>
-                                <div class="story-text">
-                                    장관이 월급은 어떻게 주고 있느냐고 묻자, 최종건 회장은 솔직하게 답합니다:<br><br>
-                                    
-                                    <strong>"실은 월급을 제대로 못 주고 있습니다. 
-                                    월급을 못 줄 때는 집에서 생산한 쌀이나 직물을 나누어 주며 
-                                    팔아서 먹고 살게 하고 있고, 매출이 일어나면 밀린 월급을 주고 있습니다."</strong><br><br>
-                                    
-                                    그 얘기에 감명을 받고 당시 박정희의장에게 
-                                    수원에 선경이라는 좋은 기업이 있다고 보고합니다.
-                                </div>
-                            </div>
-
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>🌟</span>
-                                    수출의 길을 연 비전
-                                </div>
-                                <div class="story-text">
-                                    박의장이 예고 없이 공장을 방문했을 때도 최종건 회장은 작업복 차림에 열심히 일하고 있었습니다. 
-                                    뭐 필요한 것이 없냐고 묻자, 개인적 도움보다는 업계 전체를 생각하며 말씀하십니다:<br><br>
-                                    
-                                    <strong>"우리나라가 기술적으로 어느정도 올라갔지만 공급과잉으로 시장이 포화상태다. 
-                                    새로운 판로를 개척해야 하는데 수출 밖에 없다. 
-                                    그러나 직물을 수출하려면 정부의 지원이 필요하다"</strong><br><br>
-                                    
-                                    이로 인해 정부의 지원으로 홍콩에 최초로 인견직물을 수출하게 되었고, 
-                                    <strong>금탑산업훈장</strong>까지 받게 됩니다.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 7단계: 2층 - 집무실 체험 -->
-                <div class="step-card">
-                    <div class="tour-card">
-                        <div class="step-header">
-                            <div class="step-icon">🏢</div>
-                            <div class="step-title">2층 - 집무실 체험</div>
-                            <div class="step-subtitle">1970년 서울 집무실 재현</div>
-                            <div class="step-time">체험 공간 (5분)</div>
-                        </div>
-                        
-                        <div class="step-content">
-                            <div class="context-section">
-                                <div class="context-title">
-                                    <span>📸</span>
-                                    체험 가능한 공간
-                                </div>
-                                <div class="context-text">
-                                    1970년 서울 집무실을 재현한 공간에서 
-                                    사진 촬영 등 직접 체험이 가능합니다. 
-                                    단, 금고 및 기타 전시물들은 실제 사용한 것으로 조심스럽게 다뤄야 합니다.
-                                </div>
-                            </div>
-
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>📇</span>
-                                    명함의 특별한 비밀
-                                </div>
-                                <div class="story-text">
-                                    책상 위 명함은 기념으로 한 장씩 가져갈 수 있으며, 
-                                    해당 번호를 누르면 실제 창업회장님과 선대회장님의 <strong>육성을 청취</strong> 가능합니다.<br><br>
-                                    
-                                    명함의 영문표기란을 보면 두분의 성인 "최" 표기가 다릅니다:<br>
-                                    • 최종건 회장: <strong>CHOI</strong><br>
-                                    • 최종현 회장: <strong>CHEY</strong><br><br>
-                                    
-                                    처음에는 두분 모두 CHEY를 쓰셨고, 한국에서 "최"가 CHOI로 권장되면서 
-                                    최종건 회장은 바꾸셨고, 미국에 계시던 최종현 회장은 그대로 쓰셨습니다. 
-                                    지금의 자녀들 또한 각각 아버지를 따라 CHOI, CHEY로 다르게 사용 중입니다.
-                                </div>
-                            </div>
-
-                            <div class="highlight-box">
-                                <div class="highlight-title">📱 체험 활동</div>
-                                <div class="highlight-text">
-                                    • 집무실에서 기념사진 촬영<br>
-                                    • 창업/선대회장님 육성 듣기<br>
-                                    • 명함 가져가기 (1인 1장)<br>
-                                    • 실제 사용했던 금고와 집기 관람
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 8단계: B1층으로 이동 -->
-                <div class="step-card">
-                    <div class="tour-card">
-                        <div class="step-header">
-                            <div class="step-icon">⬇️</div>
-                            <div class="step-title">B1층으로 이동</div>
-                            <div class="step-subtitle">혁신과 미래로</div>
-                            <div class="step-time">이동 및 준비 (2분)</div>
-                        </div>
-                        
-                        <div class="step-content">
-                            <div class="context-section">
-                                <div class="context-title">
-                                    <span>🚶</span>
-                                    B1층 이동 안내
-                                </div>
-                                <div class="context-text">
-                                    B1층은 선대회장님 시대의 혁신과 미래 비전을 다룹니다. 
-                                    수직계열화 완성부터 정보통신 혁명까지, 
-                                    SK가 어떻게 미래를 내다보고 준비했는지 보게 됩니다.
-                                </div>
-                            </div>
-
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>🔮</span>
-                                    B1층에서 보게 될 혁신의 역사
-                                </div>
-                                <div class="story-text">
-                                    <strong>• 1975년 수직계열화 선언</strong><br>
-                                    • 1980년 대한석유공사 인수<br>
-                                    • 1990년대 정보통신 진출 결정<br>
-                                    • 세계 최초 CDMA 기술 도입<br>
-                                    • 미래를 내다본 10년 앞선 준비
-                                </div>
-                            </div>
-
-                            <div class="highlight-box">
-                                <div class="highlight-title">💡 B1층 관람 포인트</div>
-                                <div class="highlight-text">
-                                    여기서는 단순한 과거가 아니라 "미래를 읽는 혜안"과 
-                                    "10년 앞을 내다보는 준비"의 중요성을 강조해 주세요. 
-                                    여러분도 이런 혜안을 가져야 한다는 메시지를 전달해 주시기 바랍니다.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 9단계: B1층 - 수직계열화 완성 -->
-                <div class="step-card">
-                    <div class="tour-card">
-                        <div class="step-header">
-                            <div class="step-icon">⛽</div>
-                            <div class="step-title">B1층 - 수직계열화 완성</div>
-                            <div class="step-subtitle">석유에서 섬유까지</div>
-                            <div class="step-time">B1층 전시관 (8분)</div>
-                        </div>
-                        
-                        <div class="step-content">
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>🎯</span>
-                                    1975년 신년식 역사적 선언
-                                </div>
-                                <div class="story-text">
-                                    1975년 신년식에서 최종현 선대회장님이 
-                                    <strong>"석유에서 섬유까지 수직계열화를 달성하겠다"</strong> 선포하십니다.<br><br>
-                                    
-                                    1970년부터 창업회장과 함께 석유사업의 꿈을 키웠기에, 
-                                    안으로는 선경합섬을 통해 철저하게 사업을 준비시키고 
-                                    막강한 중동 네트워크를 구축했습니다.
-                                </div>
-                            </div>
-
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>🏆</span>
-                                    1980년 대한석유공사 인수 성공
-                                </div>
-                                <div class="story-text">
-                                    철저한 준비의 결과로 1980년 대한석유공사 인수전에서 
-                                    <strong>가장 우수한 성적</strong>으로 입찰에 성공했습니다.<br><br>
-                                    
-                                    이때부터 SK만의 고유한 경영체계도 구축하게 됩니다.
-                                </div>
-                            </div>
-
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>📚</span>
-                                    선경경영관리체계의 탄생
-                                </div>
-                                <div class="story-text">
-                                    1970년대 초 최종현 회장의 선경직물주식회사 사장 재임시절, 
-                                    본사와 공장 간의 회의 진행 시 경제용어와 공장 현장 용어의 혼재로 
-                                    소통이 제대로 되지 않는다고 판단해 
-                                    <strong>선경 고유의 경영체계 및 용어정리</strong>를 만들게 하십니다.<br><br>
-                                    
-                                    초기에는 수기로 작성되었지만 1979년 '선경경영관리체계"가 책으로 나와 
-                                    전 구성원들에게 배포, 교육하게 되었고, 
-                                    <strong>지금의 SKMS의 근간</strong>이 되었습니다.
-                                </div>
-                            </div>
-
-                            <div class="highlight-box">
-                                <div class="highlight-title">🔄 투명 디스플레이 체험</div>
-                                <div class="highlight-text">
-                                    투명 디스플레이 전면에서 이 기간 중 가장 역사적인 사건인 
-                                    "석유에서 섬유까지의 수직계열화" 영상을 감상합니다. 
-                                    4면 투명 디스플레이 기술로 입체적으로 경험할 수 있습니다.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 10단계: B1층 - 정보통신 혁명 -->
-                <div class="step-card">
-                    <div class="tour-card">
-                        <div class="step-header">
-                            <div class="step-icon">📱</div>
-                            <div class="step-title">B1층 - 정보통신 혁명</div>
-                            <div class="step-subtitle">10년 앞을 내다본 혜안</div>
-                            <div class="step-time">B1층 전시관 (8분)</div>
-                        </div>
-                        
-                        <div class="step-content">
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>🔮</span>
-                                    1980년대 초, 미래를 내다본 혜안
-                                </div>
-                                <div class="story-text">
-                                    우리나라는 1990년초에 삐삐, 핸드폰이 등장했습니다. 
-                                    그런데 최종현회장은 <strong>1980년초에 이미</strong> 예견하셨습니다:<br><br>
-                                    
-                                    <strong>"앞으로 미래의 먹거리는 정보통신이다"</strong><br><br>
-                                    
-                                    직원들을 미국 실리콘밸리에 파견해 정보통신시장과 기술을 
-                                    철저하게 파악하고 연구개발 하게 하셨습니다.
-                                </div>
-                            </div>
-
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>⚡</span>
-                                    1992년 정보통신사업 진출 선언
-                                </div>
-                                <div class="story-text">
-                                    10년 이상 준비 끝에 1992년 
-                                    <strong>"우리 선경그룹은 정보통신사업에 진출하겠다"</strong> 선포하시고, 
-                                    제2 이동통신사업자 선정에 참여하여 가장 우수한 성적으로 입찰에 성공합니다.<br><br>
-                                    
-                                    하지만 사돈기업의 특혜가 아니냐는 오해, 즉 사회적 이슈에 직면하게 되어 
-                                    사업권을 반납하게 됩니다.
-                                </div>
-                            </div>
-
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>💪</span>
-                                    포기하지 않는 도전정신
-                                </div>
-                                <div class="story-text">
-                                    정보통신사업을 10년 이상 준비한 만큼 결코 포기할 수 없었습니다. 
-                                    1994년 한국이동통신 민영화과정에 참여하여 
-                                    가장 우수한 성적으로 사업권을 딴 것입니다.<br><br>
-                                    
-                                    그러나 경영진들이 오히려 반대를 하게 되는데 
-                                    그 이유는 당초 예상보다 <strong>2천억원이 올라갔기</strong> 때문입니다.
-                                </div>
-                            </div>
-
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>🌟</span>
-                                    선대회장의 확신과 비전
-                                </div>
-                                <div class="story-text">
-                                    이에 대해 최종현회장은 강하게 밀어 붙이셨습니다:<br><br>
-                                    
-                                    <strong>"지금의 2천억은 앞으로 수조원의 수익을 가져올 거다. 
-                                    나를 믿고 따라달라"</strong><br><br>
-                                    
-                                    인수하자마자 철저하게 준비한 기술을 바탕으로 
-                                    <strong>세계최초로 CDMA기술</strong>을 선보일 수 있었고, 
-                                    정말 최종현 선대회장의 예견대로 
-                                    <strong>수조원의 수익을 가져오는 SK텔레콤</strong>으로 성장하였습니다.
-                                </div>
-                            </div>
-
-                            <div class="highlight-box">
-                                <div class="highlight-title">🎮 슬라이딩비전 체험</div>
-                                <div class="highlight-text">
-                                    이 시기의 주요 계열사들의 성장사가 담긴 슬라이딩비전을 
-                                    버튼을 클릭하여 체험할 수 있습니다. 
-                                    각 계열사가 어떻게 혁신을 통해 성장했는지 확인해보세요.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 11단계: B1층 - 불굴의 도전과 열정 -->
-                <div class="step-card">
-                    <div class="tour-card">
-                        <div class="step-header">
-                            <div class="step-icon">🔥</div>
-                            <div class="step-title">B1층 - 불굴의 도전과 열정</div>
-                            <div class="step-subtitle">두 창업/선대회장님의 유산</div>
-                            <div class="step-time">RFID 미디어비전 (5분)</div>
-                        </div>
-                        
-                        <div class="step-content">
-                            <div class="context-section">
-                                <div class="context-title">
-                                    <span>🎮</span>
-                                    RFID 체험 안내
-                                </div>
-                                <div class="context-text">
-                                    두 창업/선대회장님이 남겨 주신 유산을 되새기는 공간입니다. 
-                                    불굴의 도전과 열정이 바탕이 된 3가지 테마의 내용을 
-                                    직접 조작하여 살펴볼 수 있습니다.
-                                </div>
-                            </div>
-
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>🎯</span>
-                                    RFID 체험 방법
-                                </div>
-                                <div class="story-text">
-                                    RFID 카드 한 개를 선택하여 콘트롤 포디움 위로 올려주세요. 
-                                    영상이 끝나면 조그다이얼을 돌려 테마별 스토리를 감상할 수 있습니다.<br><br>
-                                    
-                                    <strong>※ 참가자가 직접 조작하지 않도록 안내해주세요</strong><br>
-                                    멘토님이 대표로 조작하며 설명해주시기 바랍니다.
-                                </div>
-                            </div>
-
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>🧱</span>
-                                    패기 월 (Passion Wall)
-                                </div>
-                                <div class="story-text">
-                                    선경직물 수원부지에서 적출한 벽돌과 기와, 타일로 구성된 벽입니다. 
-                                    이것은 단순한 전시물이 아니라 
-                                    <strong>창업 당시의 실제 재료</strong>로 만들어진 것입니다.<br><br>
-                                    
-                                    창업회장님이 동료들과 함께 벽돌, 못 하나하나 주워서 
-                                    다시 쌓아 올렸던 그 정신이 여기에 고스란히 담겨있습니다.
-                                </div>
-                            </div>
-
-                            <div class="highlight-box">
-                                <div class="highlight-title">💼 SK Group 브로셔</div>
-                                <div class="highlight-text">
-                                    이 공간에는 SK Group 브로셔 22년판 내용이 수록되어 있어 
-                                    최신 SK의 모습까지 확인할 수 있습니다. 
-                                    과거에서 현재, 그리고 미래로 이어지는 SK의 여정을 느껴보세요.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 12단계: 투어 마무리 -->
-                <div class="step-card">
-                    <div class="tour-card">
-                        <div class="step-header">
-                            <div class="step-icon">🎉</div>
-                            <div class="step-title">투어 마무리</div>
-                            <div class="step-subtitle">History Snap & 분과장 복귀</div>
-                            <div class="step-time">마무리 (7분)</div>
-                        </div>
-                        
-                        <div class="step-content">
-                            <div class="context-section">
-                                <div class="context-title">
-                                    <span>📸</span>
-                                    History Snap 체험
-                                </div>
-                                <div class="context-text">
-                                    기념관 1층에서(또는 사전에) QR코드를 찍어 
-                                    출퇴근기록 카드를 생성하고 받은 인증번호를 화면에 입력, 
-                                    배경화면 선택 후 촬영을 진행합니다.
-                                </div>
-                            </div>
-
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>🚗</span>
-                                    창업/선대회장님이 사용하신 차량
-                                </div>
-                                <div class="story-text">
-                                    창업회장님과 선대회장님이 실제로 사용하시던 차량을 볼 수 있습니다. 
-                                    파손의 위험이 있어 직접 승차는 불가하지만, 
-                                    그 시대를 함께한 역사의 흔적을 느낄 수 있습니다.
-                                </div>
-                            </div>
-
-                            <div class="story-section">
-                                <div class="story-title">
-                                    <span>💫</span>
-                                    투어를 마치며
-                                </div>
-                                <div class="story-text">
-                                    오늘 우리가 본 것은 단순한 과거가 아닙니다. 
-                                    <strong>28세 청년의 패기로 시작된 SK</strong>가 
-                                    어떻게 오늘날의 글로벌 기업이 되었는지, 
-                                    그리고 <strong>여러분이 그 역사의 새로운 주인공</strong>이 된다는 것의 의미입니다.<br><br>
-                                    
-                                    창업회장님의 "사람을 먼저 생각하는 경영", 
-                                    선대회장님의 "미래를 내다보는 혜안" - 
-                                    이것이 바로 여러분이 이어갈 SK의 DNA입니다.
-                                </div>
-                            </div>
-
-                            <div class="highlight-box">
-                                <div class="highlight-title">📋 분과장 복귀 안내</div>
-                                <div class="highlight-text">
-                                    <strong>• 사진 처리</strong>: 찍은 사진은 바로 출퇴근기록카드에 수록되면서 메일로 전송, 저장 가능 
-                                    (시간 관계상 현장 출력은 하지 않습니다)<br><br>
-                                    
-                                    <strong>• 복귀</strong>: 기념관 방문 후 인재관 1층 분과장을 사용해주세요!<br><br>
-                                    
-                                    <strong>• 다음 활동</strong>: 분과장에서 조별로 결과지 작성, 제출 후 팀 프로젝트를 이어서 진행합니다.
-                                </div>
-                            </div>
-
-                            <div class="context-section">
-                                <div class="context-title">
-                                    <span>🎪</span>
-                                    멘토 활용 팁
-                                </div>
-                                <div class="context-text">
-                                    기념관 방문 시 멘토과정에서 학습하신 
-                                    <strong>캔미팅 가이드, FT Skill</strong>을 활용해 보세요! 
-                                    투어 후 분과장에서 신입구성원들과 함께 
-                                    오늘 본 내용을 정리하고 소감을 나누는 시간을 가져보시기 바랍니다.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
-        </div>
 
-        <div class="nav-controls">
-            <button class="nav-btn" id="prevBtn" onclick="previousStep()" disabled>이전</button>
-            <span class="step-indicator" id="stepIndicator">1 / 12</span>
-            <button class="nav-btn primary" id="nextBtn" onclick="nextStep()">다음</button>
+            <!-- 1층 -->
+            <div class="floor-content" id="floor-0">
+                <h2>🏛️ 1층 - 창업의 현장</h2>
+                
+                <div class="exhibition-grid">
+                    <button class="exhibition-btn active" onclick="showExhibition('floor1-intro')">
+                        📋 1. 기념관 안내
+                    </button>
+                    <button class="exhibition-btn" onclick="showExhibition('floor1-founding')">
+                        🏭 2. 창업의 계기
+                    </button>
+                </div>
+
+                <div class="exhibition-detail" id="floor1-intro" style="display: block;">
+                    <div class="exhibition-title">📋 기념관 안내</div>
+                    <div class="exhibition-content">
+                        <p><strong>안녕하세요! SK 기념관에 오신 것을 환영합니다.</strong></p>
+                        <p>오늘 우리가 함께 걸어갈 이 공간은 단순한 전시관이 아닙니다. SK의 창업회장님과 선대회장님이 직접 만들어온 꿈과 도전의 현장입니다.</p>
+                        
+                        <h4>🎯 투어 목적</h4>
+                        <p>여러분이 이제 막 시작하는 SK에서의 여정이 어떤 정신과 철학 위에 세워져 있는지 느껴보는 시간입니다.</p>
+                        
+                        <h4>📍 관람 순서</h4>
+                        <p><strong>1층:</strong> 창업의 현장 → <strong>2층:</strong> 성장의 발걸음 → <strong>B1층:</strong> 혁신의 도약</p>
+                        
+                        <div class="info-highlight">
+                            💡 <strong>멘토 Tip:</strong> "여러분도 이제 이 역사의 새로운 주인공이 됩니다. 어떤 이야기를 써나가고 싶으신가요?"
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exhibition-detail" id="floor1-founding">
+                    <div class="exhibition-title">🏭 창업의 계기</div>
+                    <div class="exhibition-content">
+                        <p><strong>1층은 창업당시의 공장을 재현한 공간입니다.</strong></p>
+                        <p>여기 직기를 수리하는 젊은 청년이 바로 최종건 창업회장님이십니다.</p>
+                        
+                        <h4>👨‍🎓 최종건 창업회장의 배경</h4>
+                        <p>• 현 과학기술대(구 서울산업대, 경성직업학교) 기계과 출신<br/>
+                        • 고향 수원의 조선 최대 직물공장에서 근무<br/>
+                        • 해방 당시 생산부장으로 실질적 경영 참여</p>
+                        
+                        <h4>💭 창업 결심의 순간</h4>
+                        <p>한국전쟁 후 고향에 돌아온 최종건 회장님은 폐허가 된 직물공장과 길거리에 나앉은 동료들을 보며 결심합니다.</p>
+                        
+                        <p class="info-highlight" style="background: linear-gradient(135deg, rgba(234,25,23,0.1), rgba(255,107,53,0.1)); border: 1px solid rgba(234,25,23,0.3); color: #d32f2f; padding: 16px; border-radius: 12px; margin: 16px 0; font-weight: 700;">
+                            <strong>"안되겠다. 내가 저 직물공장을 인수해서 사람들 다시 불러모아 먹고 살게 해야겠다"</strong>
+                        </p>
+                        
+                        <h4>🏗️ 1953년 10월, SK의 시작</h4>
+                        <p>부모님의 결사반대에도 불구하고 28세의 나이에 공장을 인수. 동료들과 함께 벽돌 하나하나, 못 하나하나 주워서 다시 쌓아 올리며 15대의 직기로 SK가 시작되었습니다.</p>
+                        
+                        <div class="info-highlight">
+                            🎤 <strong>참여 유도 질문:</strong> "28세에 이런 결단을 내렸다면, 여러분은 어떤 마음이었을까요? 지금 여러분의 나이와 비교해보면 어떤 생각이 드시나요?"
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2층 -->
+            <div class="floor-content" id="floor-1" style="display: none;">
+                <h2>📈 2층 - 성장의 발걸음</h2>
+                
+                <div class="exhibition-grid">
+                    <button class="exhibition-btn" onclick="showExhibition('floor2-growth')">
+                        🎬 1. 그룹의 태동~성장기
+                    </button>
+                    <button class="exhibition-btn" onclick="showExhibition('floor2-leadership')">
+                        🤝 2. 따뜻한 리더십
+                    </button>
+                    <button class="exhibition-btn" onclick="showExhibition('floor2-partnership')">
+                        👥 3. 형제경영의 시작
+                    </button>
+                    <button class="exhibition-btn" onclick="showExhibition('floor2-office')">
+                        🏢 4. 서울 집무실 재현
+                    </button>
+                </div>
+
+                <div class="exhibition-detail" id="floor2-growth">
+                    <div class="exhibition-title">🎬 그룹의 태동과 성장기틀의 마련</div>
+                    <div class="exhibition-content">
+                        <p><strong>2층 중앙의 공장 전경 조형대에서 영상을 감상해보겠습니다.</strong></p>
+                        
+                        <h4>🏗️ 1953년-1973년 성장 과정</h4>
+                        <p>창업당시 동료들과 함께 공장을 재건하는 모습이 담긴 디오라마를 통해 SK의 초기 모습을 확인할 수 있습니다.</p>
+                        
+                        <h4>🏭 1973년 공장 전경</h4>
+                        <p>조형대를 통해 본관, 관리동, 생가 등의 건물을 찾아보며 당시 규모를 체감해보세요.</p>
+                        
+                        <h4>📅 타임라인 전시</h4>
+                        <p>1953년부터 1973년까지 최종건 창업회장의 경영활동 시기를 스크린 터치 방식으로 살펴볼 수 있습니다.</p>
+                        
+                        <div class="info-highlight">
+                            🎯 <strong>체험 포인트:</strong> 터치스크린을 직접 조작하며 연도별 주요 사건들을 확인해보세요
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exhibition-detail" id="floor2-leadership">
+                    <div class="exhibition-title">🤝 따뜻하고 배려있는 최종건 회장</div>
+                    <div class="exhibition-content">
+                        <h4>👥 1) 직원모집도 남다르게 [1955년 사진]</h4>
+                        <p>1953년 창업 이후 1년 뒤 신규직원 100명을 모집합니다.</p>
+                        
+                        <p><strong>원래 선발기준:</strong><br/>
+                        첫째, 예쁘고 멋진 거 필요 없고 일을 잘할 것 같이 생긴 사람<br/>
+                        둘째, 공장 혹은 직물관련 근무 경험이 있는 사람</p>
+                        
+                        <p><strong>당일 변경된 기준:</strong></p>
+                        <p class="info-highlight" style="background: linear-gradient(135deg, rgba(76,175,80,0.1), rgba(129,199,132,0.1)); border: 1px solid rgba(76,175,80,0.3); color: #1b5e20; padding: 16px; border-radius: 12px;">
+                            <strong>"식구들이 많은 순으로 뽑아라"</strong><br/>
+                            <small>천명이 몰려온 것을 보고 가장 어려운 사람들을 우선적으로 채용하겠다는 따뜻한 결정</small>
+                        </p>
+                        
+                        <h4>🎪 2) 창립 3주년부터 시작된 사원 운동회 [1956년 사진]</h4>
+                        <p>• 매년 지역주민 전체 초청 대운동회<br/>
+                        • 군용트럭 15-16대에 태우고 여주 신륵사까지 이동<br/>
+                        • 단순 직원 행사가 아닌 지역사회와 함께하는 잔치</p>
+                        
+                        <div class="info-highlight">
+                            💭 <strong>성찰 질문:</strong> "회사가 어려운 시기에도 직원과 지역사회를 생각하는 이런 리더십, 어떻게 생각하세요?"
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exhibition-detail" id="floor2-partnership">
+                    <div class="exhibition-title">👥 형제경영의 시작과 아버지와의 약속</div>
+                    <div class="exhibition-content">
+                        <h4>🤝 1) 최종건 창업회장과 최종현 선대회장의 동행 [1962년 사진]</h4>
+                        <p>최종현 회장이 미국 유학길을 마치고 경영에 합류하십니다.</p>
+                        
+                        <p><strong>합류 배경:</strong><br/>
+                        원래 학구적이어서 계속 학업의 길로 가고 싶어했지만, 형님인 최종건 회장의 설득:</p>
+                        
+                        <p class="info-highlight" style="background: linear-gradient(135deg, rgba(33,150,243,0.1), rgba(100,181,246,0.1)); border: 1px solid rgba(33,150,243,0.3); color: #0d47a1; padding: 16px; border-radius: 12px;">
+                            <strong>"회사는 커져가는데 믿고 맡길 수 있는 파트너가 필요하다. 네가 와서 나를 도와줬음 좋겠다"</strong>
+                        </p>
+                        
+                        <p>이렇게 1962년부터 형제경영이 시작되었습니다.</p>
+                        
+                        <h4>🏆 2) 남북적십자회담 북측대표 일행 선경합섬 방문 [1972년 사진]</h4>
+                        <p>1953년 공장 인수 시 아버지와 한 약속을 기억하시나요?</p>
+                        
+                        <p class="info-highlight" style="background: linear-gradient(135deg, rgba(255,152,0,0.1), rgba(255,183,77,0.1)); border: 1px solid rgba(255,152,0,0.3); color: #e65100; padding: 16px; border-radius: 12px;">
+                            <strong>"내가 반드시 우리나라에서 제일 큰 직물기업 만들겠다. 믿어달라"</strong><br/>
+                            <small>→ 1972년, 이미 달성! 모든 외빈들의 참관장소가 된 대기업</small>
+                        </p>
+                        
+                        <div class="info-highlight">
+                            🎯 <strong>연결 질문:</strong> "28세에 한 약속을 19년 만에 지킨 것입니다. 여러분은 어떤 약속을 스스로에게 하고 싶으세요?"
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exhibition-detail" id="floor2-office">
+                    <div class="exhibition-title">🏢 1970년 서울 집무실 재현</div>
+                    <div class="exhibition-content">
+                        <p><strong>실제 창업회장님과 선대회장님이 사용하신 집무실을 재현한 공간입니다.</strong></p>
+                        
+                        <h4>📸 체험 활동</h4>
+                        <p>• 사진 촬영 가능<br/>
+                        • 금고 및 기타 전시물들은 실제 사용한 것 → 조심스럽게 관람</p>
+                        
+                        <h4>📇 특별한 명함 체험</h4>
+                        <p>책상 위 명함은 기념으로 한 장씩 가져갈 수 있습니다.</p>
+                        
+                        <div class="info-highlight">
+                            📞 <strong>음성 체험:</strong> 명함에 적힌 번호를 누르면 실제 창업회장님과 선대회장님의 육성을 들을 수 있습니다
+                        </div>
+                        
+                        <h4>🔤 재미있는 발견</h4>
+                        <p>명함의 영문표기를 보면 두 분의 성인 "최" 표기가 다릅니다:</p>
+                        <p>• <strong>최종건 회장:</strong> CHOI<br/>
+                        • <strong>최종현 회장:</strong> CHEY</p>
+                        
+                        <p><strong>이유:</strong> 처음에는 두 분 모두 CHEY를 사용했지만, 한국에서 "최"가 CHOI로 권장되면서 최종건 회장은 변경, 미국에 계시던 최종현 회장은 그대로 사용</p>
+                        
+                        <p><small>지금도 자녀들이 각각 아버지를 따라 CHOI, CHEY로 다르게 사용 중입니다.</small></p>
+                        
+                        <div class="info-highlight">
+                            💭 <strong>소감 나누기:</strong> "실제 사용하신 공간에서 어떤 느낌이 드시나요? 이 책상에서 어떤 결정들이 내려졌을까요?"
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- B1층 -->
+            <div class="floor-content" id="floor-2" style="display: none;">
+                <h2>🚀 B1층 - 혁신의 도약</h2>
+                
+                <div class="exhibition-grid">
+                    <button class="exhibition-btn" onclick="showExhibition('floor3-vertical')">
+                        ⛽ 1. 수직계열화 선언
+                    </button>
+                    <button class="exhibition-btn" onclick="showExhibition('floor3-telecom')">
+                        📱 2. 정보통신 진출
+                    </button>
+                    <button class="exhibition-btn" onclick="showExhibition('floor3-spirit')">
+                        💪 3. 불굴의 도전정신
+                    </button>
+                    <button class="exhibition-btn" onclick="showExhibition('floor3-future')">
+                        🌟 4. 패기와 미래
+                    </button>
+                </div>
+
+                <div class="exhibition-detail" id="floor3-vertical">
+                    <div class="exhibition-title">⛽ 석유에서 섬유까지 수직계열화</div>
+                    <div class="exhibition-content">
+                        <h4>📢 1975년 신년식 선언</h4>
+                        <p class="info-highlight" style="background: linear-gradient(135deg, rgba(234,25,23,0.1), rgba(255,107,53,0.1)); border: 1px solid rgba(234,25,23,0.3); color: #d32f2f; padding: 16px; border-radius: 12px; font-weight: 700; font-size: 16px;">
+                            "석유에서 섬유까지 수직계열화를 달성하겠다"
+                        </p>
+                        
+                        <h4>🛠️ 체계적인 준비 과정</h4>
+                        <p>1970년부터 창업회장과 함께 석유사업의 꿈을 키우며:</p>
+                        <p>• 선경합섬을 통해 철저한 사업 준비<br/>
+                        • 막강한 중동 네트워크 구축<br/>
+                        • 기술과 인프라 동시 개발</p>
+                        
+                        <h4>🏆 1980년 대한석유공사 인수</h4>
+                        <p>5년간의 준비 끝에 <strong>가장 우수한 성적으로 입찰 성공!</strong></p>
+                        
+                        <h4>🔧 SK 고유의 경영체계 구축</h4>
+                        <p><strong>1) 선경경영관리체계</strong><br/>
+                        1970년대 초 본사와 공장 간 소통 문제를 해결하기 위해 SK 고유의 경영체계 및 용어 정리 시작</p>
+                        
+                        <p><strong>발전 과정:</strong><br/>
+                        수기 작성(초기) → 1979년 '선경경영관리체계' 책 발간 → 전 구성원 배포·교육 → <strong>현재 SKMS의 근간</strong></p>
+                        
+                        <div class="info-highlight">
+                            🎯 <strong>연결 포인트:</strong> "여러분이 어제 배운 SKMS의 뿌리가 바로 여기서 시작되었습니다. 어떤 느낌이신가요?"
+                        </div>
+                        
+                        <h4>🌍 관계사의 변화와 혁신</h4>
+                        <p>• 선경직물 → 선경종합상사로 확장<br/>
+                        • SKC: 비디오테잎, CD 등 전자 분야 세계적 브랜드<br/>
+                        • 다양한 산업 분야로의 확장</p>
+                    </div>
+                </div>
+
+                <div class="exhibition-detail" id="floor3-telecom">
+                    <div class="exhibition-title">📱 정보통신시장 진출</div>
+                    <div class="exhibition-content">
+                        <h4>🔮 1980년대 초, 미래에 대한 통찰</h4>
+                        <p>우리나라에 삐삐, 핸드폰이 등장하기 10년 전인 1980년대 초, 최종현 회장은 이미 예견했습니다:</p>
+                        
+                        <p class="info-highlight" style="background: linear-gradient(135deg, rgba(156,39,176,0.1), rgba(186,104,200,0.1)); border: 1px solid rgba(156,39,176,0.3); color: #7b1fa2; padding: 16px; border-radius: 12px; font-weight: 700;">
+                            "앞으로 미래의 먹거리는 정보통신이다"
+                        </p>
+                        
+                        <h4>🏗️ 10년간의 철저한 준비</h4>
+                        <p>• 직원들을 미국 실리콘밸리에 파견<br/>
+                        • 정보통신시장과 기술 철저 파악<br/>
+                        • 연구개발 지속 투자</p>
+                        
+                        <h4>📢 1992년 정보통신사업 진출 선언</h4>
+                        <p>10년 이상의 준비 끝에 제2 이동통신사업자 선정에 참여하여 가장 우수한 성적으로 입찰 성공!</p>
+                        
+                        <h4>⚡ 위기와 기회</h4>
+                        <p><strong>위기:</strong> 사돈기업 특혜 논란으로 사업권 반납<br/>
+                        <strong>기회:</strong> 1994년 한국이동통신 민영화 과정 재참여</p>
+                        
+                        <h4>💰 2천억원의 결단</h4>
+                        <p>경영진들이 반대하는 상황에서 최종현 회장의 결단:</p>
+                        
+                        <p class="info-highlight" style="background: linear-gradient(135deg, rgba(255,152,0,0.1), rgba(255,183,77,0.1)); border: 1px solid rgba(255,152,0,0.3); color: #e65100; padding: 16px; border-radius: 12px; font-weight: 700;">
+                            "지금의 2천억은 앞으로 수조원의 수익을 가져올 거다. 나를 믿고 따라달라"
+                        </p>
+                        
+                        <h4>🌟 세계 최초 CDMA 기술</h4>
+                        <p>인수 직후 철저히 준비한 기술로 세계 최초 CDMA 기술을 선보이며, 정말로 수조원의 수익을 창출하는 SK텔레콤으로 성장!</p>
+                        
+                        <div class="info-highlight">
+                            🎯 <strong>성찰 질문:</strong> "10년을 준비하고 믿음으로 결단한 리더십, 여러분의 커리어에서는 어떻게 적용할 수 있을까요?"
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exhibition-detail" id="floor3-spirit">
+                    <div class="exhibition-title">💪 불굴의 도전과 열정</div>
+                    <div class="exhibition-content">
+                        <h4>🎮 RFID 미디어비전 체험</h4>
+                        <p>두 창업/선대회장님이 남겨주신 유산을 되새기는 공간입니다.</p>
+                        
+                        <p><strong>체험 방법:</strong><br/>
+                        RFID 카드 한 개를 선택하여 콘트롤 포디움 위에 올린 후, 조그다이얼을 돌려 3가지 테마 스토리를 감상하세요.</p>
+                        
+                        <div class="info-highlight">
+                            ⚠️ <strong>주의:</strong> 참가자가 직접 조작하지 않도록 멘토가 시연 후 안내
+                        </div>
+                        
+                        <h4>💎 3가지 핵심 테마</h4>
+                        <p><strong>1) 도전정신:</strong> 불가능을 가능으로 만든 순간들<br/>
+                        <strong>2) 혁신의지:</strong> 항상 한 발 앞선 미래 준비<br/>
+                        <strong>3) 인간경영:</strong> 사람을 중시하는 경영철학</p>
+                        
+                        <h4>🧱 패기 월(Wall)</h4>
+                        <p>선경직물 수원부지에서 적출한 실제 벽돌, 기와, 타일로 구성된 특별한 벽면입니다.</p>
+                        
+                        <p class="info-highlight" style="background: linear-gradient(135deg, rgba(76,175,80,0.1), rgba(129,199,132,0.1)); border: 1px solid rgba(76,175,80,0.3); color: #1b5e20; padding: 16px; border-radius: 12px;">
+                            <strong>의미:</strong> 창업의 현장에서 가져온 실제 재료로 만든 역사의 증거물입니다. 만져보시면 창업의 숨결을 느낄 수 있습니다.
+                        </p>
+                        
+                        <div class="info-highlight">
+                            💭 <strong>감성 포인트:</strong> "이 벽돌 하나하나가 여러분이 일하게 될 SK의 시작입니다. 어떤 마음으로 이 역사를 이어가고 싶으세요?"
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exhibition-detail" id="floor3-future">
+                    <div class="exhibition-title">🌟 패기와 미래</div>
+                    <div class="exhibition-content">
+                        <h4>📸 History Snap 체험</h4>
+                        <p>기념관 관람의 마지막을 장식하는 특별한 체험입니다.</p>
+                        
+                        <p><strong>체험 과정:</strong><br/>
+                        1. 기념관 1층에서 QR코드를 스캔하여 출퇴근기록 카드 생성<br/>
+                        2. 받은 인증번호를 화면에 입력<br/>
+                        3. 배경화면 선택 후 기념촬영<br/>
+                        4. 바로 메일로 전송되어 저장 가능</p>
+                        
+                        <div class="info-highlight">
+                            ⏰ <strong>시간 관리:</strong> 출력은 시간 관계상 생략하고 메일 전송으로 대체
+                        </div>
+                        
+                        <h4>🚗 창업회장님과 선대회장님의 차량</h4>
+                        <p>실제 사용하신 차량이 전시되어 있습니다.</p>
+                        <p><strong>⚠️ 주의:</strong> 파손 위험으로 직접 승차는 불가하지만, 가까이에서 관찰 가능</p>
+                        
+                        <h4>🏢 SK Group 현재</h4>
+                        <p>SK Group 브로셔 2022년판 내용이 수록되어 여러분이 합류하게 될 현재의 SK를 확인할 수 있습니다.</p>
+                        
+                        <h4>🎯 투어 마무리</h4>
+                        <p class="info-highlight" style="background: linear-gradient(135deg, rgba(234,25,23,0.1), rgba(255,107,53,0.1)); border: 1px solid rgba(234,25,23,0.3); color: #d32f2f; padding: 20px; border-radius: 12px; font-weight: 700; text-align: center;">
+                            "창업회장님과 선대회장님이 이루신 이 모든 역사의 새로운 주인공은 바로 여러분입니다!"
+                        </p>
+                        
+                        <div class="info-highlight">
+                            🏃‍♂️ <strong>다음 단계:</strong> 분과장으로 복귀하여 조별 결과지 작성 및 제출
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // 초기화 및 이벤트 리스너
+        // 페이지 로드 시 초기화
         document.addEventListener('DOMContentLoaded', function() {
             console.log('기념관 투어 가이드 로드 완료');
             
-            const container = document.getElementById('stepCards');
+            // 초기 설정
+            showFloor(0);
+            showExhibition('floor1-intro');
             
-            if (container) {
-                let startX = 0;
+            // 위치 업데이트
+            updateCurrentLocation();
+            
+            // 섹션 애니메이션
+            const sections = document.querySelectorAll('.section');
+            sections.forEach((section, index) => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    section.style.transition = 'all 0.6s ease';
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+        });
 
-                container.addEventListener('touchstart', function(e) {
-                    startX = e.touches[0].clientX;
-                });
-
-                container.addEventListener('touchend', function(e) {
-                    const endX = e.changedTouches[0].clientX;
-                    const diffX = startX - endX;
-
-                    if (Math.abs(diffX) > 50) {
-                        if (diffX > 0 && currentStep < totalSteps - 1) {
-                            nextStep();
-                        } else if (diffX < 0 && currentStep > 0) {
-                            previousStep();
-                        }
-                    }
-                });
-
-                container.addEventListener('scroll', function() {
-                    const cardWidth = container.clientWidth;
-                    const newStep = Math.round(container.scrollLeft / cardWidth);
-                    if (newStep !== currentStep && newStep >= 0 && newStep < totalSteps) {
-                        currentStep = newStep;
-                        updateNavigation();
-                    }
-                });
+        // 뒤로가기 버튼을 위한 히스토리 관리
+        window.addEventListener('load', function() {
+            if (!document.referrer.includes('index.html')) {
+                history.pushState(null, null, window.location.href);
             }
-            
-            updateNavigation();
+        });
+
+        // 안드로이드 뒤로가기 처리
+        window.addEventListener('popstate', function() {
+            window.location.href = '../index.html';
+        });
+
+        // 키보드 단축키 (투어 모드에서)
+        document.addEventListener('keydown', function(e) {
+            if (!isGuideMode) {
+                if (e.key === 'ArrowLeft' && currentFloor > 0) {
+                    showFloor(currentFloor - 1);
+                } else if (e.key === 'ArrowRight' && currentFloor < floors.length - 1) {
+                    showFloor(currentFloor + 1);
+                }
+            }
+        });
+
+        // 스와이프 제스처 지원 (모바일)
+        let startX = 0;
+        let endX = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            startX = e.touches[0].clientX;
+        });
+
+        document.addEventListener('touchend', function(e) {
+            if (!isGuideMode) {
+                endX = e.changedTouches[0].clientX;
+                const diffX = startX - endX;
+                
+                if (Math.abs(diffX) > 50) {
+                    if (diffX > 0 && currentFloor < floors.length - 1) {
+                        showFloor(currentFloor + 1);
+                    } else if (diffX < 0 && currentFloor > 0) {
+                        showFloor(currentFloor - 1);
+                    }
+                }
+            }
         });
     </script>
 </body>
