@@ -6,98 +6,9 @@
     <title>🏛️ 기념관 투어 가이드</title>
     <meta name="theme-color" content="#EA1917">
     
-    <script>
-        // 전역 함수들을 먼저 정의
-        let isGuideMode = true;
-        let currentFloor = 0;
-        const floors = ['1층', '2층', 'B1층'];
-
-        function goBack() {
-            if (document.referrer && document.referrer !== window.location.href) {
-                history.back();
-            } else {
-                window.location.href = '../index.html';
-            }
-        }
-
-        function switchMode(mode) {
-            const guideMode = document.getElementById('guideMode');
-            const tourMode = document.getElementById('tourMode');
-            const toggleBtns = document.querySelectorAll('.toggle-btn');
-            
-            if (mode === 'guide') {
-                isGuideMode = true;
-                if (guideMode) guideMode.style.display = 'block';
-                if (tourMode) tourMode.style.display = 'none';
-                toggleBtns.forEach(btn => btn.classList.remove('active'));
-                if (toggleBtns[0]) toggleBtns[0].classList.add('active');
-            } else if (mode === 'tour') {
-                isGuideMode = false;
-                if (guideMode) guideMode.style.display = 'none';
-                if (tourMode) tourMode.style.display = 'block';
-                toggleBtns.forEach(btn => btn.classList.remove('active'));
-                if (toggleBtns[1]) toggleBtns[1].classList.add('active');
-            }
-        }
-
-        function showFloor(floorIndex) {
-            currentFloor = floorIndex;
-            const floorContents = document.querySelectorAll('.floor-content');
-            const floorButtons = document.querySelectorAll('.floor-btn');
-            
-            floorContents.forEach((content, index) => {
-                content.style.display = index === floorIndex ? 'block' : 'none';
-            });
-            
-            floorButtons.forEach((btn, index) => {
-                btn.classList.toggle('active', index === floorIndex);
-            });
-            
-            // 첫 번째 전시관 자동 선택
-            const firstBtn = floorContents[floorIndex]?.querySelector('.exhibition-btn');
-            if (firstBtn) {
-                const exhibitionId = firstBtn.getAttribute('onclick').match(/'([^']+)'/)[1];
-                showExhibition(exhibitionId);
-            }
-            
-            updateCurrentLocation();
-        }
-
-        function showExhibition(exhibitionId) {
-            const exhibitions = document.querySelectorAll('.exhibition-detail');
-            const buttons = document.querySelectorAll('.exhibition-btn');
-            
-            exhibitions.forEach(ex => ex.style.display = 'none');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            
-            const targetExhibition = document.getElementById(exhibitionId);
-            const targetButton = document.querySelector(`[onclick="showExhibition('${exhibitionId}')"]`);
-            
-            if (targetExhibition) {
-                targetExhibition.style.display = 'block';
-                targetExhibition.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-            if (targetButton) targetButton.classList.add('active');
-            
-            updateCurrentLocation();
-        }
-
-        // 현재 위치 업데이트
-        function updateCurrentLocation() {
-            const currentLocationElement = document.getElementById('currentLocation');
-            if (currentLocationElement) {
-                const floorName = floors[currentFloor];
-                const activeExhibition = document.querySelector('.exhibition-btn.active');
-                const exhibitionName = activeExhibition ? activeExhibition.textContent.trim() : '';
-                
-                currentLocationElement.textContent = `${floorName} - ${exhibitionName}`;
-            }
-        }
-    </script>
-
     <style>
         /* ===================================================================
-           SK 브랜드 컬러 변수 & 글래스모피즘 기본 스타일 (Daily Opening과 동일)
+           SK 브랜드 컬러 변수 & 글래스모피즘 기본 스타일
            =================================================================== */
         :root {
             --sk-red: #EA1917;
@@ -130,7 +41,7 @@
         }
 
         /* ===================================================================
-           헤더 - Daily Opening 스타일 적용
+           헤더 스타일
            =================================================================== */
         .header {
             background: linear-gradient(135deg, var(--sk-orange) 0%, var(--sk-red) 100%);
@@ -189,7 +100,7 @@
         }
 
         /* ===================================================================
-           모드 토글 - Vision Building 스타일 적용
+           모드 토글
            =================================================================== */
         .view-toggle {
             position: fixed;
@@ -222,7 +133,7 @@
         }
 
         /* ===================================================================
-           컨테이너 & 섹션 - Daily Opening 스타일 적용
+           컨테이너 & 섹션
            =================================================================== */
         .container {
             max-width: 900px;
@@ -266,7 +177,7 @@
         }
 
         /* ===================================================================
-           투어 개요 카드 - Daily Opening schedule-info 스타일 적용
+           투어 개요 카드
            =================================================================== */
         .tour-overview {
             background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(129, 199, 132, 0.1));
@@ -306,7 +217,7 @@
         }
 
         /* ===================================================================
-           가이드 정보 아이템 - Mentor Life Guide 스타일 적용
+           가이드 정보 아이템
            =================================================================== */
         .info-item {
             display: flex;
@@ -364,7 +275,7 @@
         }
 
         /* ===================================================================
-           투어 모드 스타일 - 고정 헤더 문제 해결
+           투어 모드 스타일
            =================================================================== */
         .tour-mode {
             display: none;
@@ -494,7 +405,7 @@
         }
 
         /* ===================================================================
-           팁 박스 - Daily Opening 스타일 적용
+           팁 박스
            =================================================================== */
         .tip-box {
             background: linear-gradient(135deg, rgba(255, 152, 0, 0.1), rgba(255, 183, 77, 0.1));
@@ -528,7 +439,7 @@
         }
 
         /* ===================================================================
-           반응형 디자인 - Daily Opening 스타일 적용
+           반응형 디자인
            =================================================================== */
         @media (max-width: 768px) {
             .container {
@@ -574,7 +485,6 @@
                 font-size: 11px;
             }
             
-            /* 투어 모드 최적화 */
             .tour-header {
                 padding: 12px 16px;
                 margin-bottom: 12px;
@@ -672,7 +582,7 @@
         }
 
         /* ===================================================================
-           스크롤 스타일 - Daily Opening과 동일
+           스크롤 스타일
            =================================================================== */
         ::-webkit-scrollbar {
             width: 8px;
@@ -895,7 +805,7 @@
                         <h4>💭 창업 결심의 순간</h4>
                         <p>한국전쟁 후 고향에 돌아온 최종건 회장님은 폐허가 된 직물공장과 길거리에 나앉은 동료들을 보며 결심합니다.</p>
                         
-                        <p class="info-highlight" style="background: linear-gradient(135deg, rgba(234,25,23,0.1), rgba(255,107,53,0.1)); border: 1px solid rgba(234,25,23,0.3); color: #d32f2f; padding: 16px; border-radius: 12px; margin: 16px 0; font-weight: 700;">
+                        <p style="background: linear-gradient(135deg, rgba(234,25,23,0.1), rgba(255,107,53,0.1)); border: 1px solid rgba(234,25,23,0.3); color: #d32f2f; padding: 16px; border-radius: 12px; margin: 16px 0; font-weight: 700;">
                             <strong>"안되겠다. 내가 저 직물공장을 인수해서 사람들 다시 불러모아 먹고 살게 해야겠다"</strong>
                         </p>
                         
@@ -959,7 +869,7 @@
                         둘째, 공장 혹은 직물관련 근무 경험이 있는 사람</p>
                         
                         <p><strong>당일 변경된 기준:</strong></p>
-                        <p class="info-highlight" style="background: linear-gradient(135deg, rgba(76,175,80,0.1), rgba(129,199,132,0.1)); border: 1px solid rgba(76,175,80,0.3); color: #1b5e20; padding: 16px; border-radius: 12px;">
+                        <p style="background: linear-gradient(135deg, rgba(76,175,80,0.1), rgba(129,199,132,0.1)); border: 1px solid rgba(76,175,80,0.3); color: #1b5e20; padding: 16px; border-radius: 12px; font-weight: 700;">
                             <strong>"식구들이 많은 순으로 뽑아라"</strong><br/>
                             <small>천명이 몰려온 것을 보고 가장 어려운 사람들을 우선적으로 채용하겠다는 따뜻한 결정</small>
                         </p>
@@ -984,7 +894,7 @@
                         <p><strong>합류 배경:</strong><br/>
                         원래 학구적이어서 계속 학업의 길로 가고 싶어했지만, 형님인 최종건 회장의 설득:</p>
                         
-                        <p class="info-highlight" style="background: linear-gradient(135deg, rgba(33,150,243,0.1), rgba(100,181,246,0.1)); border: 1px solid rgba(33,150,243,0.3); color: #0d47a1; padding: 16px; border-radius: 12px;">
+                        <p style="background: linear-gradient(135deg, rgba(33,150,243,0.1), rgba(100,181,246,0.1)); border: 1px solid rgba(33,150,243,0.3); color: #0d47a1; padding: 16px; border-radius: 12px; font-weight: 700;">
                             <strong>"회사는 커져가는데 믿고 맡길 수 있는 파트너가 필요하다. 네가 와서 나를 도와줬음 좋겠다"</strong>
                         </p>
                         
@@ -993,7 +903,7 @@
                         <h4>🏆 2) 남북적십자회담 북측대표 일행 선경합섬 방문 [1972년 사진]</h4>
                         <p>1953년 공장 인수 시 아버지와 한 약속을 기억하시나요?</p>
                         
-                        <p class="info-highlight" style="background: linear-gradient(135deg, rgba(255,152,0,0.1), rgba(255,183,77,0.1)); border: 1px solid rgba(255,152,0,0.3); color: #e65100; padding: 16px; border-radius: 12px;">
+                        <p style="background: linear-gradient(135deg, rgba(255,152,0,0.1), rgba(255,183,77,0.1)); border: 1px solid rgba(255,152,0,0.3); color: #e65100; padding: 16px; border-radius: 12px; font-weight: 700;">
                             <strong>"내가 반드시 우리나라에서 제일 큰 직물기업 만들겠다. 믿어달라"</strong><br/>
                             <small>→ 1972년, 이미 달성! 모든 외빈들의 참관장소가 된 대기업</small>
                         </p>
@@ -1059,7 +969,7 @@
                     <div class="exhibition-title">⛽ 석유에서 섬유까지 수직계열화</div>
                     <div class="exhibition-content">
                         <h4>📢 1975년 신년식 선언</h4>
-                        <p class="info-highlight" style="background: linear-gradient(135deg, rgba(234,25,23,0.1), rgba(255,107,53,0.1)); border: 1px solid rgba(234,25,23,0.3); color: #d32f2f; padding: 16px; border-radius: 12px; font-weight: 700; font-size: 16px;">
+                        <p style="background: linear-gradient(135deg, rgba(234,25,23,0.1), rgba(255,107,53,0.1)); border: 1px solid rgba(234,25,23,0.3); color: #d32f2f; padding: 16px; border-radius: 12px; font-weight: 700; font-size: 16px;">
                             "석유에서 섬유까지 수직계열화를 달성하겠다"
                         </p>
                         
@@ -1096,7 +1006,7 @@
                         <h4>🔮 1980년대 초, 미래에 대한 통찰</h4>
                         <p>우리나라에 삐삐, 핸드폰이 등장하기 10년 전인 1980년대 초, 최종현 회장은 이미 예견했습니다:</p>
                         
-                        <p class="info-highlight" style="background: linear-gradient(135deg, rgba(156,39,176,0.1), rgba(186,104,200,0.1)); border: 1px solid rgba(156,39,176,0.3); color: #7b1fa2; padding: 16px; border-radius: 12px; font-weight: 700;">
+                        <p style="background: linear-gradient(135deg, rgba(156,39,176,0.1), rgba(186,104,200,0.1)); border: 1px solid rgba(156,39,176,0.3); color: #7b1fa2; padding: 16px; border-radius: 12px; font-weight: 700;">
                             "앞으로 미래의 먹거리는 정보통신이다"
                         </p>
                         
@@ -1115,7 +1025,7 @@
                         <h4>💰 2천억원의 결단</h4>
                         <p>경영진들이 반대하는 상황에서 최종현 회장의 결단:</p>
                         
-                        <p class="info-highlight" style="background: linear-gradient(135deg, rgba(255,152,0,0.1), rgba(255,183,77,0.1)); border: 1px solid rgba(255,152,0,0.3); color: #e65100; padding: 16px; border-radius: 12px; font-weight: 700;">
+                        <p style="background: linear-gradient(135deg, rgba(255,152,0,0.1), rgba(255,183,77,0.1)); border: 1px solid rgba(255,152,0,0.3); color: #e65100; padding: 16px; border-radius: 12px; font-weight: 700;">
                             "지금의 2천억은 앞으로 수조원의 수익을 가져올 거다. 나를 믿고 따라달라"
                         </p>
                         
@@ -1149,7 +1059,7 @@
                         <h4>🧱 패기 월(Wall)</h4>
                         <p>선경직물 수원부지에서 적출한 실제 벽돌, 기와, 타일로 구성된 특별한 벽면입니다.</p>
                         
-                        <p class="info-highlight" style="background: linear-gradient(135deg, rgba(76,175,80,0.1), rgba(129,199,132,0.1)); border: 1px solid rgba(76,175,80,0.3); color: #1b5e20; padding: 16px; border-radius: 12px;">
+                        <p style="background: linear-gradient(135deg, rgba(76,175,80,0.1), rgba(129,199,132,0.1)); border: 1px solid rgba(76,175,80,0.3); color: #1b5e20; padding: 16px; border-radius: 12px; font-weight: 700;">
                             <strong>의미:</strong> 창업의 현장에서 가져온 실제 재료로 만든 역사의 증거물입니다. 만져보시면 창업의 숨결을 느낄 수 있습니다.
                         </p>
                         
@@ -1183,7 +1093,7 @@
                         <p>SK Group 브로셔 2022년판 내용이 수록되어 여러분이 합류하게 될 현재의 SK를 확인할 수 있습니다.</p>
                         
                         <h4>🎯 투어 마무리</h4>
-                        <p class="info-highlight" style="background: linear-gradient(135deg, rgba(234,25,23,0.1), rgba(255,107,53,0.1)); border: 1px solid rgba(234,25,23,0.3); color: #d32f2f; padding: 20px; border-radius: 12px; font-weight: 700; text-align: center;">
+                        <p style="background: linear-gradient(135deg, rgba(234,25,23,0.1), rgba(255,107,53,0.1)); border: 1px solid rgba(234,25,23,0.3); color: #d32f2f; padding: 20px; border-radius: 12px; font-weight: 700; text-align: center;">
                             "창업회장님과 선대회장님이 이루신 이 모든 역사의 새로운 주인공은 바로 여러분입니다!"
                         </p>
                         
@@ -1197,6 +1107,104 @@
     </div>
 
     <script>
+        // 전역 변수
+        let isGuideMode = true;
+        let currentFloor = 0;
+        const floors = ['1층', '2층', 'B1층'];
+
+        // 뒤로가기 함수
+        function goBack() {
+            if (document.referrer && document.referrer !== window.location.href) {
+                history.back();
+            } else {
+                alert('이전 페이지로 돌아갑니다.');
+            }
+        }
+
+        // 모드 전환 함수
+        function switchMode(mode) {
+            const guideMode = document.getElementById('guideMode');
+            const tourMode = document.getElementById('tourMode');
+            const toggleBtns = document.querySelectorAll('.toggle-btn');
+            
+            if (mode === 'guide') {
+                isGuideMode = true;
+                guideMode.style.display = 'block';
+                tourMode.style.display = 'none';
+                toggleBtns.forEach(btn => btn.classList.remove('active'));
+                toggleBtns[0].classList.add('active');
+            } else if (mode === 'tour') {
+                isGuideMode = false;
+                guideMode.style.display = 'none';
+                tourMode.style.display = 'block';
+                toggleBtns.forEach(btn => btn.classList.remove('active'));
+                toggleBtns[1].classList.add('active');
+            }
+        }
+
+        // 층 표시 함수
+        function showFloor(floorIndex) {
+            currentFloor = floorIndex;
+            const floorContents = document.querySelectorAll('.floor-content');
+            const floorButtons = document.querySelectorAll('.floor-btn');
+            
+            floorContents.forEach((content, index) => {
+                content.style.display = index === floorIndex ? 'block' : 'none';
+            });
+            
+            floorButtons.forEach((btn, index) => {
+                if (index === floorIndex) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // 첫 번째 전시관 자동 선택
+            const firstBtn = floorContents[floorIndex]?.querySelector('.exhibition-btn');
+            if (firstBtn) {
+                const onclickValue = firstBtn.getAttribute('onclick');
+                const exhibitionId = onclickValue.match(/'([^']+)'/)[1];
+                showExhibition(exhibitionId);
+            }
+            
+            updateCurrentLocation();
+        }
+
+        // 전시관 표시 함수
+        function showExhibition(exhibitionId) {
+            const exhibitions = document.querySelectorAll('.exhibition-detail');
+            const buttons = document.querySelectorAll('.exhibition-btn');
+            
+            exhibitions.forEach(ex => ex.style.display = 'none');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            const targetExhibition = document.getElementById(exhibitionId);
+            const targetButton = document.querySelector(`[onclick="showExhibition('${exhibitionId}')"]`);
+            
+            if (targetExhibition) {
+                targetExhibition.style.display = 'block';
+                // 스크롤 이동 제거 - 현재 위치 유지
+            }
+            if (targetButton) {
+                targetButton.classList.add('active');
+            }
+            
+            updateCurrentLocation();
+        }
+
+        // 현재 위치 업데이트 함수
+        function updateCurrentLocation() {
+            const currentLocationElement = document.getElementById('currentLocation');
+            if (currentLocationElement) {
+                const floorName = floors[currentFloor];
+                const activeExhibition = document.querySelector('.exhibition-btn.active');
+                const exhibitionName = activeExhibition ? activeExhibition.textContent.trim() : '';
+                
+                currentLocationElement.textContent = `${floorName} - ${exhibitionName}`;
+            }
+        }
+
         // 페이지 로드 시 초기화
         document.addEventListener('DOMContentLoaded', function() {
             console.log('기념관 투어 가이드 로드 완료');
@@ -1220,18 +1228,6 @@
                     section.style.transform = 'translateY(0)';
                 }, index * 150);
             });
-        });
-
-        // 뒤로가기 버튼을 위한 히스토리 관리
-        window.addEventListener('load', function() {
-            if (!document.referrer.includes('index.html')) {
-                history.pushState(null, null, window.location.href);
-            }
-        });
-
-        // 안드로이드 뒤로가기 처리
-        window.addEventListener('popstate', function() {
-            window.location.href = '../index.html';
         });
 
         // 키보드 단축키 (투어 모드에서)
