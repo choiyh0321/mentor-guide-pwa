@@ -125,7 +125,7 @@
                     </div>
                     
                     <div class="task-actions">
-                        <a href="guides/interview.html" class="task-button btn-primary">💬 면담 내용 제출</a>
+                        <a href="guides/interview.html" class="task-button btn-primary">💬 면담 기록하기</a>
                         <button class="task-button btn-secondary" onclick="viewInterviewHistory()">📊 면담 기록 보기</button>
                     </div>
                 </div>
@@ -510,7 +510,7 @@
                             <div style="margin-bottom: 16px;">
                                 <label style="display: block; font-weight: 600; margin-bottom: 6px;">연수원</label>
                                 <select id="trainingCenterInput" style="width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px;">
-                                    <option value="icheon">이천 FMI인재개발원</option>
+                                    <option value="icheon">이천 SKT인재개발원</option>
                                     <option value="yongin">용인 SK아카데미</option>
                                     <option value="incheon">인천 SK무의연수원</option>
                                 </select>
@@ -706,7 +706,7 @@
             // 연수원 이름 변환
             getCenterName(centerId) {
                 const centers = {
-                    'icheon': '이천 FMI인재개발원',
+                    'icheon': '이천 SKT인재개발원',
                     'yongin': '용인 SK아카데미',
                     'incheon': '인천 SK무의연수원'
                 };
@@ -1920,7 +1920,7 @@
 
         function getCenterDisplayName(centerId) {
             const centers = {
-                'icheon': '이천 FMI인재개발원',
+                'icheon': '이천 SKT인재개발원',
                 'yongin': '용인 SK아카데미',
                 'incheon': '인천 SK무의연수원'
             };
