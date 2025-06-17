@@ -59,8 +59,18 @@
         }
 
         async function submitInterview() {
-            const submitBtn = document.getElementById('submitBtn');
-            const submitStatus = document.getElementById('submitStatus');
+            // 멘토 정보 재확인 (이중 체크)
+            const mentorName = localStorage.getItem('sk-mentor-name');
+            const mentorInfo = localStorage.getItem('sk-mentor-info');
+            
+            if (!mentorName && !mentorInfo) {
+                alert('멘토 정보를 먼저 설정해주세요. 메인 페이지로 이동합니다.');
+                window.location.href = '../index.html';
+                return;
+            }
+    
+    const submitBtn = document.getElementById('submitBtn');
+    const submitStatus = document.getElementById('submitStatus');
             
             // Apps Script URL
             const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwMjskB4jASOc4Yg-H0TeMFXeJMSxbQwsvGk25T5H7Al9FA2cj6Xy4SAlDSRGJ2_SqVJw/exec';
@@ -1164,13 +1174,25 @@
     <script>
         // 페이지 로드시 초기화
         document.addEventListener('DOMContentLoaded', function() {
-            // 멘토 정보 확인 (이 부분을 추가!)
+            // 멘토 정보 확인 및 제출 버튼 상태 설정
+            const mentorName = localStorage.getItem('sk-mentor-name');
             const mentorInfo = localStorage.getItem('sk-mentor-info');
+            const submitBtn = document.getElementById('submitBtn');
             
-            if (!mentorInfo) {
-                alert('멘토 정보를 먼저 설정해주세요.');
-                window.location.href = '../index.html';
-                return;
+            // 멘토 이름이나 멘토 정보 둘 중 하나라도 없으면 비활성화
+            if (!mentorName && !mentorInfo) {
+                // 멘토 정보가 없으면 제출 버튼 비활성화
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '🔒 멘토 정보 설정 후 제출 가능';
+                submitBtn.style.background = '#ccc';
+                submitBtn.style.cursor = 'not-allowed';
+                
+                // 안내 메시지 추가
+                const warningMsg = document.createElement('div');
+                warningMsg.className = 'status error';
+                warningMsg.style.display = 'block';
+                warningMsg.innerHTML = '⚠️ 메인 페이지에서 멘토 정보를 먼저 설정해주세요.';
+                submitBtn.parentNode.insertBefore(warningMsg, submitBtn);
             }
             console.log('1:1 면담 가이드 로드 완료');
             
