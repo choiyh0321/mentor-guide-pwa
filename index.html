@@ -1995,27 +1995,7 @@
             }
         }
 
-        function showAppInfo() {
-            // FCM 토큰 정보 가져오기
-            const token = localStorage.getItem('fcm-token');
-            const shortToken = token ? token.substring(0, 30) + '...' : '없음';
-            const isPWA = window.matchMedia('(display-mode: standalone)').matches;
-            
-            const modal = document.createElement('div');
-            modal.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0,0,0,0.7);
-                z-index: 10000;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 20px;
-            `;
-            
+        function showAppInfo() {            
             modal.innerHTML = `
                 <div style="
                     background: white;
@@ -2032,11 +2012,6 @@
                         <p><strong>버전:</strong> 1.0.0</p>
                         <p><strong>업데이트:</strong> 2025.06.09</p>
                         <p><strong>개발:</strong> SK아카데미 최유현 RF</p>
-                        <hr style="margin: 12px 0; border: 1px solid #eee;">
-                        <p><strong>🔍 디버그 정보:</strong></p>
-                        <p><strong>FCM 토큰:</strong><br><small style="word-break: break-all;">${shortToken}</small></p>
-                        <p><strong>알림 권한:</strong> ${Notification.permission}</p>
-                        <p><strong>PWA 모드:</strong> ${isPWA ? '예' : '아니오'}</p>
                     </div>
                     <button onclick="this.parentElement.parentElement.remove()" 
                             style="
