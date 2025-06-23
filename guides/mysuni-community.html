@@ -49,17 +49,56 @@
             showNotification('멘토과정 커뮤니티로 이동합니다. 새 탭에서 열립니다.');
         }
 
+        // 기존 코드를 이것으로 교체
+        const TRAINEE_COMMUNITY_LINKS = {
+            'icheon': 'https://mysuni.sk.com/suni-community/community/COMMUNITY-ew/home',
+            'yongin': 'https://mysuni.sk.com/suni-community/community/COMMUNITY-ev/home', 
+            'incheon': 'https://mysuni.sk.com/suni-community/community/COMMUNITY-dd/home',
+            'default': 'https://mysuni.sk.com/'
+        };
+
+        const ACADEMY_NAMES = {
+            'icheon': '이천 SK텔레콤 인재개발원',
+            'yongin': '용인 SK아카데미',
+            'incheon': '인천 SK무의연수원',
+            'default': '통합'
+        };
+
+        function getSelectedAcademy() {
+            try {
+                const selectedCenter = localStorage.getItem('selectedCenter');
+                console.log('선택된 연수원:', selectedCenter);
+                
+                if (selectedCenter && TRAINEE_COMMUNITY_LINKS[selectedCenter]) {
+                    return selectedCenter;
+                }
+            } catch (e) {
+                console.log('localStorage 접근 불가:', e);
+            }
+            
+            return 'default';
+        }
+
+        function updateAcademyInfo() {
+            const academy = getSelectedAcademy();
+            const academyName = ACADEMY_NAMES[academy];
+            
+            const descElement = document.querySelector('.trainee-description');
+            if (descElement) {
+                descElement.textContent = `'${academyName} 신입구성원'이 활용하는 커뮤니티로, 교육 과정 관련 공지사항과 학습 자료를 제공합니다.`;
+            }
+        }
+
+        // 기존 함수 전체를 이것으로 교체
         function openTraineeCommunity(event) {
             event.preventDefault();
             
-            // mySUNI 신입구성원과정 커뮤니티 URL (실제 URL로 변경 필요)
-            const traineeCommunityUrl = 'https://mysuni.sk.com/community/new-employee-process';
+            const academy = getSelectedAcademy();
+            const traineeCommunityUrl = TRAINEE_COMMUNITY_LINKS[academy];
+            const academyName = ACADEMY_NAMES[academy];
             
-            // 새 탭에서 열기
             window.open(traineeCommunityUrl, '_blank');
-            
-            // 사용자에게 안내 메시지 표시
-            showNotification('신입구성원과정 커뮤니티로 이동합니다. 새 탭에서 열립니다.');
+            showNotification(`${academyName} 신입구성원과정 커뮤니티로 이동합니다. 새 탭에서 열립니다.`);
         }
 
         // 알림 메시지 표시 함수
@@ -586,7 +625,7 @@
                 </ul>
             </a>
             
-            <a href="#" class="community-card trainee" onclick="openTraineeCommunity(event)">
+            <a href="#" class="card-description trainee-description" onclick="openTraineeCommunity(event)">
                 <div class="card-header">
                     <div class="card-icon">👥</div>
                     <div class="card-title">신입구성원과정 커뮤니티</div>
