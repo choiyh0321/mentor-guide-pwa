@@ -1230,6 +1230,10 @@
 
     async sendTokenToServer(token) {
         try {
+            const selectedCenter = localStorage.getItem('selectedCenter');
+            const tokenData = { token, campus: selectedCenter, userId: this.getCurrentUserId() };
+            console.log('전송할 데이터:', tokenData);
+            
             // 여기서 실제 서버로 토큰 전송
             console.log('📤 서버에 FCM 토큰 전송:', token);
             
