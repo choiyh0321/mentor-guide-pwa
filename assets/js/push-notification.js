@@ -93,25 +93,9 @@ class PushNotificationManager {
   // 서버에 토큰 전송 (실제 구현시 서버 API 호출)
   async sendTokenToServer(token) {
     try {
-          // 🆕 연수원 정보 가져오기 (3줄 추가)
-      const selectedCenter = localStorage.getItem('selectedCenter');
-      const config = await configManager.loadConfig();
-      const centerInfo = config.trainingCenters[selectedCenter];
-      
       // 실제 구현시에는 서버 API로 토큰 전송
       console.log('서버에 토큰 전송:', token);
-    
-    // 🆕 기존 코드에 연수원 정보만 추가
-    const tokenData = {
-      token: token,
-      campus: selectedCenter,           // 🆕 연수원 ID
-      topic: centerInfo?.pushTopic,     // 🆕 푸시 토픽
-      userId: this.getCurrentUserId(),
-      deviceInfo: this.getDeviceInfo()
-    };
-    
-    console.log('전송할 데이터:', tokenData);
-    
+      
       // 예시:
       // const response = await fetch('/api/register-token', {
       //   method: 'POST',
