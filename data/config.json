@@ -20,7 +20,8 @@
   "trainingCenters": {
     "icheon": {
       "id": "icheon",
-      "name": "이천 FMI인재개발원",
+      "name": "이천 SKT인재개발원",
+      "pushTopic": "campus-icheon",
       "address": "경기도 이천시 마장면 서이천로 481-28",
       "icon": "🏢",
       "emergencyPhone": "031-630-8914",
@@ -41,6 +42,7 @@
     "yongin": {
       "id": "yongin",
       "name": "용인 SK아카데미",
+      "pushTopic": "campus-yongin",
       "address": "경기도 용인시 처인구 원삼면 모래실로 17",
       "icon": "🏛️",
       "emergencyPhone": "031-329-9119",
@@ -61,6 +63,7 @@
     "incheon": {
       "id": "incheon", 
       "name": "인천 무의연수원",
+      "pushTopic": "campus-incheon",
       "address": "인천광역시 중구 무의동 대무의로 159",
       "icon": "🌊",
       "emergencyPhone": "032-123-4567",
