@@ -12,6 +12,28 @@ class PushNotificationManager {
     this.init();
   }
 
+  // 🧪 테스트 모드 감지 메서드
+  isTestMode() {
+    return localStorage.getItem('testMode') === 'true';
+  }
+
+  // 🎯 테스트용 토픽명 생성
+  getTestTopicName(centerName) {
+    return `test-campus-${centerName}`;
+  }
+
+  // 🎯 운영용 토픽명 생성
+  getProductionTopicName(centerName) {
+    return `campus-${centerName}`;
+  }
+
+  // 🎯 현재 모드에 맞는 토픽명 반환
+  getTopicName(centerName) {
+    return this.isTestMode() 
+      ? this.getTestTopicName(centerName)
+      : this.getProductionTopicName(centerName);
+  }
+
   async init() {
     if (!this.isSupported) {
       console.warn('푸시 알림이 지원되지 않는 브라우저입니다.');
@@ -91,32 +113,104 @@ class PushNotificationManager {
   }
 
   // 서버에 토큰 전송 (실제 구현시 서버 API 호출)
-  async sendTokenToServer(token) {
-    try {
-      // 실제 구현시에는 서버 API로 토큰 전송
-      console.log('서버에 토큰 전송:', token);
-      
-      // 예시:
-      // const response = await fetch('/api/register-token', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     token: token,
-      //     userId: this.getCurrentUserId(), // 현재 사용자 ID
-      //     deviceInfo: this.getDeviceInfo()
-      //   })
-      // });
-      
-      // if (!response.ok) {
-      //   throw new Error('토큰 등록 실패');
-      // }
-      
-    } catch (error) {
-      console.error('토큰 서버 전송 실패:', error);
+async sendTokenToServer(token) {
+  try {
+    const selectedCenter = localStorage.getItem('selectedCenter');
+    const isTest = this.isTestMode();
+    
+    // 🧪 모드별 로깅
+    if (isTest) {
+      console.log('🧪 테스트 모드: 토픽 구독 기능 활성화');
+      console.log('📍 선택된 연수원:', selectedCenter);
+      console.log('🎯 토픽명:', this.getTopicName(selectedCenter));
+    } else {
+      console.log('🏢 일반 모드: 기존 방식 유지');
+      console.log('📍 선택된 연수원:', selectedCenter);
     }
+    
+    console.log('📤 서버에 토큰 전송:', token.substring(0, 20) + '...');
+    
+    // 🧪 테스트 모드에서만 토픽 구독 기능 활성화
+    if (isTest && selectedCenter) {
+      await this.subscribeToTopic(token, selectedCenter);
+    }
+    
+    // 서버에 전송할 데이터 구성
+    const tokenData = {
+      token: token,
+      campus: selectedCenter,
+      testMode: isTest,  // 🧪 테스트 모드 정보 포함
+      topicName: this.getTopicName(selectedCenter), // 🎯 토픽명 포함
+      userId: this.getCurrentUserId(),
+      deviceInfo: this.getDeviceInfo(),
+      timestamp: new Date().toISOString()
+    };
+    
+    console.log('📋 전송할 데이터:', {
+      ...tokenData,
+      token: tokenData.token.substring(0, 20) + '...' // 토큰은 일부만 로깅
+    });
+    
+    // 실제 구현시에는 서버 API로 토큰 전송
+    // const response = await fetch('/api/register-token', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(tokenData)
+    // });
+    
+    // if (!response.ok) {
+    //   throw new Error('토큰 등록 실패');
+    // }
+    
+  } catch (error) {
+    console.error('❌ 토큰 서버 전송 실패:', error);
   }
+}
+
+// 🎯 토픽 구독 (현재는 시뮬레이션)
+async subscribeToTopic(token, centerName) {
+  try {
+    const topicName = this.getTopicName(centerName);
+    
+    console.log(`🎯 토픽 구독 시도: ${topicName}`);
+    
+    // 🧪 현재는 로컬스토리지에 구독 상태만 기록 (시뮬레이션)
+    const subscriptions = JSON.parse(localStorage.getItem('topicSubscriptions') || '[]');
+    
+    if (!subscriptions.includes(topicName)) {
+      subscriptions.push(topicName);
+      localStorage.setItem('topicSubscriptions', JSON.stringify(subscriptions));
+      console.log(`✅ 토픽 구독 완료: ${topicName}`);
+      
+      // 🧪 테스트 모드에서 추가 정보 표시
+      if (this.isTestMode()) {
+        console.log('🧪 테스트 모드 - 구독 정보:');
+        console.log('  - 토픽명:', topicName);
+        console.log('  - 연수원:', centerName);
+        console.log('  - 토큰:', token.substring(0, 20) + '...');
+        console.log('  - 시간:', new Date().toLocaleString());
+      }
+    } else {
+      console.log(`⚠️ 이미 구독 중인 토픽: ${topicName}`);
+    }
+    
+    // TODO: 실제 서버 API 구현시 사용
+    // await fetch('/api/subscribe-topic', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify({ 
+    //       token, 
+    //       topic: topicName,
+    //       testMode: this.isTestMode()
+    //     })
+    // });
+    
+  } catch (error) {
+    console.error('❌ 토픽 구독 실패:', error);
+  }
+}
 
   // 포그라운드 알림 표시
   showForegroundNotification(payload) {
@@ -229,6 +323,21 @@ class PushNotificationManager {
       timestamp: new Date().toISOString()
     };
   }
+
+  // 🔍 현재 푸시 설정 상태 확인
+  getCurrentPushStatus() {
+    const status = {
+      testMode: this.isTestMode(),
+      selectedCenter: localStorage.getItem('selectedCenter'),
+      setupCompleted: localStorage.getItem('setupCompleted'),
+      fcmToken: this.token ? this.token.substring(0, 20) + '...' : null,
+      subscriptions: JSON.parse(localStorage.getItem('topicSubscriptions') || '[]'),
+      timestamp: new Date().toLocaleString()
+    };
+    
+    return status;
+  }
+
 }
 
 // CSS 스타일 추가
