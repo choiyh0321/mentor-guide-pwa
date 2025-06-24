@@ -421,73 +421,33 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// 전역 객체로 내보내기 (ES6 모듈과 호환)
-if (typeof window !== 'undefined') {
-  window.PushNotificationManager = PushNotificationManager;
-  
-  // 디버그 로그 추가
-  console.log('🔧 PushNotificationManager 클래스 등록:', typeof PushNotificationManager);
-  console.log('🔧 window.PushNotificationManager:', typeof window.PushNotificationManager);
-  
-  // 즉시 테스트
-  try {
-    const testInstance = new PushNotificationManager();
-    console.log('✅ PushNotificationManager 인스턴스 생성 테스트 성공');
-  } catch (error) {
-    console.error('❌ PushNotificationManager 인스턴스 생성 테스트 실패:', error);
-  }
-}
+// 전역 객체로 내보내기
+window.PushNotificationManager = PushNotificationManager;
 
-
-// 임시 디버그 코드 - 파일 맨 아래 추가
-console.log('🔧 push-notification.js 파일 로드 시작');
-
-// DOMContentLoaded 이벤트 후에 클래스 등록
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('🔧 DOM 로드 완료, PushNotificationManager 등록 시도');
+// 디버그 도구 등록
+window.debugPushTest = {
+  checkStatus() {
+    console.log('=== 🧪 푸시 테스트 상태 ===');
+    console.log('테스트 모드:', localStorage.getItem('testMode'));
+    console.log('선택된 연수원:', localStorage.getItem('selectedCenter'));
+    console.log('FCM 토큰:', localStorage.getItem('fcm-token')?.substring(0, 20) + '...');
+    console.log('구독 토픽:', JSON.parse(localStorage.getItem('topicSubscriptions') || '[]'));
+    console.log('알림 권한:', Notification.permission);
+    console.log('========================');
+  },
   
-  if (typeof PushNotificationManager !== 'undefined') {
-    window.PushNotificationManager = PushNotificationManager;
-    console.log('✅ PushNotificationManager 등록 성공:', typeof window.PushNotificationManager);
-    
-    // 테스트 인스턴스 생성
+  createInstance() {
     try {
-      const testInstance = new PushNotificationManager();
-      console.log('✅ 테스트 인스턴스 생성 성공');
-      
-      // 전역 테스트 함수 등록
-      window.debugPushTest = {
-        checkStatus() {
-          console.log('=== 🧪 푸시 테스트 상태 ===');
-          console.log('테스트 모드:', localStorage.getItem('testMode'));
-          console.log('선택된 연수원:', localStorage.getItem('selectedCenter'));
-          console.log('FCM 토큰:', localStorage.getItem('fcm-token')?.substring(0, 20) + '...');
-          console.log('구독 토픽:', JSON.parse(localStorage.getItem('topicSubscriptions') || '[]'));
-          console.log('========================');
-        },
-        
-        createInstance() {
-          try {
-            const instance = new PushNotificationManager();
-            console.log('✅ 새 인스턴스 생성:', instance);
-            console.log('테스트 모드:', instance.isTestMode());
-            return instance;
-          } catch (error) {
-            console.error('❌ 인스턴스 생성 실패:', error);
-          }
-        }
-      };
-      
-      console.log('🧪 디버그 도구 등록 완료:');
-      console.log('  - debugPushTest.checkStatus() : 상태 확인');
-      console.log('  - debugPushTest.createInstance() : 인스턴스 생성');
-      
+      const instance = new PushNotificationManager();
+      console.log('✅ 새 인스턴스 생성 성공');
+      console.log('테스트 모드:', instance.isTestMode());
+      return instance;
     } catch (error) {
-      console.error('❌ 테스트 인스턴스 생성 실패:', error);
+      console.error('❌ 인스턴스 생성 실패:', error);
+      return null;
     }
-  } else {
-    console.error('❌ PushNotificationManager 클래스를 찾을 수 없습니다');
   }
-});
+};
 
-console.log('🔧 push-notification.js 파일 로드 완료');
+console.log('✅ PushNotificationManager 로드 완료');
+console.log('🧪 디버그 도구: debugPushTest.checkStatus() 또는 debugPushTest.createInstance()');
