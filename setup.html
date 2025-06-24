@@ -258,6 +258,25 @@
             line-height: 1.4;
         }
 
+        /* 테스트 모드 버튼 스타일 */
+        .center-button.test-mode {
+            border-left-color: #ff9800;
+            background: linear-gradient(135deg, rgba(255, 152, 0, 0.1), rgba(255, 193, 7, 0.1));
+        }
+
+        .center-button.test-mode:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(255, 152, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .center-button.test-mode .center-name {
+            color: #f57c00;
+            font-weight: 600;
+        }
+
+        /* 여기까지 삭제하면 됨*/
+
         /* 로딩 및 오류 상태 */
         .loading-centers, .error-centers {
             text-align: center;
@@ -441,10 +460,27 @@
 
     <script>
     function selectCenter(centerId) {
-        // 비활성화된 버튼 클릭 방지
+        // 🧪 무의연수원을 테스트용으로 활용
         if (centerId === 'incheon') {
-            alert('인천 SK무의연수원은 현재 선택할 수 없습니다.');
-            return;
+            const isTestMode = confirm(
+                '🧪 인천 SK무의연수원 (테스트 모드)\n\n' +
+                '토픽 구독 기능을 테스트하시겠습니까?\n' +
+                '이 모드에서는 새로운 푸시 알림 기능을 체험할 수 있습니다.\n\n' +
+                '확인: 테스트 모드로 진행\n' +
+                '취소: 다른 연수원 선택'
+            );
+            
+            if (!isTestMode) {
+                return;
+            }
+            
+            // 테스트 모드 플래그 설정
+            localStorage.setItem('testMode', 'true');
+            console.log('🧪 테스트 모드 활성화');
+        } else {
+            // 다른 연수원 선택 시 테스트 모드 해제
+            localStorage.removeItem('testMode');
+            console.log('일반 모드');
         }
         
         console.log('🏢 연수원 선택:', centerId);
@@ -456,11 +492,21 @@
         // 성공 메시지 표시
         const loading = document.getElementById('loading');
         loading.classList.add('active');
+        
+        // 테스트 모드 여부에 따라 다른 메시지
+        const isTest = localStorage.getItem('testMode') === 'true';
+        const message = isTest ? 
+            '🧪 테스트 모드 설정이 완료되었습니다!' : 
+            '✅ 설정 완료!';
+        const subtitle = isTest ? 
+            '토픽 구독 기능을 테스트할 수 있습니다.' : 
+            '연수원 설정이 완료되었습니다.';
+        
         loading.innerHTML = `
             <div style="text-align: center;">
-                <div style="font-size: 64px; margin-bottom: 20px;">✅</div>
-                <h2 style="color: #4caf50; margin-bottom: 10px; font-size: 20px;">설정 완료!</h2>
-                <p style="color: #666; font-size: 14px;">연수원 설정이 완료되었습니다.</p>
+                <div style="font-size: 64px; margin-bottom: 20px;">${isTest ? '🧪' : '✅'}</div>
+                <h2 style="color: ${isTest ? '#ff9800' : '#4caf50'}; margin-bottom: 10px; font-size: 20px;">${message}</h2>
+                <p style="color: #666; font-size: 14px;">${subtitle}</p>
                 <p style="font-size: 12px; color: #999; margin-top: 10px;">잠시 후 메인 페이지로 이동합니다...</p>
             </div>
         `;
@@ -489,11 +535,11 @@
                     <div class="center-description">경기도 용인시 처인구</div>
                 </div>
             </button>
-            <button class="center-button incheon disabled" onclick="selectCenter('incheon')">
-                <div class="center-icon">🌊</div>
+            <button class="center-button incheon test-mode" onclick="selectCenter('incheon')">
+                <div class="center-icon">🧪</div>
                 <div class="center-info">
-                    <div class="center-name">인천 SK무의연수원</div>
-                    <div class="center-description">인천광역시 중구 무의동</div>
+                    <div class="center-name">인천 SK무의연수원 (테스트)</div>
+                    <div class="center-description">토픽 구독 기능 테스트용</div>
                 </div>
             </button>
         `;
