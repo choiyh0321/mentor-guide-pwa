@@ -421,5 +421,19 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// 전역 객체로 내보내기
-window.PushNotificationManager = PushNotificationManager;
+// 전역 객체로 내보내기 (ES6 모듈과 호환)
+if (typeof window !== 'undefined') {
+  window.PushNotificationManager = PushNotificationManager;
+  
+  // 디버그 로그 추가
+  console.log('🔧 PushNotificationManager 클래스 등록:', typeof PushNotificationManager);
+  console.log('🔧 window.PushNotificationManager:', typeof window.PushNotificationManager);
+  
+  // 즉시 테스트
+  try {
+    const testInstance = new PushNotificationManager();
+    console.log('✅ PushNotificationManager 인스턴스 생성 테스트 성공');
+  } catch (error) {
+    console.error('❌ PushNotificationManager 인스턴스 생성 테스트 실패:', error);
+  }
+}
