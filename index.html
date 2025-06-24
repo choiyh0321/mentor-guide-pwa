@@ -1230,26 +1230,8 @@
 
     async sendTokenToServer(token) {
         try {
-            // 🆕 연수원 정보 가져오기
-            const selectedCenter = localStorage.getItem('selectedCenter');
-            const testMode = localStorage.getItem('testMode') === 'true';
-            
+            // 여기서 실제 서버로 토큰 전송
             console.log('📤 서버에 FCM 토큰 전송:', token);
-            console.log('📍 선택된 연수원:', selectedCenter);
-            console.log('🧪 테스트 모드:', testMode);
-            
-            // 🆕 서버로 전송할 데이터
-            const tokenData = {
-                token: token,
-                campus: selectedCenter,
-                topic: testMode ? `test-campus-${selectedCenter}` : `campus-${selectedCenter}`,
-                testMode: testMode,
-                userId: this.getCurrentUserId(),
-                deviceInfo: this.getDeviceInfo(),
-                timestamp: new Date().toISOString()
-            };
-            
-            console.log('📋 전송할 데이터:', tokenData);
             
             // 실제 구현 시 서버 API 호출
             // const response = await fetch('/api/register-fcm-token', {
