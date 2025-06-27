@@ -1,4 +1,4 @@
-#🎯 SK 멘토 가이드
+# 🎯 SK 멘토 가이드
 2025년 SK그룹 신입구성원과정 멘토를 위한 Full-Stack PWA 모바일 웹앱
 
 주요 기술: PWA | Google Sheets API | Firebase FCM | Service Worker
