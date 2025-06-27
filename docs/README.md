@@ -1,4 +1,4 @@
-🎯 SK 멘토 가이드
+#🎯 SK 멘토 가이드
 2025년 SK그룹 신입구성원과정 멘토를 위한 Full-Stack PWA 모바일 웹앱
 
 주요 기술: PWA | Google Sheets API | Firebase FCM | Service Worker
@@ -26,11 +26,11 @@ cd sk-mentor-guide
 bash# Python 3.x (간단한 테스트용)
 python -m http.server 8000
 
-# Node.js (권장 - HTTPS 지원)
+### Node.js (권장 - HTTPS 지원)
 npx serve . --ssl-cert cert.pem --ssl-key key.pem
 
-# VS Code Live Server 확장 (권장)
-# HTTPS 모드로 실행 (PWA 테스트 필수)
+### VS Code Live Server 확장 (권장)
+### HTTPS 모드로 실행 (PWA 테스트 필수)
 3. 브라우저에서 접속
 https://localhost:8000  # HTTPS 필수 (PWA, Push 알림)
 4. PWA 설치 및 테스트
@@ -196,13 +196,13 @@ json{
 bash# Android Chrome
 메뉴 → "홈 화면에 추가" → "설치"
 
-# iOS Safari  
+### iOS Safari  
 공유 버튼 → "홈 화면에 추가"
 
-# Desktop Chrome
+### Desktop Chrome
 주소창 오른쪽 설치 아이콘 클릭
 
-# Samsung Internet
+### Samsung Internet
 메뉴 → "페이지를 추가" → "앱으로 추가"
 🚀 배포 및 운영 가이드
 🌟 Netlify (권장) - PWA 최적화
