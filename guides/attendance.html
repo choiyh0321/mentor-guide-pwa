@@ -37,14 +37,24 @@
         }
     </script>
 
-    <style>
+        <style>
+        /* ===================================================================
+           SK 브랜드 컬러 변수 & Daily Opening 스타일 기반
+           =================================================================== */
         :root {
             --sk-red: #EA1917;
             --sk-orange: #FF6B35;
+            --sk-red-light: #FF4444;
+            --sk-red-dark: #CC1515;
             --success: #4CAF50;
             --warning: #FF9800;
+            --error: #F44336;
             --info: #2196F3;
             --purple: #9C27B0;
+            --gray-50: #FAFAFA;
+            --gray-100: #F5F5F5;
+            --gray-600: #757575;
+            --gray-900: #212121;
         }
 
         * {
@@ -56,15 +66,19 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
-            color: #333;
+            color: #202124;
             line-height: 1.6;
+            min-height: 100vh;
         }
 
-        /* Header */
+        /* ===================================================================
+           헤더 - Daily Opening과 동일한 스타일
+           =================================================================== */
         .header {
             background: linear-gradient(135deg, var(--sk-orange) 0%, var(--sk-red) 100%);
             color: white;
             padding: 20px;
+            box-shadow: 0 10px 40px rgba(234, 25, 23, 0.2);
             position: relative;
             overflow: hidden;
         }
@@ -81,64 +95,83 @@
         }
 
         .back-button {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
+            padding: 10px 16px;
+            border-radius: 12px;
             cursor: pointer;
             font-size: 14px;
+            font-weight: 600;
             margin-bottom: 16px;
-            transition: background 0.3s ease;
-            position: relative;
-            z-index: 10;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: fit-content;
         }
 
         .back-button:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateY(-2px);
         }
 
         .header h1 {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 700;
             margin-bottom: 8px;
-            position: relative;
-            z-index: 10;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .header .subtitle {
             font-size: 16px;
-            opacity: 0.9;
-            position: relative;
-            z-index: 10;
+            opacity: 0.95;
+            font-weight: 400;
         }
 
-        /* Container */
+        /* ===================================================================
+           컨테이너 & 섹션 - Daily Opening과 동일
+           =================================================================== */
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 24px 20px;
         }
 
-        /* Section */
         .section {
-            background: rgba(255,255,255,0.9);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
         }
 
         .section h2 {
-            font-size: 20px;
-            margin-bottom: 16px;
             color: var(--sk-red);
+            font-size: 22px;
             font-weight: 700;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
+        }
+
+        .section h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: #333;
+            border-left: 4px solid var(--sk-red);
+            padding-left: 16px;
+            font-weight: 600;
         }
 
         /* 시간대 선택 */
@@ -146,7 +179,7 @@
             background: linear-gradient(135deg, rgba(234,25,23,0.05), rgba(255,107,53,0.05));
             border: 2px solid var(--sk-red);
             border-radius: 16px;
-            padding: 20px;
+            padding: 24px;
             margin-bottom: 24px;
         }
 
@@ -182,6 +215,8 @@
             color: var(--sk-red);
             margin-bottom: 8px;
             font-weight: 600;
+            border: none;
+            padding: 0;
         }
 
         .time-option p {
@@ -230,7 +265,7 @@
             display: flex;
             flex-direction: column;
             gap: 6px;
-            min-width: 0; /* 그리드 오버플로우 방지 */
+            min-width: 0;
         }
 
         .form-label {
@@ -251,7 +286,7 @@
             transition: all 0.3s ease;
             background: rgba(255,255,255,0.9);
             width: 100%;
-            min-width: 0; /* 입력 필드 축소 허용 */
+            min-width: 0;
             box-sizing: border-box;
         }
 
@@ -495,24 +530,41 @@
             display: block;
         }
 
-        /* 반응형 */
+        /* ===================================================================
+           반응형 디자인 - Daily Opening과 동일한 모바일 최적화
+           =================================================================== */
         @media (max-width: 768px) {
             .container {
-                padding: 16px;
+                padding: 12px 12px;
             }
             
             .section {
-                padding: 20px;
-                margin-bottom: 16px;
-                border-radius: 16px;
+                padding: 16px 16px;
+                margin-bottom: 12px;
+                border-radius: 12px;
+            }
+            
+            .header {
+                padding: 16px 16px;
             }
             
             .header h1 {
-                font-size: 20px;
+                font-size: 22px;
+                margin-bottom: 4px;
             }
-
+            
             .header .subtitle {
-                font-size: 14px;
+                font-size: 15px;
+            }
+            
+            .section h2 {
+                font-size: 19px;
+                margin-bottom: 12px;
+            }
+            
+            .section h3 {
+                font-size: 17px;
+                margin-bottom: 10px;
             }
 
             .time-options {
@@ -546,12 +598,12 @@
             }
 
             .form-input {
-                font-size: 15px; /* iOS 줌 방지 */
+                font-size: 15px;
                 padding: 12px 8px;
             }
 
             .special-notes-textarea {
-                font-size: 15px; /* iOS 줌 방지 */
+                font-size: 15px;
                 min-height: 100px;
                 padding: 12px 8px;
             }
@@ -581,7 +633,6 @@
                 width: 100%;
             }
 
-            /* 모바일에서 입력 필드 최적화 */
             .form-section {
                 padding: 16px;
             }
@@ -597,23 +648,35 @@
 
         @media (max-width: 480px) {
             .container {
-                padding: 12px;
+                padding: 8px 10px;
             }
 
             .section {
-                padding: 16px;
+                padding: 12px 12px;
+                margin-bottom: 8px;
             }
 
             .header {
-                padding: 16px;
+                padding: 14px 12px;
             }
 
             .header h1 {
-                font-size: 18px;
+                font-size: 20px;
             }
 
             .header .subtitle {
+                font-size: 14px;
+            }
+
+            .section h2 {
+                font-size: 17px;
+                margin-bottom: 10px;
+            }
+
+            .back-button {
+                padding: 6px 12px;
                 font-size: 13px;
+                margin-bottom: 10px;
             }
 
             .time-option {
@@ -635,7 +698,7 @@
             }
 
             .form-input {
-                font-size: 16px; /* iOS 줌 방지 */
+                font-size: 16px;
                 padding: 10px 6px;
                 min-height: 40px;
             }
@@ -669,6 +732,27 @@
             .form-label {
                 font-size: 12px;
             }
+        }
+
+        /* ===================================================================
+           스크롤 스타일 - Daily Opening과 동일
+           =================================================================== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, var(--sk-red), var(--sk-red-light));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, var(--sk-red-dark), var(--sk-red));
         }
     </style>
 </head>
