@@ -114,10 +114,22 @@
                 showStatus('success', '✅ 제출 완료!');
                 clearForm();
                 
-                // 제출 기록 저장
-                const submissions = JSON.parse(localStorage.getItem('interview-submissions') || '[]');
-                submissions.push({...data, id: Date.now()});
-                localStorage.setItem('interview-submissions', JSON.stringify(submissions));
+                // 제출 기록 저장 - 통합된 저장소 사용
+                const submissions = JSON.parse(localStorage.getItem('sk-mentor-submissions') || '[]');
+                submissions.push({
+                    type: 'interview',
+                    studentName: data.studentName,
+                    interviewDate: data.interviewDate,
+                    mentorName: data.mentorName,
+                    submittedAt: data.submittedAt,
+                    generalStatus: data.generalStatus,
+                    educationFeedback: data.educationFeedback,
+                    careerConcerns: data.careerConcerns,
+                    personalConcerns: data.personalConcerns,
+                    mentorNotes: data.mentorNotes,
+                    id: Date.now()
+                });
+                localStorage.setItem('sk-mentor-submissions', JSON.stringify(submissions));
                 
             } catch (error) {
                 console.error('제출 오류:', error);
