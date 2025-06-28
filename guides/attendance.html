@@ -1278,24 +1278,23 @@
             const mentor = JSON.parse(mentorInfo);
             console.log('멘토 정보 확인됨:', mentor.name);
 
-            // 여기 바로 아래에 이 3줄만 추가
+            // 먼저 폼 비활성화 (기존 코드)
+            const formInputs = document.querySelectorAll('.form-input, .special-notes-textarea');
+            formInputs.forEach(input => {
+                input.disabled = true;
+            });
+            
+            // 그 다음에 URL 파라미터 확인 및 시간대 자동 선택
             const urlParams = new URLSearchParams(window.location.search);
             const timeParam = urlParams.get('time');
             if (timeParam === 'morning' || timeParam === 'afternoon') selectTime(timeParam);
-
-            // 등록된 멘티 인원수를 총 인원에 디폴트로 설정
+            
+            // 등록된 멘티 인원수 설정
             if (mentor.mentees && mentor.mentees.length > 0) {
                 document.getElementById('totalCount').value = mentor.mentees.length;
                 document.getElementById('presentCount').value = mentor.mentees.length;
                 console.log(`등록된 멘티 ${mentor.mentees.length}명을 총 인원으로 설정`);
             }
-            
-            // 기존 코드들은 그대로 유지
-            // 폼 비활성화
-            const formInputs = document.querySelectorAll('.form-input, .special-notes-textarea');
-            formInputs.forEach(input => {
-                input.disabled = true;
-            });
 
             // 글자수 카운터 초기화
             updateCharacterCount();
