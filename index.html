@@ -698,8 +698,20 @@
             updateHeader() {
                 const subtitle = document.getElementById('headerSubtitle');
                 if (subtitle && this.mentorInfo) {
-                    const centerName = this.getCenterName(this.mentorInfo.trainingCenter);
-                    subtitle.textContent = `2025년 1월 SK그룹 신입구성원과정 - ${centerName} ${this.mentorInfo.teamNumber}분과`;
+                    // localStorage에서 실제 선택된 연수원 정보 가져오기
+                    const selectedCenter = localStorage.getItem('selectedCenter');
+                    
+                    // 실제 선택된 연수원에 따른 이름 매핑
+                    const centerMap = {
+                        'icheon': '이천 SKT인재개발원',  // FMI → SKT로 변경
+                        'yongin': '용인 SK아카데미',
+                        'incheon': '인천 SK무의연수원'
+                    };
+                    
+                    // 실제 선택된 연수원의 이름 사용
+                    const centerName = selectedCenter ? centerMap[selectedCenter] : '연수원 미설정';
+                    
+                    subtitle.textContent = `2025년 7월 SK그룹 신입구성원과정 - ${centerName} ${this.mentorInfo.teamNumber}분과`;
                 }
             }
 
