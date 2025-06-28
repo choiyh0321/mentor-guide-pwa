@@ -2233,6 +2233,22 @@
                 showNotification('환영합니다!', '오늘의 멘토 업무를 시작해주세요.');
             }, 1000);
 
+        // 페이지가 포커스될 때마다 업데이트 (다른 페이지에서 돌아올 때)
+            window.addEventListener('focus', function() {
+                if (mentorTeamManager) {
+                    mentorTeamManager.updateInterviewStatus();
+                }
+            });
+            
+            // 페이지 로드 시에도 업데이트
+            window.addEventListener('load', function() {
+                setTimeout(() => {
+                    if (mentorTeamManager) {
+                        mentorTeamManager.updateInterviewStatus();
+                    }
+                }, 1000);
+            });
+
         // 개별 함수들
         function scrollToToday() {
             const todaySection = document.getElementById("today-schedule");
