@@ -851,7 +851,7 @@ class SKMentorApp {
     const subtitle = document.getElementById('headerSubtitle');
     if (subtitle && this.selectedCenter) {
       const centerMap = {
-        'icheon': '이천 FMI인재개발원',
+        'icheon': '이천 SKT인재개발원',
         'yongin': '용인 SK아카데미', 
         'incheon': '인천 SK무의연수원'
       };
@@ -917,7 +917,7 @@ class SKMentorApp {
       trainingCenters: {
         icheon: {
           id: "icheon",
-          name: "이천 FMI인재개발원",
+          name: "이천 SKT인재개발원",
           operations: { name: "운영팀", phone: "031-630-8914" },
           mentorSupport: { name: "멘토지원팀", phone: "031-630-8915" },
           emergencyPhone: "031-630-8914"
@@ -1213,7 +1213,7 @@ async function showDynamicFullTimetable() {
   // 제목 업데이트
   if (title && window.app) {
     const centerMap = {
-      'icheon': '이천 FMI인재개발원',
+      'icheon': '이천 SKT인재개발원',
       'yongin': '용인 SK아카데미', 
       'incheon': '인천 SK무의연수원'
     };
