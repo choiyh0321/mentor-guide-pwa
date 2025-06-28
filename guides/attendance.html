@@ -1282,6 +1282,13 @@
             const urlParams = new URLSearchParams(window.location.search);
             const timeParam = urlParams.get('time');
             if (timeParam === 'morning' || timeParam === 'afternoon') selectTime(timeParam);
+
+            // 등록된 멘티 인원수를 총 인원에 디폴트로 설정
+            if (mentor.mentees && mentor.mentees.length > 0) {
+                document.getElementById('totalCount').value = mentor.mentees.length;
+                document.getElementById('presentCount').value = mentor.mentees.length;
+                console.log(`등록된 멘티 ${mentor.mentees.length}명을 총 인원으로 설정`);
+            }
             
             // 기존 코드들은 그대로 유지
             // 폼 비활성화
