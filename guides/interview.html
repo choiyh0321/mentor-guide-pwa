@@ -165,13 +165,23 @@
     </script>
     
     <style>
+        /* ===================================================================
+           SK 브랜드 컬러 변수 & Daily Opening 스타일 기반
+           =================================================================== */
         :root {
             --sk-red: #EA1917;
             --sk-orange: #FF6B35;
+            --sk-red-light: #FF4444;
+            --sk-red-dark: #CC1515;
             --success: #4CAF50;
             --warning: #FF9800;
+            --error: #F44336;
             --info: #2196F3;
             --purple: #9C27B0;
+            --gray-50: #FAFAFA;
+            --gray-100: #F5F5F5;
+            --gray-600: #757575;
+            --gray-900: #212121;
         }
 
         * {
@@ -183,16 +193,20 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
-            color: #333;
+            color: #202124;
             line-height: 1.6;
+            min-height: 100vh;
         }
 
+        /* ===================================================================
+           헤더 - Daily Opening과 동일한 스타일
+           =================================================================== */
         .header {
             background: linear-gradient(135deg, var(--sk-orange) 0%, var(--sk-red) 100%);
             color: white;
             padding: 20px;
             text-align: center;
-            box-shadow: 0 4px 20px rgba(234,25,23,0.3);
+            box-shadow: 0 10px 40px rgba(234, 25, 23, 0.2);
             position: relative;
             overflow: hidden;
         }
@@ -205,39 +219,58 @@
             right: 0;
             bottom: 0;
             background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
         }
 
         .back-btn {
             position: absolute;
             left: 20px;
             top: 20px;
-            background: rgba(255,255,255,0.2);
-            border: none;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
+            padding: 10px 16px;
+            border-radius: 12px;
             cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             z-index: 9999;
         }
 
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateY(-2px);
+        }
+
         .header h1 {
-            font-size: 24px;
-            margin-bottom: 4px;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
             position: relative;
             z-index: 10;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .header .subtitle {
-            font-size: 14px;
-            opacity: 0.9;
+            font-size: 16px;
+            opacity: 0.95;
             position: relative;
             z-index: 10;
+            font-weight: 400;
         }
 
+        /* ===================================================================
+           컨테이너 & 섹션 - Daily Opening과 동일
+           =================================================================== */
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 24px 20px;
         }
 
         /* 탭 내용 */
@@ -251,23 +284,29 @@
         }
 
         .section {
-            background: rgba(255,255,255,0.9);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
         }
 
         .section h2 {
             color: var(--sk-red);
-            margin-bottom: 16px;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 20px;
-            font-weight: 700;
+            gap: 12px;
         }
 
         .overview-card {
@@ -309,7 +348,7 @@
             gap: 8px;
         }
 
-        /* 기법 카드 - 백업 파일의 예쁜 디자인 적용 */
+        /* 기법 카드 */
         .technique-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -439,7 +478,7 @@
             font-style: italic;
         }
 
-        /* 상황별 대응 - 백업 파일 스타일 */
+        /* 상황별 대응 */
         .scenario-card {
             background: linear-gradient(135deg, #fff3e0, #fce4ec);
             border: 2px solid var(--sk-orange);
@@ -658,10 +697,36 @@
             font-weight: 500;
         }
 
-        /* 모바일 최적화 */
-        @media (max-width: 480px) {
+        /* ===================================================================
+           반응형 디자인 - Daily Opening과 동일한 모바일 최적화
+           =================================================================== */
+        @media (max-width: 768px) {
             .container {
-                padding: 16px;
+                padding: 12px 12px;
+            }
+            
+            .section {
+                padding: 16px 16px;
+                margin-bottom: 12px;
+                border-radius: 12px;
+            }
+            
+            .header {
+                padding: 16px 16px;
+            }
+            
+            .header h1 {
+                font-size: 22px;
+                margin-bottom: 4px;
+            }
+            
+            .header .subtitle {
+                font-size: 15px;
+            }
+            
+            .section h2 {
+                font-size: 19px;
+                margin-bottom: 12px;
             }
 
             .technique-grid {
@@ -669,14 +734,65 @@
                 gap: 8px;
             }
 
-            .header h1 {
-                font-size: 20px;
-            }
-
             .section {
                 padding: 16px;
                 margin-bottom: 12px;
             }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 8px 10px;
+            }
+
+            .section {
+                padding: 12px 12px;
+                margin-bottom: 8px;
+            }
+
+            .header {
+                padding: 14px 12px;
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .header .subtitle {
+                font-size: 14px;
+            }
+
+            .section h2 {
+                font-size: 17px;
+                margin-bottom: 10px;
+            }
+
+            .back-btn {
+                padding: 6px 12px;
+                font-size: 13px;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* ===================================================================
+           스크롤 스타일 - Daily Opening과 동일
+           =================================================================== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, var(--sk-red), var(--sk-red-light));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, var(--sk-red-dark), var(--sk-red));
         }
     </style>
 </head>
