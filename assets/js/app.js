@@ -118,39 +118,40 @@ class ScheduleManager {
 
   // 오늘 일정 필터링
   filterTodaySchedule(allScheduleData) {
-  if (!this.selectedCenter) return [];
+    if (!this.selectedCenter) return [];
 
-  const trainingCenter = this.centerMap[this.selectedCenter];
-  const todayStr = this.getKoreanDateString(); // 한국 시간 기준
-  
-  console.log('📊 일정 필터링:', { trainingCenter, todayStr, totalData: allScheduleData.length });
-  
-  const filtered = allScheduleData.filter(item => {
-    // 연수원 매칭
-    if (item.training_center !== trainingCenter) return false;
+    const trainingCenter = this.centerMap[this.selectedCenter];
+    const today = new Date();
+    const todayStr = today.toLocaleDateString('sv-SE');
     
-    // 날짜 매칭
-    if (!item.date) return false;
+    console.log('📊 일정 필터링:', { trainingCenter, todayStr, totalData: allScheduleData.length });
     
-    let itemDateStr;
-    try {
-      const dateObj = new Date(item.date);
-      itemDateStr = this.getKoreanDateString(dateObj); // 일관된 한국 시간 처리
-    } catch {
-      return false;
-    }
-    
-    if (itemDateStr !== todayStr) return false;
-    
-    // 활성 상태 확인
-    const isActive = !item.status || item.status === 'active';
-    
-    return isActive;
-  });
+    const filtered = allScheduleData.filter(item => {
+      // 연수원 매칭
+      if (item.training_center !== trainingCenter) return false;
+      
+      // 날짜 매칭
+      if (!item.date) return false;
+      
+      let itemDateStr;
+      try {
+        const dateObj = new Date(item.date);
+        itemDateStr = dateObj.toISOString().split('T')[0];
+      } catch {
+        return false;
+      }
+      
+      if (itemDateStr !== todayStr) return false;
+      
+      // 활성 상태 확인
+      const isActive = !item.status || item.status === 'active';
+      
+      return isActive;
+    });
 
-  console.log('✅ 필터링된 오늘 일정:', filtered.length, '개');
-  return filtered;
-}
+    console.log('✅ 필터링된 오늘 일정:', filtered.length, '개');
+    return filtered;
+  }
 
   // 오늘 일정 렌더링
   renderTodaySchedule(container, scheduleData) {
@@ -670,48 +671,56 @@ class SKMentorApp {
 
   // 오늘의 멘토 프로그램 필터링
   filterTodayMentorPrograms(allScheduleData) {
-  if (!this.selectedCenter) return [];
+    if (!this.selectedCenter) return [];
 
-  const centerMap = { 
-    'icheon': '이천', 
-    'yongin': '용인', 
-    'incheon': '인천' 
-  };
-  const trainingCenter = centerMap[this.selectedCenter];
-  const todayStr = this.getKoreanDateString(); // 한국 시간 기준
-  
-  console.log('🎯 멘토 프로그램 필터링:', { trainingCenter, todayStr, selectedCenter: this.selectedCenter });
-  
-  const filtered = allScheduleData.filter(item => {
-    // 연수원 매칭
-    if (item.training_center !== trainingCenter) return false;
+    const centerMap = { 
+      'icheon': '이천', 
+      'yongin': '용인', 
+      'incheon': '인천' 
+    };
+    const trainingCenter = centerMap[this.selectedCenter];
+    const today = new Date();
+   const todayStr = today.toLocaleDateString('sv-SE');
     
-    // 날짜 매칭
-    if (!item.date) return false;
-    let itemDateStr;
-    try {
-      const dateObj = new Date(item.date);
-      itemDateStr = this.getKoreanDateString(dateObj); // 일관된 한국 시간 처리
-    } catch {
-      return false;
-    }
-    if (itemDateStr !== todayStr) return false;
+    console.log('🎯 멘토 프로그램 필터링:', { trainingCenter, todayStr, selectedCenter: this.selectedCenter });
     
-    // 멘토 역할 확인 (진행, 필수참관)
-    const mentorRole = item.mentor_role?.toLowerCase() || '';
-    const isMentorProgram = mentorRole.includes('진행') || 
-                           mentorRole.includes('lead') || 
-                           mentorRole.includes('주도');
+    const filtered = allScheduleData.filter(item => {
+      // 연수원 매칭
+      if (item.training_center !== trainingCenter) return false;
+      
+      // 날짜 매칭
+      if (!item.date) return false;
+      let itemDateStr;
+      try {
+        const dateObj = new Date(item.date);
+        itemDateStr = dateObj.toISOString().split('T')[0];
+      } catch {
+        return false;
+      }
+      if (itemDateStr !== todayStr) return false;
+      
+      // 멘토 역할 확인 (진행, 필수참관)
+      const mentorRole = item.mentor_role?.toLowerCase() || '';
+      const isMentorProgram = mentorRole.includes('진행') || 
+                             mentorRole.includes('lead') || 
+                             mentorRole.includes('주도');
+      
+      // 활성 상태 확인
+      const isActive = !item.status || item.status === 'active';
+      
+      console.log('프로그램 체크:', {
+        program: item.program_name,
+        mentorRole: item.mentor_role,
+        isMentorProgram,
+        isActive
+      });
+      
+      return isMentorProgram && isActive;
+    });
     
-    // 활성 상태 확인
-    const isActive = !item.status || item.status === 'active';
-    
-    return isMentorProgram && isActive;
-  });
-  
-  console.log('✅ 필터링된 멘토 프로그램:', filtered.length, '개');
-  return filtered;
-}
+    console.log('✅ 필터링된 멘토 프로그램:', filtered.length, '개');
+    return filtered;
+  }
 
   // 멘토 프로그램 렌더링
   renderMentorPrograms(container, programs) {
@@ -824,34 +833,32 @@ class SKMentorApp {
   }
 
   updateHeader() {
-  // 오늘 날짜 업데이트 (한국 시간 기준)
-  const todayDateElement = document.getElementById('today-date');
-  if (todayDateElement) {
-    const today = new Date();
-    // 한국 시간으로 날짜 포맷팅
-    const options = { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric', 
-      weekday: 'long',
-      timeZone: 'Asia/Seoul' // 한국 시간대 명시
-    };
-    const dateString = today.toLocaleDateString('ko-KR', options);
-    todayDateElement.textContent = `📅 ${dateString}`;
-  }
+    // 오늘 날짜 업데이트
+    const todayDateElement = document.getElementById('today-date');
+    if (todayDateElement) {
+      const today = new Date();
+      const options = { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric', 
+        weekday: 'long' 
+      };
+      const dateString = today.toLocaleDateString('ko-KR', options);
+      todayDateElement.textContent = `📅 ${dateString}`;
+    }
 
-  // 연수원 정보 업데이트
-  const subtitle = document.getElementById('headerSubtitle');
-  if (subtitle && this.selectedCenter) {
-    const centerMap = {
-      'icheon': '이천 SKT인재개발원',  // FMI → SKT로 변경된 부분 반영
-      'yongin': '용인 SK아카데미', 
-      'incheon': '인천 SK무의연수원'
-    };
-    const centerName = centerMap[this.selectedCenter];
-    subtitle.textContent = `2025년 7월 SK그룹 신입구성원과정 - ${centerName}`;
+    // 연수원 정보 업데이트
+    const subtitle = document.getElementById('headerSubtitle');
+    if (subtitle && this.selectedCenter) {
+      const centerMap = {
+        'icheon': '이천 SKT인재개발원',
+        'yongin': '용인 SK아카데미', 
+        'incheon': '인천 SK무의연수원'
+      };
+      const centerName = centerMap[this.selectedCenter];
+      subtitle.textContent = `2025년 7월 SK그룹 신입구성원과정 - ${centerName}`;
+    }
   }
-}
 
     // =================================================================
   // 2. Config 로드 시스템 메서드들 (새로 추가)
