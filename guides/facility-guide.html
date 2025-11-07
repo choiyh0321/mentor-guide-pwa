@@ -762,7 +762,9 @@
                 const names = {
                     'icheon': '이천 SKT인재개발원',
                     'yongin': '용인 SK아카데미',
-                    'incheon': '인천 SK무의연수원'
+                    'incheon': '인천 SK무의연수원',
+                    'sunning': '써닝 리더십센터',
+                    'sbti': '중소벤처기업연수원'
                 };
                 return names[centerId] || `${centerId} 연수원`;
             }
@@ -1233,7 +1235,7 @@
             
             // 맵 컨테이너 업데이트 (이미지 포함)
             const mapContainer = document.querySelector('.map-container');
-            if (selectedCenter === 'icheon' || selectedCenter === 'yongin') {
+            if (selectedCenter === 'icheon' || selectedCenter === 'yongin' || selectedCenter === 'incheon') {
                 mapContainer.innerHTML = `
                     <img src="../assets/images/map-${selectedCenter}.png" 
                         alt="${centerData.name} 건물 배치도">

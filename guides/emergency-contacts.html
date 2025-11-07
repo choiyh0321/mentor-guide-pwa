@@ -279,7 +279,43 @@
                         phone: "032-890-2114",
                         description: "24시간 응급실 운영, 인천광역시 중구"
                     }
-                ]
+                ],
+                'sunning': [
+                    {
+                        icon: "🏥",
+                        name: "다보스 병원",
+                        phone: "031-8021-2119",
+                        description: "경기 용인시 처인구 백곡대로1082번길 18"
+                    },
+                    {
+                        icon: "🚔",
+                        name: "백암파출소",
+                        phone: "031-8021-2119",
+                        description: "경기 용인시 처인구 백암로201번길 9"
+                    }
+                    
+                ],
+                'sbti': [
+                    {
+                        icon: "🏥",
+                        name: "죽능보건진료소",
+                        phone: "031-332-8439",
+                        description: "경기 용인시 처인구 원삼면 보개원삼로 1634"
+                    },
+                    {
+                        icon: "🚔",
+                        name: "원삼파출소",
+                        phone: "031-260-0455",
+                        description: "경기 용인시 처인구 원삼면 고당로15번길 1"
+                    },
+                    {
+                        icon: "🚒",
+                        name: "용인소방서원삼지역대",
+                        phone: "031-8021-0587",
+                        description: "응급상황 지원, 경기 용인시 처인구 원삼면 원양로 64"
+                    }
+                ],
+                
             };
             
             const result = hospitalData[center_id] || [];
@@ -291,7 +327,9 @@
             const names = {
                 'icheon': '이천 FMI인재개발원',
                 'yongin': '용인 SK아카데미',
-                'incheon': '인천 SK무의연수원'
+                'incheon': '인천 SK무의연수원',
+                'sunning' : '써닝 리더십센터',
+                'sbti': '중소벤처기업연수원'
             };
             return names[center] || center;
         }
@@ -304,14 +342,14 @@
                 'icheon': [
                     {
                         icon: "👨‍💼",
-                        name: "운영진 대표 (최지윤 RF)",
-                        phone: "010-2360-1145",
+                        name: "운영진 대표 (김진태 RF)",
+                        phone: "010-9415-5590",
                         description: "교육 운영 총괄, 멘토 지원 담당"
                     },
                     {
                         icon: "📋",
-                        name: "교육 운영 (최유현 RF)",
-                        phone: "010-9235-5562",
+                        name: "교육 운영 (김진태 RF)",
+                        phone: "010-9415-5590",
                         description: "멘토 관련 업무, 교육 과정 지원"
                     },
                     {
@@ -324,24 +362,64 @@
                 'yongin': [
                     {
                         icon: "👨‍💼",
-                        name: "운영진 대표 (강원식 RF)",
-                        phone: "010-329-9100",
+                        name: "운영진 대표 (여규원 RF)",
+                        phone: "010-8430-4610",
                         description: "교육 운영 총괄, 멘토 지원 담당"
                     },
                     {
                         icon: "📋",
-                        name: "교육 운영 (이희진 RF)",
-                        phone: "010-2386-2376",
+                        name: "교육 운영 (여규원 RF)",
+                        phone: "010-8430-4610",
                         description: "멘토 관련 업무, 교육 과정 지원"
                     },
                     {
                         icon: "🏢",
                         name: "중앙통제실",
-                        phone: "031-329-9120",
+                        phone: "031-329-9119",
                         description: "연수원 운영 총괄, 숙소 관련 문의, 시설 관리"
                     }
                 ],
                 'incheon': [
+                    {
+                        icon: "👨‍💼",
+                        name: "운영진 대표 (정성훈 RF)",
+                        phone: "010-2607-6546",
+                        description: "교육 운영 총괄, 멘토 지원 담당"
+                    },
+                    {
+                        icon: "📋",
+                        name: "멘토 운영진 (정성훈 RF)",
+                        phone: "010-2607-6546",
+                        description: "멘토 관련 업무, 교육 과정 지원"
+                    },
+                    {
+                        icon: "🏢",
+                        name: "중앙통제실",
+                        phone: "032-760-3030",
+                        description: "연수원 운영 총괄, 숙소 관련 문의, 24시간 상주"
+                    }
+                ],
+                'sunning': [
+                    {
+                        icon: "👨‍💼",
+                        name: "운영진 대표 (이재윤 RF)",
+                        phone: "010-3166-9029",
+                        description: "교육 운영 총괄, 멘토 지원 담당"
+                    },
+                    {
+                        icon: "📋",
+                        name: "멘토 운영진 대표 (이재윤 RF)",
+                        phone: "010-3166-9029",
+                        description: "멘토 관련 업무, 교육 과정 지원"
+                    },
+                    {
+                        icon: "🏢",
+                        name: "중앙통제실",
+                        phone: "031-290-0721",
+                        description: "연수원 운영 총괄, 숙소 관련 문의, 24시간 상주"
+                    }
+                ],
+                'sbti': [
                     {
                         icon: "👨‍💼",
                         name: "운영진 대표",
@@ -357,7 +435,7 @@
                     {
                         icon: "🏢",
                         name: "중앙통제실",
-                        phone: "032-760-3020",
+                        phone: "031-490-1472",
                         description: "연수원 운영 총괄, 숙소 관련 문의, 24시간 상주"
                     }
                 ]

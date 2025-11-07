@@ -1,6 +1,6 @@
 /**
  * SK 멘토 가이드 - Google Sheets 완전 연동 버전
- * @version 2.0.0
+ * @version 2.2.0
  */
 
 // =================================================================
@@ -88,7 +88,9 @@ class ScheduleManager {
     this.centerMap = { 
       'icheon': '이천', 
       'yongin': '용인', 
-      'incheon': '인천' 
+      'incheon': '인천',
+      'sunning': '써닝',
+      'sbti': '중소' 
     };
   }
 
@@ -676,7 +678,9 @@ class SKMentorApp {
     const centerMap = { 
       'icheon': '이천', 
       'yongin': '용인', 
-      'incheon': '인천' 
+      'incheon': '인천',
+      'sunning': '써닝',
+      'sbti': '중소' 
     };
     const trainingCenter = centerMap[this.selectedCenter];
     const today = new Date();
@@ -851,12 +855,14 @@ class SKMentorApp {
     const subtitle = document.getElementById('headerSubtitle');
     if (subtitle && this.selectedCenter) {
       const centerMap = {
-        'icheon': '이천 SKT인재개발원',
+        'icheon': '이천 SKT인재개발원',
         'yongin': '용인 SK아카데미', 
-        'incheon': '인천 SK무의연수원'
+        'incheon': '인천 SK무의연수원',
+        'sunning': '써닝 리더십센터',
+        'sbti': '중소벤처기업연수원'
       };
       const centerName = centerMap[this.selectedCenter];
-      subtitle.textContent = `2025년 7월 SK그룹 신입구성원과정 - ${centerName}`;
+      subtitle.textContent = `2026년 1월 SK그룹 신입구성원과정 - ${centerName}`;
     }
   }
 
@@ -1215,7 +1221,9 @@ async function showDynamicFullTimetable() {
     const centerMap = {
       'icheon': '이천 SKT인재개발원',
       'yongin': '용인 SK아카데미', 
-      'incheon': '인천 SK무의연수원'
+      'incheon': '인천 SK무의연수원',
+      'sunning': '써닝 리더십센터',
+      'sbti': '중소벤처기업연수원'
     };
     const centerName = centerMap[window.app.selectedCenter] || '연수원';
     title.textContent = `📅 ${centerName} 전체 일정`;
