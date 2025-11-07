@@ -441,12 +441,7 @@
 
     <script>
     function selectCenter(centerId) {
-        // 비활성화된 버튼 클릭 방지
-        if (centerId === 'incheon') {
-            alert('인천 SK무의연수원은 현재 선택할 수 없습니다.');
-            return;
-        }
-        
+               
         console.log('🏢 연수원 선택:', centerId);
         
         // 선택된 연수원 정보 저장
@@ -475,25 +470,48 @@
     document.addEventListener('DOMContentLoaded', function() {
         const container = document.getElementById('trainingCenters');
         container.innerHTML = `
+            <!-- 이천 SKT인재개발원 -->
             <button class="center-button icheon" onclick="selectCenter('icheon')">
                 <div class="center-icon">🏢</div>
                 <div class="center-info">
-                    <div class="center-name">이천 SK텔레콤 인재개발원</div>
-                    <div class="center-description">경기도 이천시 마장면</div>
+                    <div class="center-name">이천 SKT인재개발원</div>
+                    <div class="center-description">경기도 이천시 마장면 서이천로 481-28</div>
                 </div>
             </button>
+
+            <!-- 용인 SK아카데미 -->
             <button class="center-button yongin" onclick="selectCenter('yongin')">
                 <div class="center-icon">🏛️</div>
                 <div class="center-info">
                     <div class="center-name">용인 SK아카데미</div>
-                    <div class="center-description">경기도 용인시 처인구</div>
+                    <div class="center-description">경기도 용인시 처인구 원삼면 모래실로 17</div>
                 </div>
             </button>
-            <button class="center-button incheon disabled" onclick="selectCenter('incheon')">
+
+            <!-- 인천 무의연수원 (이제 활성화) -->
+            <button class="center-button incheon" onclick="selectCenter('incheon')">
                 <div class="center-icon">🌊</div>
                 <div class="center-info">
-                    <div class="center-name">인천 SK무의연수원</div>
-                    <div class="center-description">인천광역시 중구 무의동</div>
+                    <div class="center-name">인천 무의연수원</div>
+                    <div class="center-description">인천광역시 중구 무의동 대무의로 159</div>
+                </div>
+            </button>
+
+            <!-- 써닝 리더십센터 -->
+            <button class="center-button sunning" onclick="selectCenter('sunning')">
+                <div class="center-icon">🌞</div>
+                <div class="center-info">
+                    <div class="center-name">써닝 리더십센터</div>
+                    <div class="center-description">경기도 용인시 처인구 백암면 고안로 51번길 205</div>
+                </div>
+            </button>
+
+            <!-- 중소벤처기업연수원 (SBti) -->
+            <button class="center-button sbti" onclick="selectCenter('sbti')">
+                <div class="center-icon">🏫</div>
+                <div class="center-info">
+                    <div class="center-name">중소벤처기업연수원</div>
+                    <div class="center-description">경기도 안산시 단원구 연수원로 87</div>
                 </div>
             </button>
         `;
