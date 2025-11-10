@@ -1653,14 +1653,14 @@ body {
     font-weight: 700; /* 600 → 700으로 강화 */
     margin-bottom: 2px;
     font-size: 15px; /* 원래 크기 유지 */
-    font-family: -apple-system, BlinkMacSystemFont, 'Malgun Gothic', '맑은 고딕', sans-serif; /* 한글 폰트 우선 */
+    font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', 'Malgun Gothic', '맑은 고딕', sans-serif; /* 한글 폰트 우선 */
 }
 
 .menu-desc {
     font-size: 13px; /* 12px → 13px로 증가 */
     opacity: 0.7;
     font-weight: 400;
-    font-family: -apple-system, BlinkMacSystemFont, 'Malgun Gothic', '맑은 고딕', sans-serif; /* 한글 폰트 우선 */
+    font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR','Malgun Gothic', '맑은 고딕', sans-serif; /* 한글 폰트 우선 */
 }
 
 .menu-arrow {
