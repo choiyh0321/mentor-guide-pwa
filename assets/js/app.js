@@ -88,9 +88,9 @@ class ScheduleManager {
     this.centerMap = { 
       'icheon': '이천', 
       'yongin': '용인', 
-      'incheon': '인천',
+      'incheon': '무의',
       'sunning': '써닝',
-      'sbti': '중소' 
+      'sbti': '중소벤처기업' 
     };
   }
 
