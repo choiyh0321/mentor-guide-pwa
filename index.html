@@ -1013,6 +1013,207 @@
             }
         }
 
+    
+    // =================================================================
+    // 🔥 Google Sheets 자동 동기화 클래스 (새로 추가)
+    // =================================================================
+
+    class DashboardSync {
+        constructor() {
+            // Apps Script URL
+            this.ATTENDANCE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx_sWKPsECUK7VvG9-6p8HNw_7s2h3C_VLxlOn7_PlHaZiRvyJWVAYBrr8nfEPDpIXJTw/exec';
+            this.INTERVIEW_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxSBdv_N1H7mw51UcWgRPGmAVk1Yh-hEcgLqDU1zVwUgaL6tn3QXslVFJai0TGEC0TUyw/exec';
+        }
+
+        /**
+         * 초기화 - 페이지 로드 시 자동 동기화
+         */
+        async initialize() {
+            console.log('🔄 대시보드 동기화 시작...');
+            
+            // 멘토 정보 확인
+            const mentorInfo = this.getMentorInfo();
+            if (!mentorInfo) {
+                console.log('⚠️ 멘토 정보 없음 - 동기화 건너뛰기');
+                return;
+            }
+
+            // 병렬로 동기화 (빠르게!)
+            await Promise.all([
+                this.syncAttendance(mentorInfo),
+                this.syncInterviews(mentorInfo)
+            ]);
+
+            console.log('✅ 대시보드 동기화 완료!');
+        }
+
+        /**
+         * 멘토 정보 가져오기
+         */
+        getMentorInfo() {
+            const stored = localStorage.getItem('sk-mentor-info');
+            if (stored) {
+                return JSON.parse(stored);
+            }
+            return null;
+        }
+
+        /**
+         * 오늘 날짜 가져오기 (Google Sheets 형식)
+         */
+        getTodayDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            return `${year}. ${month}. ${day}.`; // "2025. 12. 01." 형식
+        }
+
+        /**
+         * 출석 동기화
+         */
+        async syncAttendance(mentorInfo) {
+            try {
+                const today = this.getTodayDate();
+                const url = `${this.ATTENDANCE_SCRIPT_URL}?action=getTodayAttendance&mentorName=${encodeURIComponent(mentorInfo.name)}&teamNumber=${encodeURIComponent(mentorInfo.teamNumber)}&trainingCenter=${encodeURIComponent(mentorInfo.trainingCenter)}&date=${encodeURIComponent(today)}`;
+                
+                console.log(`📊 출석 조회: ${mentorInfo.name} ${mentorInfo.teamNumber}분과 (${mentorInfo.trainingCenter}), ${today}`);
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                console.log('📊 출석 데이터:', data);
+                
+                // UI 업데이트
+                this.updateAttendanceUI(data);
+                
+            } catch (error) {
+                console.error('❌ 출석 동기화 실패:', error);
+            }
+        }
+
+        /**
+         * 면담 동기화
+         */
+        async syncInterviews(mentorInfo) {
+            try {
+                const url = `${this.INTERVIEW_SCRIPT_URL}?action=getInterviews&mentorName=${encodeURIComponent(mentorInfo.name)}&teamNumber=${encodeURIComponent(mentorInfo.teamNumber)}&trainingCenter=${encodeURIComponent(mentorInfo.trainingCenter)}`;
+                
+                console.log(`💬 면담 조회: ${mentorInfo.name} ${mentorInfo.teamNumber}분과 (${mentorInfo.trainingCenter})`);
+                
+                const response = await fetch(url);
+                const interviews = await response.json();
+                
+                console.log(`💬 면담 데이터: ${interviews.length}건`);
+                
+                // UI 업데이트
+                this.updateInterviewUI(interviews, mentorInfo);
+                
+            } catch (error) {
+                console.error('❌ 면담 동기화 실패:', error);
+            }
+        }
+
+        /**
+         * 출석 UI 업데이트
+         */
+        updateAttendanceUI(data) {
+            // 오전 출석
+            if (data.morning) {
+                updateTaskStatus('morning', '완료', 'complete', 100);
+                const morningStatus = document.getElementById('morningStatus');
+                if (morningStatus) {
+                    morningStatus.textContent = `완료 (${data.morning.presentCount}/${data.morning.totalCount}명)`;
+                }
+            } else {
+                updateTaskStatus('morning', '대기중', 'pending', 0);
+            }
+
+            // 오후 출석
+            if (data.afternoon) {
+                updateTaskStatus('afternoon', '완료', 'complete', 100);
+                const afternoonStatus = document.getElementById('afternoonStatus');
+                if (afternoonStatus) {
+                    afternoonStatus.textContent = `완료 (${data.afternoon.presentCount}/${data.afternoon.totalCount}명)`;
+                }
+            } else {
+                updateTaskStatus('afternoon', '대기중', 'pending', 0);
+            }
+
+            // 요약 업데이트
+            let summaryText = '';
+            if (data.morning && data.afternoon) {
+                summaryText = '오전·오후 완료';
+            } else if (data.morning) {
+                summaryText = '오전 완료, 오후 대기중';
+            } else if (data.afternoon) {
+                summaryText = '오전 미완료, 오후 완료';
+            } else {
+                summaryText = '오전·오후 대기중';
+            }
+
+            const summaryElement = document.getElementById('attendanceSummary');
+            if (summaryElement) {
+                summaryElement.textContent = summaryText;
+            }
+        }
+
+        /**
+         * 면담 UI 업데이트
+         */
+        updateInterviewUI(interviews, mentorInfo) {
+            const totalMentees = mentorInfo.mentees ? mentorInfo.mentees.length : 0;
+            const completedCount = interviews.length;
+            const pendingCount = totalMentees - completedCount;
+            const progressPercent = totalMentees > 0 ? Math.round((completedCount / totalMentees) * 100) : 0;
+
+            // 통계 업데이트
+            this.updateElement('totalMentees', totalMentees);
+            this.updateElement('completedInterviews', completedCount);
+            this.updateElement('pendingInterviews', pendingCount);
+            this.updateElement('interviewProgress', `${progressPercent}%`);
+
+            // 진행률 바 업데이트
+            const progressBar = document.getElementById('totalInterviewProgress');
+            if (progressBar) {
+                progressBar.style.width = `${progressPercent}%`;
+            }
+
+            // 상태 업데이트
+            let status = 'pending';
+            let statusText = '대기중';
+            if (completedCount === totalMentees && totalMentees > 0) {
+                status = 'complete';
+                statusText = '완료';
+            } else if (completedCount > 0) {
+                status = 'partial';
+                statusText = '진행중';
+            }
+
+            const statusElement = document.getElementById('interviewStatus');
+            if (statusElement) {
+                statusElement.className = `task-status status-${status}`;
+                statusElement.textContent = statusText;
+            }
+
+            // 면담 요약
+            this.updateElement('interviewSummary', `${completedCount}/${totalMentees}명 완료 (${progressPercent}%)`);
+        }
+
+        /**
+         * 요소 업데이트 헬퍼
+         */
+        updateElement(id, value) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = value;
+            }
+        }
+    }
+
+    // 전역 변수로 선언
+    let dashboardSync;
+
     // =================================================================
     // 모바일 PWA 푸시 알림 시스템
     // =================================================================
@@ -2124,13 +2325,17 @@
 
         // 초기화
         // 모든 초기화를 하나로 통합
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             // 1. 기본 초기화
             checkAttendanceStatus();
             
             // 2. 매니저 초기화
             mentorTeamManager = new MentorTeamManager();
             mobilePushManager = new MobilePushNotificationManager();
+
+            // 🔥 3. 대시보드 자동 동기화 (새로 추가)
+            dashboardSync = new DashboardSync();
+            await dashboardSync.initialize();
             
             // 3. 연수원 이름 설정
             try {

@@ -94,7 +94,9 @@
                 personalConcerns: document.getElementById('personalConcerns').value.trim(),
                 mentorNotes: document.getElementById('mentorNotes').value.trim(),
                 submittedAt: new Date().toLocaleString('ko-KR'),
-                mentorName: localStorage.getItem('sk-mentor-name') || '미입력'
+                mentorName: localStorage.getItem('sk-mentor-name') || '미입력',
+                teamNumber: JSON.parse(localStorage.getItem('sk-mentor-info') || '{}').teamNumber || '미입력',  // 🔥 추가
+                trainingCenter: JSON.parse(localStorage.getItem('sk-mentor-info') || '{}').trainingCenter || '미입력'  // 🔥 추가
             };
             
             submitBtn.disabled = true;
