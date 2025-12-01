@@ -1064,9 +1064,9 @@
         getTodayDate() {
             const today = new Date();
             const year = today.getFullYear();
-            const month = String(today.getMonth() + 1).padStart(2, '0');
-            const day = String(today.getDate()).padStart(2, '0');
-            return `${year}. ${month}. ${day}.`; // "2025. 12. 01." 형식
+            const month = today.getMonth() + 1;
+            const day = today.getDate();
+            return `${year}. ${month}. ${day}.`;
         }
 
         /**
@@ -1105,6 +1105,29 @@
                 const interviews = await response.json();
                 
                 console.log(`💬 면담 데이터: ${interviews.length}건`);
+                
+                // 🔥 Google Sheets 데이터로 localStorage 동기화
+                const submissions = interviews.map(interview => ({
+                    type: 'interview',
+                    studentName: interview.studentName,
+                    interviewDate: interview.interviewDate,
+                    mentorName: mentorInfo.name,
+                    submittedAt: interview.submittedAt,
+                    generalStatus: interview.generalStatus,
+                    educationFeedback: interview.educationFeedback,
+                    careerConcerns: interview.careerConcerns,
+                    personalConcerns: interview.personalConcerns,
+                    mentorNotes: interview.mentorNotes,
+                    id: Date.now() + Math.random()
+                }));
+                
+                // 기존 localStorage 중 면담 아닌 것들 유지
+                const allSubmissions = JSON.parse(localStorage.getItem('sk-mentor-submissions') || '[]');
+                const nonInterviews = allSubmissions.filter(s => s.type !== 'interview');
+                const updatedSubmissions = [...nonInterviews, ...submissions];
+                localStorage.setItem('sk-mentor-submissions', JSON.stringify(updatedSubmissions));
+                
+                console.log('💾 localStorage 동기화 완료');
                 
                 // UI 업데이트
                 this.updateInterviewUI(interviews, mentorInfo);
