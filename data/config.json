@@ -30,12 +30,12 @@
         "password": "!SKTwifi@2025!@"
       },
       "operations": {
-        "name": "김진태 RF",
-        "phone": "010-9415-5590"
+        "name": "윤연주 RF",
+        "phone": "010-5057-8517"
       },
       "mentorSupport": {
-        "name": "김진태 RF",
-        "phone": "010-9415-5590"
+        "name": "백송이 RF",
+        "phone": "010-8471-1012"
       },
       "enabled": true
     },
@@ -51,12 +51,12 @@
         "password": "TV 옆 셋톱박스 확인"
       },
       "operations": {
-        "name": "여규원 RF",
+        "name": "신기민 RF",
         "phone": "010-8430-4610"
       },
       "mentorSupport": {
         "name": "여규원 RF",
-        "phone": "010-8430-4610"
+        "phone": "010-4190-3250"
       },
       "enabled": true
     },
@@ -73,19 +73,19 @@
         "password": "연수원 안내데스크 문의"
       },
       "operations": {
-        "name": "정성훈 RF",
-        "phone": "010-2607-6546"
+        "name": "신호정 RF",
+        "phone": "010-3401-3153"
       },
       "mentorSupport": {
-        "name": "정성훈 RF", 
-        "phone": "010-2607-6546"
+        "name": "최유현 RF", 
+        "phone": "010-9235-5562"
       },
       "enabled": true
     },
 
     "sunning": {
       "id": "sunning", 
-      "name": "써닝 리더십센터",
+      "name": "용인 써닝리더십센터",
       "pushTopic": "campus-sunning",
       "address": "경기도 용인시 처인구 백암면 고안로 51번길 205",
       "icon": "🌞",
@@ -95,19 +95,19 @@
         "password": "연수원 안내데스크 문의"
       },
       "operations": {
-        "name": "이재윤 RF",
-        "phone": "010-3166-9029"
+        "name": "김남연 RF",
+        "phone": "010-6597-3008"
       },
       "mentorSupport": {
-        "name": "이재윤 RF",
-        "phone": "010-3166-9029"
+        "name": "정성훈 RF",
+        "phone": "010-2607-6546"
       },
       "enabled": true
     },
 
     "sbti": {
       "id": "sbti", 
-      "name": "중소벤처기업연수원",
+      "name": "안산 중소기업연수원",
       "pushTopic": "campus-sbti",
       "address": "경기도 안산시 단원구 연수원로 87",
       "icon": "🏫",
@@ -117,12 +117,12 @@
         "password": "연수원 안내데스크 문의"
       },
       "operations": {
-        "name": "김민수 RF",
-        "phone": "010-8430-4610"
+        "name": "이재윤 RF",
+        "phone": "010-3166-9029"
       },
       "mentorSupport": {
-        "name": "박지영 TL", 
-        "phone": "010-4567-8901"
+        "name": "김지원 RF", 
+        "phone": "010-9990-2133"
       },
       "enabled": true
     }
