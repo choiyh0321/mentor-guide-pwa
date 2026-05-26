@@ -859,10 +859,12 @@ class SKMentorApp {
         'yongin': '용인 SK아카데미', 
         'incheon': '인천 SK무의연수원',
         'sunning': '써닝 리더십센터',
-        'sbti': '중소벤처기업연수원'
+        'sbti': '중소벤처기업연수원',
+        'gapyeong' : '가평 교원비전센터',
+        'cheonggang' : '청강문화산업대학교'
       };
       const centerName = centerMap[this.selectedCenter];
-      subtitle.textContent = `2026년 1월 SK그룹 신입구성원과정 - ${centerName}`;
+      subtitle.textContent = `2026년 7월 SK그룹 신입구성원과정 - ${centerName}`;
     }
   }
 
