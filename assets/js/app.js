@@ -90,7 +90,9 @@ class ScheduleManager {
       'yongin': '용인', 
       'incheon': '무의',
       'sunning': '써닝',
-      'sbti': '중소벤처기업' 
+      'sbti': '중소벤처기업',
+      'gapyeong': '가평',
+      'cheonggang': '청강' 
     };
   }
 
@@ -680,7 +682,9 @@ class SKMentorApp {
       'yongin': '용인', 
       'incheon': '인천',
       'sunning': '써닝',
-      'sbti': '중소' 
+      'sbti': '중소',
+      'gapyeong': '가평',
+      'cheonggang': '청강' 
     };
     const trainingCenter = centerMap[this.selectedCenter];
     const today = new Date();
@@ -1225,7 +1229,9 @@ async function showDynamicFullTimetable() {
       'yongin': '용인 SK아카데미', 
       'incheon': '인천 SK무의연수원',
       'sunning': '써닝 리더십센터',
-      'sbti': '중소벤처기업연수원'
+      'sbti': '중소벤처기업연수원',
+      'gapyeong' : '가평 교원비전센터',
+      'cheonggang' : '청강문화산업대학교'
     };
     const centerName = centerMap[window.app.selectedCenter] || '연수원';
     title.textContent = `📅 ${centerName} 전체 일정`;
