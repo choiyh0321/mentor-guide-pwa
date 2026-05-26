@@ -2357,18 +2357,6 @@
             dashboardSync = new DashboardSync();
             await dashboardSync.initialize();
             
-            // 3. 연수원 이름 설정
-            ```
-            try {
-                const centerName = configManager.getCurrentConfig().centerName || "알 수 없음";
-                const centerNameEl = document.getElementById("center-name");
-                if (centerNameEl) centerNameEl.textContent = centerName;
-            } catch (e) {
-                console.warn("연수원 이름 로딩 실패:", e);
-                const centerNameEl = document.getElementById("center-name");
-                if (centerNameEl) centerNameEl.textContent = "미설정";
-            }
-            ```
             // 4. 메뉴 토글 (중복 제거)
             const menuToggle = document.getElementById("menu-toggle");
             const sideMenu = document.getElementById("side-menu");
